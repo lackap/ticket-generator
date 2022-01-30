@@ -21,18 +21,11 @@ public class TicketGeneratorApplication {
 
 	public static void main(String[] args) {
 		try {
-			Map<String, Entreprise> entreprises = ModelService.loadEntreprises("C:\\perso\\ticket-generator\\src\\test\\resources\\in\\entreprises.csv");
-			Map<String, Formation> formations = ModelService.loadFormations("C:\\perso\\ticket-generator\\src\\test\\resources\\in\\formations.csv");
+			Map<String, Entreprise> entreprises = ModelService.loadEntreprises("F:\\Tech\\ticket-generator\\src\\test\\resources\\in\\entreprises.csv");
+			Map<String, Formation> formations = ModelService.loadFormations("F:\\Tech\\ticket-generator\\src\\test\\resources\\in\\formations.csv");
 			Model.getInstance().setEntreprises(entreprises);
 			Model.getInstance().setFormations(formations);
-			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-			String json = ow.writeValueAsString(Model.getInstance());
-			FileUtils.writeStringToFile(new File("C:\\tmp\\loading.json"), json);
-			SearchService searchService = new SearchService();
-			List<Entreprise> entreprisesMatch = searchService.searchFromFormation("BENJAMIN FRANKLIN", "BTS CPRP : Conception des Processus de Réalisation de Produits");
 
-			json = ow.writeValueAsString(entreprisesMatch);
-			FileUtils.writeStringToFile(new File("C:\\tmp\\entreprisesMatch.json"), json);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -2,6 +2,7 @@ package com.forum.ticketgenerator.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Formation {
     private String nomCentre;
@@ -9,6 +10,10 @@ public class Formation {
 
     public Formation() {
         this.diplomes = new ArrayList<>();
+    }
+
+    public List<String> getDiplomeLabels() {
+        return diplomes.stream().map(Diplome::getIntituleDiplome).collect(Collectors.toList());
     }
 
     public String getNomCentre () {

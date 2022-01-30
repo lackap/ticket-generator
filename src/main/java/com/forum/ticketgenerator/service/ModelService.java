@@ -5,6 +5,7 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class ModelService {
 
     public static Map<String, Entreprise> loadEntreprises (String entrepriseFile) throws IOException {
@@ -75,8 +77,12 @@ public class ModelService {
 
     }
 
-    public Collection<Formation> getAllFormations() {
-        return Model.getInstance().getFormations().values();
+    public Map<String,Formation> getAllFormations() {
+        return Model.getInstance().getFormations();
+    }
+
+    public List<String> getCentreFormationLabels() {
+        return getAllFormations().values().stream().map(formation -> formation.getNomCentre()).collect(Collectors.toList());
     }
 
     public List<String> getFamilleMetierEntreprises() {
