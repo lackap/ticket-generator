@@ -6,23 +6,25 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class ModelService {
 
-    public static Map<String, Entreprise> loadEntreprises (String entrepriseFile) throws IOException {
+    public static Map<String, Entreprise> loadEntreprises (Reader reader) throws IOException {
         Map<String, Entreprise> entreprises = new HashMap<>();
-        CSVReader reader =
-                new CSVReaderBuilder(new FileReader(entrepriseFile)).
+        CSVReader csvReader =
+                new CSVReaderBuilder(reader).
                         withSkipLines(1).withCSVParser(new CSVParser(';')). // Skiping firstline as it is header
                         build();
-        for (String[] posteValues : reader.readAll()) {
+        for (String[] posteValues : csvReader.readAll()) {
             String nomSecteursActivite = posteValues[0];
             String nomEntreprise = posteValues[1];
             Entreprise entreprise = entreprises.get(nomEntreprise);
@@ -44,13 +46,21 @@ public class ModelService {
         return entreprises;
     }
 
+    public static Map<String, Entreprise> loadEntreprises (String entrepriseFile) throws IOException {
+        return loadEntreprises(new FileReader(entrepriseFile));
+    }
+
     public static Map<String, Formation> loadFormations (String formationFile) throws IOException {
+        return loadFormations(new FileReader(formationFile));
+    }
+
+    public static Map<String, Formation> loadFormations (Reader reader ) throws IOException {
         Map<String, Formation> formations = new HashMap<>();
-        CSVReader reader = new CSVReaderBuilder(new FileReader(formationFile)).
+        CSVReader csvReader = new CSVReaderBuilder(reader).
                 withSkipLines(1).withCSVParser(new CSVParser(';')). // Skiping firstline as it is header
                         build();
         Diplome diplomePrecedent = null;
-        for (String[] diplomeValues : reader.readAll()) {
+        for (String[] diplomeValues : csvReader.readAll()) {
             String nomCentre = diplomeValues[1];
             Diplome diplome = null;
             if (StringUtils.isEmpty(nomCentre)) {
@@ -91,6 +101,18 @@ public class ModelService {
                 .stream()
                 .map(entreprise -> entreprise.getPostes().stream().map(poste -> poste.getFamilleMetier()).collect(Collectors.toList()))
                 .flatMap(Collection::stream)
+                .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public List<String> getSecteursActivitesEntreprises() {
+        return Model.getInstance().getEntreprises()
+                .values()
+                .stream()
+                .map(entreprise -> entreprise.getSecteursActivite())
+                .flatMap(Collection::stream)
+                .distinct()
+                .collect(Collectors.toList());
+
     }
 }

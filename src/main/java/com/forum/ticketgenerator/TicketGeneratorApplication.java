@@ -20,15 +20,7 @@ import java.util.Map;
 public class TicketGeneratorApplication {
 
 	public static void main(String[] args) {
-		try {
-			Map<String, Entreprise> entreprises = ModelService.loadEntreprises("F:\\Tech\\ticket-generator\\src\\test\\resources\\in\\entreprises.csv");
-			Map<String, Formation> formations = ModelService.loadFormations("F:\\Tech\\ticket-generator\\src\\test\\resources\\in\\formations.csv");
-			Model.getInstance().setEntreprises(entreprises);
-			Model.getInstance().setFormations(formations);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		SpringApplication.run(TicketGeneratorApplication.class, args);
 	}
 
