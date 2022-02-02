@@ -27,20 +27,22 @@ public class ModelService {
         for (String[] posteValues : csvReader.readAll()) {
             String nomSecteursActivite = posteValues[0];
             String nomEntreprise = posteValues[1];
+            String stand = posteValues[2];
             Entreprise entreprise = entreprises.get(nomEntreprise);
             if (entreprise == null) {
                 entreprise = new Entreprise();
                 entreprise.setNom(nomEntreprise);
+                entreprise.setStand(Integer.valueOf(stand));
                 List<String> secteursActivite = new ArrayList<>();
                 secteursActivite.add(nomSecteursActivite);
                 entreprise.setSecteursActivite(secteursActivite);
                 entreprises.put(nomEntreprise, entreprise);
             }
             Poste poste = new Poste();
-            poste.setIntitule(posteValues[2]);
-            poste.setFamilleMetier(posteValues[3]);
-            poste.setContrat(posteValues[4]);
-            poste.setNiveau(posteValues[5]);
+            poste.setIntitule(posteValues[3]);
+            poste.setFamilleMetier(posteValues[4]);
+            poste.setContrat(posteValues[5]);
+            poste.setNiveau(posteValues[6]);
             entreprise.getPostes().add(poste);
         }
         return entreprises;

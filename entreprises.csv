@@ -1,13 +1,13 @@
-Secteur d'activitÈ;Entreprise;NumÈro de stand;IntitulÈ mÈtier;Famille mÈtier;Contrat;niveau
+Secteur d'activit√©;Entreprise;Num√©ro de stand;Intitul√© m√©tier;Famille m√©tier;Contrat;niveau
 INDUSTRIE;PIERRE;1;Technicien de maintenance;MAINTENANCE;Stage;BAC+2
-SANTE / SOCIAL;PIERRE;1;Aide ‡ Domicile ;AIDE SOIGNANT;CDI;BAC
+SANTE / SOCIAL;PIERRE;1;Aide √† Domicile ;AIDE SOIGNANT;CDI;BAC
 INDUSTRIE;PIERRE;1;Electricien;ELECTRICITE;CDD;BAC
-INDUSTRIE;DAVID;2;ChargÈ de bureau d'Ètudes ;PRODUCTIQUE;CDI;>BAC+3
+INDUSTRIE;DAVID;2;Charg√© de bureau d'√©tudes ;PRODUCTIQUE;CDI;>BAC+3
 INDUSTRIE;DAVID;2;Responsable production;PRODUCTIQUE;Stage;>BAC+3
-INDUSTRIE;DAVID;2;OpÈrateur maintenance;MAINTENANCE;CDI;BAC+2
+INDUSTRIE;DAVID;2;Op√©rateur maintenance;MAINTENANCE;CDI;BAC+2
 INDUSTRIE;SAMIA;3;competent robotique;AUTOMATISME;CDI;BAC+2
 INDUSTRIE;SAMIA;3;bureau d'etudes automatisme;AUTOMATISME;CDD;BAC+2
 INDUSTRIE;SAMIA;3;Technicien de maintenance;MAINTENANCE;CDD;BAC
-INDUSTRIE;CHAFIAA;4;OpÈrateur maintenance;MAINTENANCE;CDI;BAC+2
+INDUSTRIE;CHAFIAA;4;Op√©rateur maintenance;MAINTENANCE;CDI;BAC+2
 INDUSTRIE;CHAFIAA;4;Electricien industriel;ELECTRICITE;Stage;BAC
-INDUSTRIE;CHAFIAA;4;Electricien du b‚timent;ELECTRICITE;CDI;BAC
+INDUSTRIE;CHAFIAA;4;Electricien du b√¢timent;ELECTRICITE;CDI;BAC

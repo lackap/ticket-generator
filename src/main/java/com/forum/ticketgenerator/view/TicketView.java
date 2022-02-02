@@ -16,8 +16,15 @@ import java.util.List;
 
 @Route
 public class TicketView extends VerticalLayout {
+
+    @Autowired
+    private HeaderView headerView;
+
     @Autowired
     private SearchView searchView;
+
+    @Autowired
+    private PdfGenerationView pdfGenerationView;
 
     @Autowired
     private SearchService searchService;
@@ -32,26 +39,20 @@ public class TicketView extends VerticalLayout {
     public void init() {
 
         configureGrid();
+        add(headerView);
         add(searchView);
         searchView.addListener(SearchFormationEvent.class, event -> {
+            Model.getInstance().setPostesMatching(event.getPostesMatching());
             grid.setItems(event.getPostesMatching());
             grid.getDataProvider().refreshAll();
 
         });
+        add(pdfGenerationView);
         add(grid);
     }
 
 
     private void configureGrid() {
         grid = new Grid<>(PosteMatching.class);
-        PosteMatching posteMatching1 = new PosteMatching();
-        posteMatching1.setStand(1);
-        posteMatching1.setNiveau("BAC");
-        posteMatching1.setIntitule("Toto");
-        posteMatching1.setContrat("CDI");
-        posteMatching1.setNom("Benjamin");
-        List<PosteMatching> posteMatchingList = new ArrayList<>();
-        posteMatchingList.add(posteMatching1);
-        grid.setItems(posteMatchingList);
     }
 }

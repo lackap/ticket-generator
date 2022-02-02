@@ -1,0 +1,27 @@
+Secteur d'activité;Centre de formation;diplômes + niveau (BTS, BAC …);Niveau;Intitulé métier;Famille métier
+INDUSTRIE;STE CROIX ST EUVERTE;Bac Pro MEI : Maintenance des Equipements Industriels;BAC;Technicien de maintenance ;MAINTENANCE
+INDUSTRIE;MARECHAL LECLERC;Bac Pro MEI : Maintenance des Equipements Industriels;BAC;Technicien de maintenance ;MAINTENANCE
+INDUSTRIE;STE CROIX ST EUVERTE;BTS CRSA : Conception et Réalisation de Systèmes Automatisés;BAC+2;Technicien de bureau d’études en automatisme;AUTOMATISME
+;;;;Technicien de maintenance;MAINTENANCE
+INDUSTRIE;JACQUES MONOD;BTS CIRA : Contrôle Industriel et Régulation Automatique;BAC+2;Technicien de bureau d’études en régul. /autom. ;AUTOMATISME
+;;;;Technicien de maintenance;MAINTENANCE
+;;;;Technicien instrumentiste/métrologue;MAINTENANCE
+;;;;Technicien de conduite de production;PRODUCTIQUE
+INDUSTRIE;BENJAMIN FRANKLIN;Bac Pro TU : Technicien d’Usinage;BAC;Opérateur de fabrication sur MO;PRODUCTIQUE
+;;;;Technicien en métrologie;PRODUCTIQUE
+INDUSTRIE;BENJAMIN FRANKLIN;BTS CPRP : Conception des Processus de Réalisation de Produits;BAC+2;Technicien de méthodes en conception des processus;PRODUCTIQUE
+;;;;Technicien méthodes atelier;PRODUCTIQUE
+INDUSTRIE;BENJAMIN FRANKLIN;Licence Pro CAPPI : Process de fabrication;> BAC+3;Responsable méthodes;PRODUCTIQUE
+;;;;Responsable de production     ;PRODUCTIQUE
+;;;;Responsable industrialisation;PRODUCTIQUE
+INDUSTRIE;STE CROIX ST EUVERTE;Licence Pro CAPPI : Systèmes automatisés/robotisés;> BAC+3;Chef de projet robotique;AUTOMATISME
+;;;;Intégrateur automatisme / robotique;AUTOMATISME
+INDUSTRIE;BENJAMIN FRANKLIN;BTS électrotechnique;BAC+2;Electricien du bâtiment (domotique-électricité);ELECTRICITE
+;;;;Electricien de l’industrie (électrotechnique);ELECTRICITE
+;;;;Technicien de maintenance - installateur;MAINTENANCE
+INDUSTRIE;JEAN LURCAT;Bac Pro MELEC : Métier de l’Electricité et de ses Environnements Connectés;BAC;Electricien du bâtiment (domotique-électricité);ELECTRICITE
+;;;;Electricien de l’industrie (électrotechnique);ELECTRICITE
+;;;;Technicien de maintenance - installateur;MAINTENANCE
+INDUSTRIE;MAURICE GENEVOIX;Bac Pro SN : Systèmes Numériques ;BAC;Technicien installateur de systèmes de sécurité;ELECTRICITE
+;;;;Technicien de maintenance en sécurité;MAINTENANCE
+;;;;Technicien SAV électroménager;ELECTRICITE

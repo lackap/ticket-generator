@@ -43,6 +43,11 @@
 			<artifactId>opencsv</artifactId>
 			<version>4.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.10</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -69,7 +74,31 @@
 					<maxAttempts>240</maxAttempts>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resource-one</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/test/resources/in</directory>
+									<includes>
+										<include>entreprises.csv</include>
+										<include>formations.csv</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!--
                 Take care of synchronizing java dependencies and imports in
                 package.json and main.js files.
