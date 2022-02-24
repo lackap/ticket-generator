@@ -53,6 +53,12 @@ public class TicketView extends VerticalLayout {
 
 
     private void configureGrid() {
-        grid = new Grid<>(PosteMatching.class);
+
+        grid = new Grid<>(PosteMatching.class, false);
+        grid.addColumn("nom");
+        grid.addColumn("intitule");
+        grid.addColumn("contrat");
+        grid.addColumn("niveau");
+        grid.addColumn("stand");
     }
 }

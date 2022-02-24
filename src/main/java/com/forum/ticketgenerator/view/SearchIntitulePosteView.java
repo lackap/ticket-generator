@@ -7,6 +7,7 @@ import com.forum.ticketgenerator.service.SearchService;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.shared.Registration;
@@ -25,7 +26,7 @@ public class SearchIntitulePosteView  extends VerticalLayout {
     @Autowired
     private SearchService searchService;
 
-    private Select<String> selectFamilleMetier;
+    private ComboBox<String> selectFamilleMetier;
 
     private Button buttonSearchPoste;
 
@@ -35,8 +36,8 @@ public class SearchIntitulePosteView  extends VerticalLayout {
 
     @PostConstruct
     public void init(){
-        selectFamilleMetier = new Select<>();
-        selectFamilleMetier.setLabel("Poste");
+        selectFamilleMetier = new ComboBox<>();
+        selectFamilleMetier.setLabel("Famille Métier");
         selectFamilleMetier.setEnabled(true);
         selectFamilleMetier.setItems(modelService.getFamilleMetierEntreprises());
         selectFamilleMetier.addValueChangeListener(event -> {
@@ -48,7 +49,7 @@ public class SearchIntitulePosteView  extends VerticalLayout {
         });
         add(selectFamilleMetier);
         buttonSearchPoste = new Button();
-        buttonSearchPoste.setText("Chercher par poste");
+        buttonSearchPoste.setText("Chercher par famille métier");
         buttonSearchPoste.setEnabled(false);
         buttonSearchPoste.addClickListener(event -> {
             fireEvent(new FormationEvent(buttonSearchPoste, false,

@@ -40,6 +40,7 @@ public class SearchView extends HorizontalLayout {
 
     @PostConstruct
     public void init() {
+        setWidth("100%");
         addListener(FormationEvent.class, event -> {
             fireEvent(new SearchFormationEvent(event.getSource(), false, event.getPostesMatching()));
         });

@@ -1,5 +1,6 @@
 package com.forum.ticketgenerator.service;
 
+import com.forum.ticketgenerator.constants.ApplicationConstants;
 import com.forum.ticketgenerator.model.*;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
@@ -62,6 +63,7 @@ public class ModelService {
                 withSkipLines(1).withCSVParser(new CSVParser(';')). // Skiping firstline as it is header
                         build();
         Diplome diplomePrecedent = null;
+        formations.put(ApplicationConstants.AUCUN_DIPLOME, new Formation(ApplicationConstants.AUCUN_DIPLOME));
         for (String[] diplomeValues : csvReader.readAll()) {
             String nomCentre = diplomeValues[1];
             Diplome diplome = null;
@@ -93,6 +95,13 @@ public class ModelService {
         return Model.getInstance().getFormations();
     }
 
+    public List<String> getAllDiplomes() {
+        return Model.getInstance().getFormations().values().stream().
+                map(formation -> formation.getDiplomes().stream().map(Diplome::getIntituleDiplome).collect(Collectors.toList()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
     public List<String> getCentreFormationLabels() {
         return getAllFormations().values().stream().map(formation -> formation.getNomCentre()).collect(Collectors.toList());
     }
@@ -104,7 +113,7 @@ public class ModelService {
                 .map(entreprise -> entreprise.getPostes().stream().map(poste -> poste.getFamilleMetier()).collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .distinct()
-                .collect(Collectors.toList());
+                .sorted((p1, p2) -> p1.compareTo(p2)).collect(Collectors.toList());
     }
 
     public List<String> getSecteursActivitesEntreprises() {

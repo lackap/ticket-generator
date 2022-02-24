@@ -8,6 +8,11 @@ public class Formation {
     private String nomCentre;
     private List<Diplome> diplomes;
 
+    public Formation(String nomCentre) {
+        this.nomCentre = nomCentre;
+        this.diplomes = new ArrayList<>();
+    }
+
     public Formation() {
         this.diplomes = new ArrayList<>();
     }
