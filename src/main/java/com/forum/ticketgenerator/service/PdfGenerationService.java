@@ -59,7 +59,7 @@ public class PdfGenerationService {
     }
 
     private void addTableHeader(PdfPTable table) {
-        Stream.of("Nom Entreprise", "Intitule poste", "Niveau", "Contrat", "Stand")
+        Stream.of("Entreprise", "Intitule de poste", "Niveau", "Contrat", "N°Stand")
                 .forEach(columnTitle -> {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(BaseColor.LIGHT_GRAY);

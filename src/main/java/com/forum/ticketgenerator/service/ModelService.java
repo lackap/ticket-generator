@@ -5,14 +5,12 @@ import com.forum.ticketgenerator.model.*;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,11 +48,11 @@ public class ModelService {
     }
 
     public static Map<String, Entreprise> loadEntreprises (String entrepriseFile) throws IOException {
-        return loadEntreprises(new FileReader(entrepriseFile));
+        return loadEntreprises(new InputStreamReader(new FileInputStream(entrepriseFile) , CharEncoding.UTF_8));
     }
 
     public static Map<String, Formation> loadFormations (String formationFile) throws IOException {
-        return loadFormations(new FileReader(formationFile));
+        return loadFormations(new InputStreamReader(new FileInputStream(formationFile), CharEncoding.UTF_8));
     }
 
     public static Map<String, Formation> loadFormations (Reader reader ) throws IOException {
