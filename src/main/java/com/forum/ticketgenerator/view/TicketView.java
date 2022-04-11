@@ -3,18 +3,19 @@ package com.forum.ticketgenerator.view;
 import com.forum.ticketgenerator.event.SearchFormationEvent;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
-import com.forum.ticketgenerator.service.ModelService;
 import com.forum.ticketgenerator.service.SearchService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
 
-@Route
+@Route(value = "ticket")
+@RouteAlias(value = "")
+@UIScope
 public class TicketView extends VerticalLayout {
 
     @Autowired

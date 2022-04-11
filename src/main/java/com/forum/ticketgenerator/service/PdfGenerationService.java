@@ -2,24 +2,24 @@ package com.forum.ticketgenerator.service;
 
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Phrase;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.time.Instant;
 import java.util.stream.Stream;
 
 @Service
 public class PdfGenerationService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PdfGenerationService.class);
 
     public void genererPdf() {
 
@@ -29,6 +29,18 @@ public class PdfGenerationService {
             PdfWriter.getInstance(document, new FileOutputStream(name));
 
             document.open();
+            try {
+                Image imageMetropole = Image.getInstance(getClass().getClassLoader().getResource("META-INF/resources/img/logo-metropole.png"));
+                imageMetropole.setWidthPercentage(40);
+                float scaler = ((document.getPageSize().getWidth() / 2 - document.leftMargin()
+                        - document.rightMargin()) / imageMetropole.getWidth()) * 100;
+
+                imageMetropole.scalePercent(scaler);
+                imageMetropole.setAlignment(Element.ALIGN_CENTER);
+                document.add(imageMetropole);
+            } catch (Exception e ) {
+                LOGGER.error("File not found : META-INF/resources/img/orleans_metropole.png", e);
+            }
 
             PdfPTable table = new PdfPTable(5);
             addTableHeader(table);

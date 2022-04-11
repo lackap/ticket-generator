@@ -2,27 +2,18 @@ package com.forum.ticketgenerator.view;
 
 import com.forum.ticketgenerator.event.FormationEvent;
 import com.forum.ticketgenerator.event.SearchFormationEvent;
-import com.forum.ticketgenerator.model.Entreprise;
-import com.forum.ticketgenerator.model.Model;
-import com.forum.ticketgenerator.model.PosteMatching;
-import com.forum.ticketgenerator.service.ModelService;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
 @Component
+@UIScope
 public class SearchView extends HorizontalLayout {
 
     @Autowired
