@@ -18,19 +18,13 @@ import javax.annotation.PostConstruct;
 
 @Component
 @UIScope
-public class SearchSecteurActiviteView extends VerticalLayout {
-
-    @Autowired
-    private ModelService modelService;
-
-    @Autowired
-    private SearchService searchService;
+public class SearchBySecteurActiviteView extends ASearchByLayout {
 
     private Select<String> selectSecteurActivite;
 
     private Button buttonSearchSecteur;
 
-    public SearchSecteurActiviteView () {
+    public SearchBySecteurActiviteView () {
 
     }
 
@@ -57,11 +51,5 @@ public class SearchSecteurActiviteView extends VerticalLayout {
         });
         add(buttonSearchSecteur);
     }
-
-    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
-                                                                  ComponentEventListener<T> listener) {
-        return getEventBus().addListener(eventType, listener);
-    }
-
 }
 

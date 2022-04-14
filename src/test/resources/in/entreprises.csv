@@ -1,13 +1,8 @@
-Secteur d'activité;Entreprise;Numéro de stand;Intitulé métier;Famille métier;Contrat;niveau
+Secteur d'activitÃ©;Entreprise;NumÃ©ro de stand;IntitulÃ© mÃ©tier;Famille mÃ©tier;Contrat;niveau
 INDUSTRIE;PIERRE;1;Technicien de maintenance;MAINTENANCE;Stage;BAC+2
-SANTE / SOCIAL;PIERRE;1;Aide à Domicile ;AIDE SOIGNANT;CDI;BAC
 INDUSTRIE;PIERRE;1;Electricien;ELECTRICITE;CDD;BAC
-INDUSTRIE;DAVID;2;Chargé de bureau d'études ;PRODUCTIQUE;CDI;>BAC+3
 INDUSTRIE;DAVID;2;Responsable production;PRODUCTIQUE;Stage;>BAC+3
-INDUSTRIE;DAVID;2;Opérateur maintenance;MAINTENANCE;CDI;BAC+2
-INDUSTRIE;SAMIA;3;competent robotique;AUTOMATISME;CDI;BAC+2
 INDUSTRIE;SAMIA;3;bureau d'etudes automatisme;AUTOMATISME;CDD;BAC+2
 INDUSTRIE;SAMIA;3;Technicien de maintenance;MAINTENANCE;CDD;BAC
-INDUSTRIE;CHAFIAA;4;Opérateur maintenance;MAINTENANCE;CDI;BAC+2
 INDUSTRIE;CHAFIAA;4;Electricien industriel;ELECTRICITE;Stage;BAC
-INDUSTRIE;CHAFIAA;4;Electricien du bâtiment;ELECTRICITE;CDI;BAC
+INDUSTRIE;CHAFIAA;4;Electricien du bÃ¢timent;ELECTRICITE;CDI;BAC

@@ -1,12 +1,23 @@
 package com.forum.ticketgenerator.view;
 
+import com.forum.ticketgenerator.event.FormationEvent;
+import com.forum.ticketgenerator.event.ReloadEvent;
+import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.service.ModelService;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.spring.annotation.UIScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +26,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.logging.Logger;
 
-public class LoadingView extends HorizontalLayout {
+@Component
+@UIScope
+public class LoadingView extends VerticalLayout {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoadingView.class);
 
     @Autowired
     private ModelService modelService;
@@ -33,43 +46,41 @@ public class LoadingView extends HorizontalLayout {
 
     @PostConstruct
     private void init() {
-
-    Text textEntreprise = new Text("Charger les entreprises : ");
-    add(textEntreprise);
-    Button crapButton = new Button("press to get an upload button");
-    add(crapButton);
-    crapButton.addClickListener(buttonClickEvent -> {
-        addEntrepriseButton();
-        crapButton.setVisible(false);
-    });
-
-    Text textFormation = new Text("Charger les formations : ");
-    add(textFormation);
-    MemoryBuffer memoryBufferFormation = new MemoryBuffer();
-    uploadFormation = new Upload(memoryBufferFormation);
-    uploadFormation.addSucceededListener(event -> {
-        InputStream inputStream = memoryBufferFormation.getInputStream();
-        try {
-            ModelService.loadFormations(new InputStreamReader(inputStream));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    });
-    add(uploadFormation);
-}
-
-    private void addEntrepriseButton () {
-        FileBuffer memoryBufferEntreprise = new FileBuffer();
+        MemoryBuffer memoryBufferEntreprise = new MemoryBuffer();
         uploadEntreprise = new Upload(memoryBufferEntreprise);
+        uploadEntreprise.setUploadButton(new Button("Charger les entreprises : "));
+        uploadEntreprise.setDropLabel(new Label("Déposer le fichier ici"));
         uploadEntreprise.addSucceededListener(event -> {
             InputStream inputStream = memoryBufferEntreprise.getInputStream();
             try {
-                ModelService.loadEntreprises(new InputStreamReader(inputStream));
+                Model.getInstance().setEntreprises(modelService.loadEntreprises(new InputStreamReader(inputStream)));
+                fireEvent(new ReloadEvent(uploadEntreprise, false));
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Erreur lors du chargement des entreprises", e);
             }
         });
         add(uploadEntreprise);
+
+        MemoryBuffer memoryBufferFormation = new MemoryBuffer();
+        uploadFormation = new Upload(memoryBufferFormation);
+        uploadFormation.setUploadButton(new Button("Charger les formations : "));
+        uploadFormation.setDropLabel(new Label("Déposer le fichier ici"));
+        uploadFormation.addSucceededListener(event -> {
+            InputStream inputStream = memoryBufferFormation.getInputStream();
+            try {
+                Model.getInstance().setFormations(modelService.loadFormations(new InputStreamReader(inputStream)));
+                fireEvent(new ReloadEvent(uploadFormation, false));
+            } catch (IOException e) {
+                LOGGER.error("Erreur lors du chargement des formations", e);
+            }
+        });
+        add(uploadFormation);
     }
+
+    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
+                                                                  ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
+    }
+
 
 }

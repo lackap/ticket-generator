@@ -1,9 +1,11 @@
 package com.forum.ticketgenerator.view;
 
+import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.event.SearchFormationEvent;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.service.SearchService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -25,6 +27,9 @@ public class TicketView extends VerticalLayout {
     private SearchView searchView;
 
     @Autowired
+    private LoadingView loadingView;
+
+    @Autowired
     private PdfGenerationView pdfGenerationView;
 
     @Autowired
@@ -41,6 +46,10 @@ public class TicketView extends VerticalLayout {
 
         configureGrid();
         add(headerView);
+        add(loadingView);
+        loadingView.addListener(ReloadEvent.class, event -> {
+            UI.getCurrent().getPage().reload();
+        });
         add(searchView);
         searchView.addListener(SearchFormationEvent.class, event -> {
             Model.getInstance().setPostesMatching(event.getPostesMatching());

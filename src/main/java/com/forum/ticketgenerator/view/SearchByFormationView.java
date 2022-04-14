@@ -19,23 +19,13 @@ import javax.annotation.PostConstruct;
 
 @Component
 @UIScope
-public class FormationView extends VerticalLayout {
-
-    @Autowired
-    private ModelService modelService;
-
-    @Autowired
-    private SearchService searchService;
+public class SearchByFormationView extends ASearchByLayout {
 
     private ComboBox<String> selectCentre;
 
     private ComboBox<String> selectDiplome;
 
     private Button buttonSearchFormation;
-
-    public FormationView() {
-
-    }
 
     @PostConstruct
     public void init(){
@@ -75,11 +65,6 @@ public class FormationView extends VerticalLayout {
                         searchService.searchFromFormation(selectCentre.getValue(), selectDiplome.getValue())));
         });
         add(buttonSearchFormation);
-    }
-
-    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
-                                                                  ComponentEventListener<T> listener) {
-        return getEventBus().addListener(eventType, listener);
     }
 
 }

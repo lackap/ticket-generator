@@ -18,19 +18,13 @@ import javax.annotation.PostConstruct;
 
 @Component
 @UIScope
-public class SearchIntitulePosteView  extends VerticalLayout {
-
-    @Autowired
-    private ModelService modelService;
-
-    @Autowired
-    private SearchService searchService;
+public class SearchByIntitulePosteView extends ASearchByLayout {
 
     private ComboBox<String> selectFamilleMetier;
 
     private Button buttonSearchPoste;
 
-    public SearchIntitulePosteView() {
+    public SearchByIntitulePosteView () {
 
     }
 
@@ -57,11 +51,5 @@ public class SearchIntitulePosteView  extends VerticalLayout {
         });
         add(buttonSearchPoste);
     }
-
-    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
-                                                                  ComponentEventListener<T> listener) {
-        return getEventBus().addListener(eventType, listener);
-    }
-
 }
 

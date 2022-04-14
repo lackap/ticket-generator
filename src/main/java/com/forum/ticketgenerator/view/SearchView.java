@@ -17,13 +17,13 @@ import javax.annotation.PostConstruct;
 public class SearchView extends HorizontalLayout {
 
     @Autowired
-    private FormationView formationView;
+    private SearchByFormationView formationView;
 
     @Autowired
-    private SearchIntitulePosteView searchIntitulePosteView;
+    private SearchByIntitulePosteView searchIntitulePosteView;
 
     @Autowired
-    private SearchSecteurActiviteView searchSecteurActiviteView;
+    private SearchBySecteurActiviteView searchSecteurActiviteView;
 
     public SearchView () {
     }

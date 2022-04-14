@@ -19,13 +19,14 @@ public class PdfGenerationView extends VerticalLayout {
     private Button buttonGeneratePdf;
 
     public PdfGenerationView () {
-
+        setHorizontalComponentAlignment(Alignment.CENTER);
     }
 
     @PostConstruct
     public void init(){
+        getStyle().set("text-align", "center");
         buttonGeneratePdf = new Button();
-        buttonGeneratePdf.setText("Générer PDF recherche");
+        buttonGeneratePdf.setText("Générer PDF");
         buttonGeneratePdf.addClickListener(event -> {
               pdfGenerationService.genererPdf();
         });

@@ -21,7 +21,7 @@ public class HeaderView extends HorizontalLayout {
     @PostConstruct
     public void init() {
         setWidth("100%");
-        Image image2 = new Image("img/logo-metropole.png", "Orleans Metropole 2");
+        Image image2 = new Image("img/partenaires.png", "Orleans Metropole 2");
         image2.setWidth("150px");
         add(image2);
         Div titre = new Div();
@@ -30,7 +30,7 @@ public class HeaderView extends HorizontalLayout {
         titre.getElement().getStyle().set("font-weight", "bold");
         titre.getElement().getStyle().set("text-align", "center");
         Span span = new Span();
-        Text html = new Text("Forum Détecter les nouveau talents");
+        Text html = new Text("Forum Détecter les nouveaux talents");
         span.add(html);
         titre.add(span);
         add(titre);

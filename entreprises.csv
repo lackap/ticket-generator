@@ -2,8 +2,8 @@ Secteur d'activité;Entreprise;Numéro de stand;Intitulé métier;Famille métie
 INDUSTRIE;PIERRE;1;Technicien de maintenance;MAINTENANCE;Stage;BAC+2
 SANTE / SOCIAL;PIERRE;1;Aide à Domicile ;AIDE SOIGNANT;CDI;BAC
 INDUSTRIE;PIERRE;1;Electricien;ELECTRICITE;CDD;BAC
-INDUSTRIE;DAVID;2;Chargé de bureau d'études ;PRODUCTIQUE;CDI;>BAC+3
-INDUSTRIE;DAVID;2;Responsable production;PRODUCTIQUE;Stage;>BAC+3
+INDUSTRIE;DAVID;;Chargé de bureau d'études ;PRODUCTIQUE;CDI;>BAC+3
+INDUSTRIE;DAVID;;Responsable production;PRODUCTIQUE;Stage;>BAC+3
 INDUSTRIE;DAVID;2;Opérateur maintenance;MAINTENANCE;CDI;BAC+2
 INDUSTRIE;SAMIA;3;competent robotique;AUTOMATISME;CDI;BAC+2
 INDUSTRIE;SAMIA;3;bureau d'etudes automatisme;AUTOMATISME;CDD;BAC+2

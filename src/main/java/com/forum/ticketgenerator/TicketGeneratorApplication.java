@@ -9,6 +9,7 @@ import com.forum.ticketgenerator.service.ModelService;
 import com.forum.ticketgenerator.service.SearchService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -29,8 +30,9 @@ public class TicketGeneratorApplication {
 			} else {
 				path = new File(new File("toto").getAbsolutePath()).getParent();
 			}
-			Map<String, Entreprise> entreprises = ModelService.loadEntreprises(path + "\\entreprises.csv");
-			Map<String, Formation> formations = ModelService.loadFormations(path + "\\formations.csv");
+			ModelService modelService = new ModelService();
+			Map<String, Entreprise> entreprises = modelService.loadEntreprises(path + "\\entreprises.csv");
+			Map<String, Formation> formations = modelService.loadFormations(path + "\\formations.csv");
 			Model.getInstance().setEntreprises(entreprises);
 			Model.getInstance().setFormations(formations);
 

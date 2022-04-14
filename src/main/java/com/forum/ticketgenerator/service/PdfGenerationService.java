@@ -30,7 +30,7 @@ public class PdfGenerationService {
 
             document.open();
             try {
-                Image imageMetropole = Image.getInstance(getClass().getClassLoader().getResource("META-INF/resources/img/logo-metropole.png"));
+                Image imageMetropole = Image.getInstance(getClass().getClassLoader().getResource("META-INF/resources/img/partenaires.png"));
                 imageMetropole.setWidthPercentage(40);
                 float scaler = ((document.getPageSize().getWidth() / 2 - document.leftMargin()
                         - document.rightMargin()) / imageMetropole.getWidth()) * 100;

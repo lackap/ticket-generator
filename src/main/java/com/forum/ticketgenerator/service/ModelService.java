@@ -5,19 +5,23 @@ import com.forum.ticketgenerator.model.*;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class ModelService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModelService.class);
 
-    public static Map<String, Entreprise> loadEntreprises (Reader reader) throws IOException {
+    public Map<String, Entreprise> loadEntreprises (Reader reader) throws IOException {
         Map<String, Entreprise> entreprises = new HashMap<>();
         CSVReader csvReader =
                 new CSVReaderBuilder(reader).
@@ -31,7 +35,11 @@ public class ModelService {
             if (entreprise == null) {
                 entreprise = new Entreprise();
                 entreprise.setNom(nomEntreprise);
-                entreprise.setStand(Integer.valueOf(stand));
+                try {
+                    entreprise.setStand(Integer.valueOf(stand));
+                } catch (NumberFormatException e) {
+                    LOGGER.info("Stand n'a pas de valeur valide pour l'entreprise " + nomEntreprise );
+                }
                 List<String> secteursActivite = new ArrayList<>();
                 secteursActivite.add(nomSecteursActivite);
                 entreprise.setSecteursActivite(secteursActivite);
@@ -47,15 +55,15 @@ public class ModelService {
         return entreprises;
     }
 
-    public static Map<String, Entreprise> loadEntreprises (String entrepriseFile) throws IOException {
-        return loadEntreprises(new InputStreamReader(new FileInputStream(entrepriseFile) , CharEncoding.UTF_8));
+    public Map<String, Entreprise> loadEntreprises (String entrepriseFile) throws IOException {
+        return loadEntreprises(new InputStreamReader(new FileInputStream(entrepriseFile)));
     }
 
-    public static Map<String, Formation> loadFormations (String formationFile) throws IOException {
-        return loadFormations(new InputStreamReader(new FileInputStream(formationFile), CharEncoding.UTF_8));
+    public Map<String, Formation> loadFormations (String formationFile) throws IOException {
+        return loadFormations(new InputStreamReader(new FileInputStream(formationFile)));
     }
 
-    public static Map<String, Formation> loadFormations (Reader reader ) throws IOException {
+    public Map<String, Formation> loadFormations (Reader reader ) throws IOException {
         Map<String, Formation> formations = new HashMap<>();
         CSVReader csvReader = new CSVReaderBuilder(reader).
                 withSkipLines(1).withCSVParser(new CSVParser(';')). // Skiping firstline as it is header
