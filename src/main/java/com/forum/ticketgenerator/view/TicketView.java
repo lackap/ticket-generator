@@ -1,10 +1,11 @@
 package com.forum.ticketgenerator.view;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
-import com.forum.ticketgenerator.event.SearchFormationEvent;
+import com.forum.ticketgenerator.event.SearchResultEvent;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.service.SearchService;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,34 +37,29 @@ public class TicketView extends VerticalLayout {
     private SearchService searchService;
 
     private Grid<PosteMatching> grid;
-
-    public TicketView() {
-
-    }
+    private Text recherche;
 
     @PostConstruct
     public void init() {
 
-        configureGrid();
         add(headerView);
         add(loadingView);
-        loadingView.addListener(ReloadEvent.class, event -> {
-            UI.getCurrent().getPage().reload();
-        });
+        loadingView.addListener(ReloadEvent.class, event -> UI.getCurrent().getPage().reload());
         add(searchView);
-        searchView.addListener(SearchFormationEvent.class, event -> {
+        searchView.addListener(SearchResultEvent.class, event -> {
             Model.getInstance().setPostesMatching(event.getPostesMatching());
             grid.setItems(event.getPostesMatching());
             grid.getDataProvider().refreshAll();
-
+            recherche.setText(event.getLabel());
         });
         add(pdfGenerationView);
-        add(grid);
+        configureGrid();
     }
 
 
     private void configureGrid() {
-
+        recherche  = new Text("");
+        add(recherche);
         grid = new Grid<>(PosteMatching.class, false);
         grid.addColumn("nom");
         grid.getColumnByKey("nom").setHeader("Entreprise");
@@ -73,5 +69,6 @@ public class TicketView extends VerticalLayout {
         grid.addColumn("niveau");
         grid.addColumn("stand");
         grid.getColumnByKey("stand").setHeader("N° de stand");
+        add(grid);
     }
 }

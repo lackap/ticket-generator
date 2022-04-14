@@ -1,7 +1,7 @@
 package com.forum.ticketgenerator.view;
 
-import com.forum.ticketgenerator.event.FormationEvent;
-import com.forum.ticketgenerator.event.SearchFormationEvent;
+import com.forum.ticketgenerator.event.SearchEvent;
+import com.forum.ticketgenerator.event.SearchResultEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -32,18 +32,10 @@ public class SearchView extends HorizontalLayout {
     @PostConstruct
     public void init() {
         setWidth("100%");
-        addListener(FormationEvent.class, event -> {
-            fireEvent(new SearchFormationEvent(event.getSource(), false, event.getPostesMatching()));
-        });
-        formationView.addListener(FormationEvent.class, event -> {
-            fireEvent(event);
-        });
-        searchIntitulePosteView.addListener(FormationEvent.class, event -> {
-            fireEvent(event);
-        });
-        searchSecteurActiviteView.addListener(FormationEvent.class, event -> {
-            fireEvent(event);
-        });
+        addListener(SearchEvent.class, event -> fireEvent(new SearchResultEvent(event.getSource(), false, event.getPostesMatching(), event.getLabel())));
+        formationView.addListener(SearchEvent.class, this::fireEvent);
+        searchIntitulePosteView.addListener(SearchEvent.class, this::fireEvent);
+        searchSecteurActiviteView.addListener(SearchEvent.class, this::fireEvent);
 
         add(formationView);
         add(searchIntitulePosteView);

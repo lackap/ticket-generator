@@ -6,13 +6,22 @@ import com.vaadin.flow.component.button.Button;
 
 import java.util.List;
 
-public class FormationEvent extends ComponentEvent<Button> {
-
+public class SearchEvent extends ComponentEvent<Button> {
+    private String label;
     private List<PosteMatching> postesMatching;
 
-    public FormationEvent (Button source, boolean fromClient, List<PosteMatching> postesMatching) {
+    public SearchEvent (Button source, boolean fromClient, List<PosteMatching> postesMatching, String label) {
         super(source, fromClient);
         this.postesMatching = postesMatching;
+        this.label = label;
+    }
+
+    public String getLabel () {
+        return label;
+    }
+
+    public void setLabel (String label) {
+        this.label = label;
     }
 
     public List<PosteMatching> getPostesMatching () {

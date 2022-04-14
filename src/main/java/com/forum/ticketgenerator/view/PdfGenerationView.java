@@ -19,7 +19,7 @@ public class PdfGenerationView extends VerticalLayout {
     private Button buttonGeneratePdf;
 
     public PdfGenerationView () {
-        setHorizontalComponentAlignment(Alignment.CENTER);
+        setAlignItems(Alignment.CENTER);
     }
 
     @PostConstruct
