@@ -18,7 +18,7 @@ public class Formation {
     }
 
     public List<String> getDiplomeLabels() {
-        return diplomes.stream().map(Diplome::getIntituleDiplome).collect(Collectors.toList());
+        return diplomes.stream().map(Diplome::getIntituleDiplome).distinct().collect(Collectors.toList());
     }
 
     public String getNomCentre () {

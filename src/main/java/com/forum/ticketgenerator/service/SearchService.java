@@ -48,7 +48,7 @@ public class SearchService {
             return formation.getDiplomes().stream()
                     .filter(di -> di.getIntituleDiplome().equals(intituleFormation))
                     .findFirst()
-                    .map(diplome -> diplome.getMetiersDebouche().stream().map(metier -> metier.getFamilleMetier()).collect(Collectors.toList()))
+                    .map(diplome -> diplome.getMetiersDebouche().stream().map(MetierDebouche::getFamilleMetier).collect(Collectors.toList()))
                     .get();
         }
     }
