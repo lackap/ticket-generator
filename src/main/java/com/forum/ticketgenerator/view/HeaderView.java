@@ -14,14 +14,12 @@ import javax.annotation.PostConstruct;
 @UIScope
 public class HeaderView extends HorizontalLayout {
 
-    private Text titre;
-
     public HeaderView() {}
 
     @PostConstruct
     public void init() {
         setWidth("100%");
-        Image image2 = new Image("img/partenaires.png", "Orleans Metropole 2");
+        Image image2 = new Image("img/ORLEANS METROPOLE.png", "Orleans Metropole 2");
         image2.setWidth("150px");
         add(image2);
         Div titre = new Div();
