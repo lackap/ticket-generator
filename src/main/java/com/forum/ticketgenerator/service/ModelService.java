@@ -2,6 +2,7 @@ package com.forum.ticketgenerator.service;
 
 import com.forum.ticketgenerator.constants.ApplicationConstants;
 import com.forum.ticketgenerator.model.*;
+import com.forum.ticketgenerator.utils.EncodingUtils;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -25,7 +26,7 @@ public class ModelService {
         Map<String, Entreprise> entreprises = new HashMap<>();
         CSVReader csvReader =
                 new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')). // Skiping firstline as it is header
+                        withSkipLines(1).withCSVParser(new CSVParser(';')).
                         build();
         for (String[] posteValues : csvReader.readAll()) {
             String nomSecteursActivite = posteValues[0];
@@ -50,29 +51,32 @@ public class ModelService {
             poste.setFamilleMetier(posteValues[4]);
             poste.setContrat(posteValues[5]);
             poste.setNiveau(posteValues[6]);
+            LOGGER.info("Added poste " + poste.getIntitule() + " " + poste.getFamilleMetier());
             entreprise.getPostes().add(poste);
         }
         return entreprises;
     }
 
     public Map<String, Entreprise> loadEntreprises (String entrepriseFile) throws IOException {
-        return loadEntreprises(new InputStreamReader(new FileInputStream(entrepriseFile)));
+        String charset = EncodingUtils.getEncodingToUse(entrepriseFile);
+        return loadEntreprises(new InputStreamReader(new FileInputStream(entrepriseFile), charset));
     }
 
     public Map<String, Formation> loadFormations (String formationFile) throws IOException {
-        return loadFormations(new InputStreamReader(new FileInputStream(formationFile)));
+        String charset = EncodingUtils.getEncodingToUse(formationFile);
+        return loadFormations(new InputStreamReader(new FileInputStream(formationFile), charset));
     }
 
     public Map<String, Formation> loadFormations (Reader reader ) throws IOException {
         Map<String, Formation> formations = new HashMap<>();
         CSVReader csvReader = new CSVReaderBuilder(reader).
-                withSkipLines(1).withCSVParser(new CSVParser(';')). // Skiping firstline as it is header
+                withSkipLines(1).withCSVParser(new CSVParser(';')).
                         build();
         Diplome diplomePrecedent = null;
         formations.put(ApplicationConstants.AUCUN_DIPLOME, new Formation(ApplicationConstants.AUCUN_DIPLOME));
         for (String[] diplomeValues : csvReader.readAll()) {
             String nomCentre = diplomeValues[1];
-            Diplome diplome = null;
+            Diplome diplome;
             if (StringUtils.isEmpty(nomCentre)) {
                 diplome = diplomePrecedent;
             } else {
@@ -105,28 +109,29 @@ public class ModelService {
         return Model.getInstance().getFormations().values().stream().
                 map(formation -> formation.getDiplomes().stream().map(Diplome::getIntituleDiplome).collect(Collectors.toList()))
                 .flatMap(Collection::stream)
+                .distinct()
                 .collect(Collectors.toList());
     }
 
     public List<String> getCentreFormationLabels() {
-        return getAllFormations().values().stream().map(formation -> formation.getNomCentre()).collect(Collectors.toList());
+        return getAllFormations().values().stream().map(Formation::getNomCentre).collect(Collectors.toList());
     }
 
     public List<String> getFamilleMetierEntreprises() {
         return Model.getInstance().getEntreprises()
                 .values()
                 .stream()
-                .map(entreprise -> entreprise.getPostes().stream().map(poste -> poste.getFamilleMetier()).collect(Collectors.toList()))
+                .map(entreprise -> entreprise.getPostes().stream().map(Poste::getFamilleMetier).collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .distinct()
-                .sorted((p1, p2) -> p1.compareTo(p2)).collect(Collectors.toList());
+                .sorted(Comparator.naturalOrder()).collect(Collectors.toList());
     }
 
     public List<String> getSecteursActivitesEntreprises() {
         return Model.getInstance().getEntreprises()
                 .values()
                 .stream()
-                .map(entreprise -> entreprise.getSecteursActivite())
+                .map(Entreprise::getSecteursActivite)
                 .flatMap(Collection::stream)
                 .distinct()
                 .collect(Collectors.toList());

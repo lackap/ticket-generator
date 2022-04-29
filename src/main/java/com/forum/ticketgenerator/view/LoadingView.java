@@ -9,7 +9,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.component.upload.receivers.FileBuffer;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.slf4j.Logger;
@@ -19,8 +19,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 @Component
 @UIScope
@@ -41,14 +39,13 @@ public class LoadingView extends VerticalLayout {
 
     @PostConstruct
     private void init() {
-        MemoryBuffer memoryBufferEntreprise = new MemoryBuffer();
+        FileBuffer memoryBufferEntreprise = new FileBuffer();
         uploadEntreprise = new Upload(memoryBufferEntreprise);
         uploadEntreprise.setUploadButton(new Button("Charger les entreprises : "));
         uploadEntreprise.setDropLabel(new Label("Déposer le fichier ici"));
         uploadEntreprise.addSucceededListener(event -> {
-            InputStream inputStream = memoryBufferEntreprise.getInputStream();
             try {
-                Model.getInstance().setEntreprises(modelService.loadEntreprises(new InputStreamReader(inputStream)));
+                Model.getInstance().setEntreprises(modelService.loadEntreprises(memoryBufferEntreprise.getFileData().getFile().getAbsolutePath()));
                 fireEvent(new ReloadEvent(uploadEntreprise, false));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors du chargement des entreprises", e);
@@ -56,14 +53,13 @@ public class LoadingView extends VerticalLayout {
         });
         add(uploadEntreprise);
 
-        MemoryBuffer memoryBufferFormation = new MemoryBuffer();
+        FileBuffer memoryBufferFormation = new FileBuffer();
         uploadFormation = new Upload(memoryBufferFormation);
         uploadFormation.setUploadButton(new Button("Charger les formations : "));
         uploadFormation.setDropLabel(new Label("Déposer le fichier ici"));
         uploadFormation.addSucceededListener(event -> {
-            InputStream inputStream = memoryBufferFormation.getInputStream();
             try {
-                Model.getInstance().setFormations(modelService.loadFormations(new InputStreamReader(inputStream)));
+                Model.getInstance().setFormations(modelService.loadFormations(memoryBufferFormation.getFileData().getFile().getAbsolutePath()));
                 fireEvent(new ReloadEvent(uploadFormation, false));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors du chargement des formations", e);
