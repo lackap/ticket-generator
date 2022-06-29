@@ -1,19 +1,16 @@
 package com.forum.ticketgenerator.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Model {
-    private Map<String, Entreprise> entreprises;
-    private Map<String, Formation> formations;
     private List<PosteMatching> postesMatching;
+    private String entreprisesFile;
+    private String formationsFile;
     private static  Model INSTANCE;
 
     private Model() {
-        this.entreprises = new HashMap<>();
-        this.formations = new HashMap<>();
         this.postesMatching = new ArrayList<>();
     }
 
@@ -24,20 +21,21 @@ public class Model {
         return INSTANCE;
     }
 
-    public Map<String, Entreprise> getEntreprises () {
-        return entreprises;
+    public String getEntreprisesFile () {
+        return entreprisesFile;
     }
 
-    public void setEntreprises (Map<String, Entreprise> entreprises) {
-        this.entreprises = entreprises;
+    public String getFormationsFile () {
+        return formationsFile;
     }
 
-    public Map<String, Formation> getFormations () {
-        return formations;
+    public void setEntrepriseFile (String entrepriseFile) throws IOException {
+        this.entreprisesFile = entrepriseFile;
+
     }
 
-    public void setFormations (Map<String, Formation> formations) {
-        this.formations = formations;
+    public void setFormationsFile (String formationFile) throws IOException {
+        this.formationsFile = formationFile;
     }
 
     public List<PosteMatching> getPostesMatching () {

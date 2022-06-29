@@ -4,7 +4,6 @@ import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.event.SearchResultEvent;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
-import com.forum.ticketgenerator.service.SearchService;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
@@ -32,9 +31,6 @@ public class TicketView extends VerticalLayout {
 
     @Autowired
     private PdfGenerationView pdfGenerationView;
-
-    @Autowired
-    private SearchService searchService;
 
     private Grid<PosteMatching> grid;
     private Text recherche;

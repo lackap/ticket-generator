@@ -8,13 +8,17 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 
 @Component
 @UIScope
 public class SearchBySecteurActiviteView extends ASearchByLayout {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchBySecteurActiviteView.class);
 
     private final static String SEARCH_LABEL = "Recherche par secteur d'activité";
 
@@ -27,7 +31,7 @@ public class SearchBySecteurActiviteView extends ASearchByLayout {
     }
 
     @PostConstruct
-    public void init(){
+    public void init() throws IOException {
         Div titre = new Div();
         titre.setWidth("100%");
         titre.getElement().getStyle().set("font-size", "20px");
@@ -47,9 +51,15 @@ public class SearchBySecteurActiviteView extends ASearchByLayout {
         buttonSearchSecteur = new Button();
         buttonSearchSecteur.setText("Chercher par secteur d'activité");
         buttonSearchSecteur.setEnabled(false);
-        buttonSearchSecteur.addClickListener(event -> fireEvent(new SearchEvent(buttonSearchSecteur, false,
-                searchService.searchFromSecteurActivite(selectSecteurActivite.getValue()),
-                SEARCH_LABEL + " " + selectSecteurActivite.getValue())));
+        buttonSearchSecteur.addClickListener(event -> {
+            try {
+                fireEvent(new SearchEvent(buttonSearchSecteur, false,
+                        modelService.searchFromSecteurActivite(selectSecteurActivite.getValue()),
+                        SEARCH_LABEL + " " + selectSecteurActivite.getValue()));
+            } catch (IOException e) {
+                LOGGER.error("Erreur lors de la recherche depuis le secteur d'activité " + selectSecteurActivite.getValue(), e);
+            }
+        });
         add(buttonSearchSecteur);
     }
 }

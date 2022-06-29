@@ -9,13 +9,17 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 
 @Component
 @UIScope
 public class SearchByFormationView extends ASearchByLayout {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchByFormationView.class);
 
     private final static String SEARCH_LABEL = "Recherche par formation";
 
@@ -26,7 +30,7 @@ public class SearchByFormationView extends ASearchByLayout {
     private Button buttonSearchFormation;
 
     @PostConstruct
-    public void init(){
+    public void init() throws IOException {
         Div titre = new Div();
         titre.setWidth("100%");
         titre.getElement().getStyle().set("font-size", "20px");
@@ -47,9 +51,17 @@ public class SearchByFormationView extends ASearchByLayout {
             } else {
                 selectDiplome.setEnabled(true);
                 if (ApplicationConstants.AUCUN_DIPLOME.equals(selectCentre.getValue())) {
-                    selectDiplome.setItems(modelService.getAllDiplomes());
+                    try {
+                        selectDiplome.setItems(modelService.getAllDiplomesLabels());
+                    } catch (IOException e) {
+                        LOGGER.error("Erreur lors de la récupération de tout les libellés de diplomes", e);
+                    }
                 } else {
-                    selectDiplome.setItems(modelService.getAllFormations().get(selectCentre.getValue()).getDiplomeLabels());
+                    try {
+                        selectDiplome.setItems(modelService.getDiplomesLabels((selectCentre.getValue())));
+                    } catch (IOException e) {
+                        LOGGER.error("Erreur lors de la récupération des libellés de diplomes du centre " + selectCentre.getValue(), e);
+                    }
                 }
             }
         });
@@ -62,9 +74,15 @@ public class SearchByFormationView extends ASearchByLayout {
         buttonSearchFormation = new Button();
         buttonSearchFormation.setText("Chercher depuis formation");
         buttonSearchFormation.setEnabled(false);
-        buttonSearchFormation.addClickListener(event -> fireEvent(new SearchEvent(buttonSearchFormation, false,
-                searchService.searchFromFormation(selectCentre.getValue(), selectDiplome.getValue()),
-                SEARCH_LABEL + " " + selectCentre.getValue() + " / " + selectDiplome.getValue())));
+        buttonSearchFormation.addClickListener(event -> {
+            try {
+                fireEvent(new SearchEvent(buttonSearchFormation, false,
+                        modelService.searchFromFormation(selectCentre.getValue(), selectDiplome.getValue()),
+                        SEARCH_LABEL + " " + selectCentre.getValue() + " / " + selectDiplome.getValue()));
+            } catch (IOException e) {
+                LOGGER.error("Erreur lors de la recherche des diplomes liés a " + selectCentre.getValue() + " / " + selectDiplome.getValue(), e);
+            }
+        });
         add(buttonSearchFormation);
     }
 

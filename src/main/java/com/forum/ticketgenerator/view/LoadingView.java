@@ -45,7 +45,7 @@ public class LoadingView extends VerticalLayout {
         uploadEntreprise.setDropLabel(new Label("Déposer le fichier ici"));
         uploadEntreprise.addSucceededListener(event -> {
             try {
-                Model.getInstance().setEntreprises(modelService.loadEntreprises(memoryBufferEntreprise.getFileData().getFile().getAbsolutePath()));
+                Model.getInstance().setEntrepriseFile(memoryBufferEntreprise.getFileData().getFile().getAbsolutePath());
                 fireEvent(new ReloadEvent(uploadEntreprise, false));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors du chargement des entreprises", e);
@@ -59,7 +59,7 @@ public class LoadingView extends VerticalLayout {
         uploadFormation.setDropLabel(new Label("Déposer le fichier ici"));
         uploadFormation.addSucceededListener(event -> {
             try {
-                Model.getInstance().setFormations(modelService.loadFormations(memoryBufferFormation.getFileData().getFile().getAbsolutePath()));
+                Model.getInstance().setFormationsFile(memoryBufferFormation.getFileData().getFile().getAbsolutePath());
                 fireEvent(new ReloadEvent(uploadFormation, false));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors du chargement des formations", e);

@@ -1,23 +1,13 @@
 package com.forum.ticketgenerator;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.forum.ticketgenerator.model.Entreprise;
-import com.forum.ticketgenerator.model.Formation;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.service.ModelService;
-import com.forum.ticketgenerator.service.SearchService;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
 
 @SpringBootApplication
 public class TicketGeneratorApplication {
@@ -31,10 +21,8 @@ public class TicketGeneratorApplication {
 				path = new File(new File("toto").getAbsolutePath()).getParent();
 			}
 			ModelService modelService = new ModelService();
-			Map<String, Entreprise> entreprises = modelService.loadEntreprises(path + "\\entreprises.csv");
-			Map<String, Formation> formations = modelService.loadFormations(path + "\\formations.csv");
-			Model.getInstance().setEntreprises(entreprises);
-			Model.getInstance().setFormations(formations);
+			Model.getInstance().setEntrepriseFile(path + "\\entreprises.csv");
+			Model.getInstance().setFormationsFile(path + "\\formations.csv");
 
 		} catch (IOException e) {
 			e.printStackTrace();

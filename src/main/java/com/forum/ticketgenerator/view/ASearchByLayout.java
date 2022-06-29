@@ -1,7 +1,6 @@
 package com.forum.ticketgenerator.view;
 
 import com.forum.ticketgenerator.service.ModelService;
-import com.forum.ticketgenerator.service.SearchService;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -12,9 +11,6 @@ public class ASearchByLayout extends VerticalLayout {
 
     @Autowired
     protected ModelService modelService;
-
-    @Autowired
-    protected SearchService searchService;
 
     public ASearchByLayout () {
         getStyle().set("border", "1px solid black");
