@@ -22,7 +22,6 @@ public class EntrepriseMapper {
         poste.setFamilleMetier(csvDatas[4]);
         poste.setContrat(csvDatas[5]);
         poste.setNiveau(csvDatas[6]);
-        LOGGER.info("Added poste " + poste.getIntitule() + " " + poste.getFamilleMetier());
         entreprise.getPostes().add(poste);
         return entreprise;
     }

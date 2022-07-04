@@ -2,10 +2,9 @@ package com.forum.ticketgenerator.model;
 
 public class PosteMatching {
     private String nom;
-    private Integer stand;
+    private String stand;
     private String intitule;
-    private String contrat;
-    private String niveau;
+    private String secteurActivite;
 
     public String getNom () {
         return nom;
@@ -15,11 +14,11 @@ public class PosteMatching {
         this.nom = nom;
     }
 
-    public Integer getStand () {
+    public String getStand () {
         return stand;
     }
 
-    public void setStand (Integer stand) {
+    public void setStand (String stand) {
         this.stand = stand;
     }
 
@@ -31,19 +30,11 @@ public class PosteMatching {
         this.intitule = intitule;
     }
 
-    public String getContrat () {
-        return contrat;
+    public String getSecteurActivite () {
+        return secteurActivite;
     }
 
-    public void setContrat (String contrat) {
-        this.contrat = contrat;
-    }
-
-    public String getNiveau () {
-        return niveau;
-    }
-
-    public void setNiveau (String niveau) {
-        this.niveau = niveau;
+    public void setSecteurActivite (String secteurActivite) {
+        this.secteurActivite = secteurActivite;
     }
 }

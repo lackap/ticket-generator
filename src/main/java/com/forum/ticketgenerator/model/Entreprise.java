@@ -6,7 +6,7 @@ import java.util.List;
 public class Entreprise {
 	
 	private String nom;
-	private Integer stand;
+	private String stand;
 	private List<String> secteursActivite;
 	private List<Poste> postes;
 
@@ -23,11 +23,11 @@ public class Entreprise {
 		this.nom = nom;
 	}
 
-	public Integer getStand () {
+	public String getStand () {
 		return stand;
 	}
 
-	public void setStand (Integer stand) {
+	public void setStand (String stand) {
 		this.stand = stand;
 	}
 

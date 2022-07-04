@@ -61,8 +61,6 @@ public class TicketView extends VerticalLayout {
         grid.getColumnByKey("nom").setHeader("Entreprise");
         grid.addColumn("intitule");
         grid.getColumnByKey("intitule").setHeader("Intitulé de poste");
-        grid.addColumn("contrat");
-        grid.addColumn("niveau");
         grid.addColumn("stand");
         grid.getColumnByKey("stand").setHeader("N° de stand");
         add(grid);

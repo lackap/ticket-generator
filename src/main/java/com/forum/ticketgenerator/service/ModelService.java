@@ -52,7 +52,7 @@ public class ModelService {
             diplomesLabels.addAll(formation.getDiplomes().stream().map(Diplome::getIntituleDiplome).collect(Collectors.toList()));
         }
         csvReader.close();
-        return diplomesLabels.stream().distinct().collect(Collectors.toList());
+        return diplomesLabels.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
     }
 
     public List<String> getDiplomesLabels(String centreFormation) throws IOException {
@@ -71,7 +71,7 @@ public class ModelService {
             }
         }
         csvReader.close();
-        return diplomesLabels.stream().distinct().collect(Collectors.toList());
+        return diplomesLabels.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
     }
 
     public List<String> getCentreFormationLabels() throws IOException {
@@ -89,7 +89,7 @@ public class ModelService {
             centreFormationLabels.add(formation.getNomCentre());
         }
         csvReader.close();
-        return centreFormationLabels.stream().distinct().collect(Collectors.toList());
+        return centreFormationLabels.stream().sorted(Comparator.naturalOrder()).distinct().collect(Collectors.toList());
     }
 
     public List<String> getFamilleMetierEntreprises() throws IOException {
@@ -123,7 +123,7 @@ public class ModelService {
             secteurs.addAll(entreprise.getSecteursActivite());
         }
         csvReader.close();
-        return secteurs.stream().distinct().collect(Collectors.toList());
+        return secteurs.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
 
     }
 
