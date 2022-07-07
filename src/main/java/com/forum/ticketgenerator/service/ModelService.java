@@ -14,10 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,26 +22,11 @@ import java.util.stream.Collectors;
 public class ModelService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelService.class);
 
-
-    private Map<String, Entreprise> loadEntreprises (Reader reader) throws IOException {
-        Map<String, Entreprise> entreprises = new HashMap<>();
-        CSVReader csvReader =
-                new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')).
-                        build();
-        for (String[] posteValues : csvReader.readAll()) {
-            Entreprise entreprise = EntrepriseMapper.map(posteValues);
-        }
-        return entreprises;
-    }
-
     public List<String> getAllDiplomesLabels() throws IOException {
-        String charset = EncodingUtils.getEncodingToUse(Model.getInstance().getFormationsFile());
-        Reader reader = new InputStreamReader(new FileInputStream(Model.getInstance().getFormationsFile()), charset);
-        CSVReader csvReader =
-                new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')).
-                        build();
+        CSVReader csvReader =createCsvReader(Model.getInstance().getFormationsFile());
+        if (csvReader == null) {
+            return new ArrayList<>();
+        }
         String[] csvDatas = null;
         List<String> diplomesLabels = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
@@ -56,12 +38,10 @@ public class ModelService {
     }
 
     public List<String> getDiplomesLabels(String centreFormation) throws IOException {
-        String charset = EncodingUtils.getEncodingToUse(Model.getInstance().getFormationsFile());
-        Reader reader = new InputStreamReader(new FileInputStream(Model.getInstance().getFormationsFile()), charset);
-        CSVReader csvReader =
-                new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')).
-                        build();
+        CSVReader csvReader =createCsvReader(Model.getInstance().getFormationsFile());
+        if (csvReader == null) {
+            return new ArrayList<>();
+        }
         String[] csvDatas = null;
         List<String> diplomesLabels = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
@@ -75,30 +55,28 @@ public class ModelService {
     }
 
     public List<String> getCentreFormationLabels() throws IOException {
-        String charset = EncodingUtils.getEncodingToUse(Model.getInstance().getFormationsFile());
-        Reader reader = new InputStreamReader(new FileInputStream(Model.getInstance().getFormationsFile()), charset);
-        CSVReader csvReader =
-                new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')).
-                        build();
+        CSVReader csvReader =createCsvReader(Model.getInstance().getFormationsFile());
+        if (csvReader == null) {
+            return new ArrayList<>();
+        }
         String[] csvDatas = null;
         List<String> centreFormationLabels = new ArrayList<>();
-        centreFormationLabels.add(ApplicationConstants.AUCUN_DIPLOME);
         while ((csvDatas = csvReader.readNext()) != null) {
             Formation formation = FormationMapper.map(csvDatas);
             centreFormationLabels.add(formation.getNomCentre());
         }
         csvReader.close();
-        return centreFormationLabels.stream().sorted(Comparator.naturalOrder()).distinct().collect(Collectors.toList());
+        List<String> sortedList = new ArrayList<>();
+        sortedList.add(ApplicationConstants.AUCUN_DIPLOME);
+        sortedList.addAll(centreFormationLabels.stream().sorted(Comparator.naturalOrder()).distinct().collect(Collectors.toList()));
+        return sortedList;
     }
 
     public List<String> getFamilleMetierEntreprises() throws IOException {
-        String charset = EncodingUtils.getEncodingToUse(Model.getInstance().getEntreprisesFile());
-        Reader reader = new InputStreamReader(new FileInputStream(Model.getInstance().getEntreprisesFile()), charset);
-        CSVReader csvReader =
-                new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')).
-                        build();
+        CSVReader csvReader =createCsvReader(Model.getInstance().getEntreprisesFile());
+        if (csvReader == null) {
+            return new ArrayList<>();
+        }
         String[] csvDatas = null;
         List<String> famillesMetier = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
@@ -110,12 +88,10 @@ public class ModelService {
     }
 
     public List<String> getSecteursActivitesEntreprises() throws IOException {
-        String charset = EncodingUtils.getEncodingToUse(Model.getInstance().getEntreprisesFile());
-        Reader reader = new InputStreamReader(new FileInputStream(Model.getInstance().getEntreprisesFile()), charset);
-        CSVReader csvReader =
-                new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')).
-                        build();
+        CSVReader csvReader =createCsvReader(Model.getInstance().getEntreprisesFile());
+        if (csvReader == null) {
+            return new ArrayList<>();
+        }
         String[] csvDatas = null;
         List<String> secteurs = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
@@ -132,12 +108,10 @@ public class ModelService {
         List<String> famillesMetier = getFamillesMetierFromFormation(nomCentre, intituleFormation);
         List<PosteMatching> postesMatching = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(famillesMetier)) {
-            String charset = EncodingUtils.getEncodingToUse(Model.getInstance().getEntreprisesFile());
-            Reader reader = new InputStreamReader(new FileInputStream(Model.getInstance().getEntreprisesFile()), charset);
-            CSVReader csvReader =
-                    new CSVReaderBuilder(reader).
-                            withSkipLines(1).withCSVParser(new CSVParser(';')).
-                            build();
+            CSVReader csvReader =createCsvReader(Model.getInstance().getEntreprisesFile());
+            if (csvReader == null) {
+                return new ArrayList<>();
+            }
             String[] csvDatas = null;
             while ((csvDatas = csvReader.readNext()) != null) {
                 Entreprise entreprise = EntrepriseMapper.map(csvDatas);
@@ -154,12 +128,10 @@ public class ModelService {
     }
 
     private List<String> getFamillesMetierFromFormation(String nomCentre, String intituleFormation) throws IOException {
-        String charset = EncodingUtils.getEncodingToUse(Model.getInstance().getFormationsFile());
-        Reader reader = new InputStreamReader(new FileInputStream(Model.getInstance().getFormationsFile()), charset);
-        CSVReader csvReader =
-                new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')).
-                        build();
+        CSVReader csvReader =createCsvReader(Model.getInstance().getFormationsFile());
+        if (csvReader == null) {
+            return new ArrayList<>();
+        }
         String[] csvDatas = null;
         List<String> famillesMetier = new ArrayList<>();
         if (ApplicationConstants.AUCUN_DIPLOME.equals(nomCentre)) {
@@ -192,12 +164,10 @@ public class ModelService {
     }
 
     public List<PosteMatching> searchFromFamilleMetier(String familleMetier) throws IOException {
-        String charset = EncodingUtils.getEncodingToUse(Model.getInstance().getEntreprisesFile());
-        Reader reader = new InputStreamReader(new FileInputStream(Model.getInstance().getEntreprisesFile()), charset);
-        CSVReader csvReader =
-                new CSVReaderBuilder(reader).
-                        withSkipLines(1).withCSVParser(new CSVParser(';')).
-                        build();
+        CSVReader csvReader =createCsvReader(Model.getInstance().getEntreprisesFile());
+        if (csvReader == null) {
+            return new ArrayList<>();
+        }
         String[] csvDatas = null;
         List<PosteMatching> postesMatching = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
@@ -234,5 +204,19 @@ public class ModelService {
         Model.getInstance().setPostesMatching(postesMatching);
         csvReader.close();
         return postesMatching;
+    }
+
+    private CSVReader createCsvReader(String file) throws IOException {
+        File fileToLoad = new File(file);
+        if (!fileToLoad.exists()) {
+            return null;
+        }
+        String charset = EncodingUtils.getEncodingToUse(file);
+        Reader reader = new InputStreamReader(new FileInputStream(file), charset);
+        CSVReader csvReader =
+                new CSVReaderBuilder(reader).
+                        withSkipLines(1).withCSVParser(new CSVParser(';')).
+                        build();
+        return csvReader;
     }
 }

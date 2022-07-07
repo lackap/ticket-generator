@@ -188,9 +188,10 @@ public class PdfGenerationService {
         table.setMarginTop(40.0f);
         table.setBorder(DEFAULT_BORDER);
         Cell headerCell = new Cell(1, 8);
-        Paragraph legend = new Paragraph(new Text("Legend"));
+        Paragraph legend = new Paragraph(new Text("Légende"));
         legend.setHorizontalAlignment(HorizontalAlignment.CENTER);
         legend.setBold();
+        headerCell.setBorder(DEFAULT_BORDER);
         headerCell.setHorizontalAlignment(HorizontalAlignment.CENTER);
         headerCell.add(legend);
         table.addCell(headerCell);
