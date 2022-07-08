@@ -7,7 +7,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import java.io.IOException;
 
 @Component
 @UIScope
-@PreserveOnRefresh
 public class SearchByFormationView extends ASearchByLayout {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchByFormationView.class);
 

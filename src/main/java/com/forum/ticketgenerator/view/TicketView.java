@@ -8,7 +8,6 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -19,7 +18,6 @@ import javax.annotation.PostConstruct;
 @Route(value = "ticket")
 @RouteAlias(value = "")
 @UIScope
-@PreserveOnRefresh
 public class TicketView extends VerticalLayout {
 
     @Autowired
