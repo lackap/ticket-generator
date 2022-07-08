@@ -4,6 +4,7 @@ import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.pdf.bean.PdfLegendBean;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.io.source.ByteArrayOutputStream;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -37,22 +38,23 @@ public class PdfGenerationService {
     private List<PdfLegendBean> pdfLegendBeans;
     private Border DEFAULT_BORDER = new GrooveBorder(1.0f);
 
-    public void genererPdf() {
-        String name = "forum_entreprises_" + Instant.now().toEpochMilli() + " .pdf";
+    public byte[] genererPdf() {
         try {
-            Document document = createDocument(name);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            PdfWriter pdfWriter = new PdfWriter(byteArrayOutputStream);
+            Document document = createDocument(pdfWriter);
             buildDocumentHeader(document);
             buildTableLegend(document);
             buildDocumentBody(document);
             document.close();
-            openDocument(name);
+            return byteArrayOutputStream.toByteArray();
         }  catch (Exception e ) {
-            LOGGER.error("Erreur lors de la génération du pdf " + name, e);
+            LOGGER.error("Erreur lors de la génération du pdf");
         }
+        return null;
     }
 
-    private Document createDocument(String fileName) throws FileNotFoundException, DocumentException {
-        PdfWriter pdfWriter = new PdfWriter(fileName);
+    private Document createDocument(PdfWriter pdfWriter) throws FileNotFoundException, DocumentException {
         PdfDocument pdfDocument = new PdfDocument(pdfWriter);
         Document document = new Document(pdfDocument);
         return document;
