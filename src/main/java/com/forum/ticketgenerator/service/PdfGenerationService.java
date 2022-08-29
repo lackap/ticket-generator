@@ -6,6 +6,7 @@ import com.forum.ticketgenerator.pdf.bean.PdfLegendBean;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
 import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -29,7 +30,9 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PdfGenerationService {
@@ -56,7 +59,7 @@ public class PdfGenerationService {
 
     private Document createDocument(PdfWriter pdfWriter) throws FileNotFoundException, DocumentException {
         PdfDocument pdfDocument = new PdfDocument(pdfWriter);
-        Document document = new Document(pdfDocument);
+        Document document = new Document(pdfDocument, PageSize.A4.rotate());
         return document;
     }
 
@@ -96,7 +99,11 @@ public class PdfGenerationService {
         table.setBorder(DEFAULT_BORDER);
         table.setMarginTop(40.0f);
         addTableHeader(table);
-        Model.getInstance().getPostesMatching().forEach(poste -> addRow(table, poste));
+        Map<String, List<PosteMatching>> orderedPostes = Model.getInstance().getPostesMatching().stream().collect(
+                Collectors.groupingBy(PosteMatching::getSecteurActivite));
+        for (Map.Entry<String, List<PosteMatching>> entry : orderedPostes.entrySet()) {
+            entry.getValue().forEach(poste -> addRow(table, poste));
+        }
         document.add(table);
     }
 
