@@ -6,6 +6,7 @@ import com.forum.ticketgenerator.pdf.bean.PdfLegendBean;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
 import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -47,7 +48,6 @@ public class PdfGenerationService {
             PdfWriter pdfWriter = new PdfWriter(byteArrayOutputStream);
             Document document = createDocument(pdfWriter);
             buildDocumentHeader(document);
-            buildTableLegend(document);
             buildDocumentBody(document);
             document.close();
             return byteArrayOutputStream.toByteArray();
@@ -65,14 +65,11 @@ public class PdfGenerationService {
 
     private void buildDocumentHeader(Document document) {
         try {
-            Table pdfPTable = new Table(UnitValue.createPercentArray(new float[]{40,20,40}));
+            Table pdfPTable = new Table(UnitValue.createPercentArray(new float[]{70, 30}));
             float cellSize = (document.getPdfDocument().getDefaultPageSize().getWidth() - document.getLeftMargin() - document.getRightMargin()) / 4;
             pdfPTable.setWidth(UnitValue.createPercentValue(100));
             pdfPTable.setFixedLayout();
-            addImageToHeader(pdfPTable, "META-INF/resources/img/clee_45.png", cellSize);
-            Cell emptyCell = new Cell();
-            emptyCell.setBorder(Border.NO_BORDER);
-            pdfPTable.addCell(emptyCell);
+            addLegendToHeader(pdfPTable);
             addImageToHeader(pdfPTable, "META-INF/resources/img/metropole.png", cellSize);
             document.add(pdfPTable);
         } catch (Exception e ) {
@@ -193,10 +190,9 @@ public class PdfGenerationService {
         return img;
     }
 
-    private void buildTableLegend(Document document) throws DocumentException {
+    private void addLegendToHeader(Table mainTable) throws DocumentException {
         Table table = new Table(new float[] { 10, 15, 10, 15,10, 15, 10, 15});
-        table.setWidthPercent(50);
-        table.setMarginTop(40.0f);
+        table.setWidthPercent(100);
         table.setBorder(DEFAULT_BORDER);
         Cell headerCell = new Cell(1, 8);
         Paragraph legend = new Paragraph(new Text("Légende"));
@@ -209,7 +205,9 @@ public class PdfGenerationService {
         for (PdfLegendBean pdfLegendBean : getPdfLegendBeans()) {
             addLegendCell(table, pdfLegendBean.getColor(), pdfLegendBean.getLabel());
         }
-        document.add(table);
+        Cell cell = new Cell();
+        cell.add(table);
+        mainTable.addCell(cell);
     }
 
     public void addLegendCell(Table table, Color color, String label) {
@@ -242,9 +240,9 @@ public class PdfGenerationService {
             pdfLegendBeans.add(new PdfLegendBean("AGRICULTURE", "Agriculture", Color.GREEN));
             pdfLegendBeans.add(new PdfLegendBean("BTP", "BTP", Color.YELLOW));
             pdfLegendBeans.add(new PdfLegendBean("HOTELLERIE RESTAURATION", "Hôtellerie Restauration", Color.ORANGE));
-            pdfLegendBeans.add(new PdfLegendBean("FONCTION PUBLIQUE", "Fonction Publique", Color.LIGHT_GRAY));
+            pdfLegendBeans.add(new PdfLegendBean("FONCTION PUBLIQUE", "Fonction Publique", new DeviceRgb(194, 178, 128)));
             pdfLegendBeans.add(new PdfLegendBean("INDUSTRIE", "Industrie", Color.RED));
-            pdfLegendBeans.add(new PdfLegendBean("NUMERIQUE", "Numérique", Color.DARK_GRAY));
+            pdfLegendBeans.add(new PdfLegendBean("NUMERIQUE", "Numérique", Color.LIGHT_GRAY));
             pdfLegendBeans.add(new PdfLegendBean("SANTE SOCIAL", "Santé Social", Color.PINK));
             pdfLegendBeans.add(new PdfLegendBean("SERVICE", "Service", Color.BLUE));
         }
