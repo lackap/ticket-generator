@@ -137,8 +137,10 @@ public class PdfGenerationService {
         colorCell.add(paragraph);
         table.addCell(colorCell);
         Cell entrepriseCell = new Cell();
-        entrepriseCell.setBold();
-        entrepriseCell.add(posteMatching.getNom());
+        Text entrepriseText = new Text(posteMatching.getNom());
+        entrepriseText.setBold();
+        entrepriseCell.setBorder(DEFAULT_BORDER);
+        entrepriseCell.add(new Paragraph(entrepriseText));
         table.addCell(entrepriseCell);
         Cell intituleCell = new Cell();
         intituleCell.setBorder(DEFAULT_BORDER);
@@ -193,7 +195,7 @@ public class PdfGenerationService {
 
     private void buildTableLegend(Document document) throws DocumentException {
         Table table = new Table(new float[] { 10, 15, 10, 15,10, 15, 10, 15});
-        table.setWidthPercent(100);
+        table.setWidthPercent(50);
         table.setMarginTop(40.0f);
         table.setBorder(DEFAULT_BORDER);
         Cell headerCell = new Cell(1, 8);
@@ -228,7 +230,7 @@ public class PdfGenerationService {
         Cell labelCell = new Cell();
         labelCell.add(label);
         labelCell.setBorder(Border.NO_BORDER);
-        labelCell.setHeight(40.f);
+        labelCell.setHeight(20.f);
         labelCell.setVerticalAlignment(VerticalAlignment.MIDDLE);
         labelCell.setHorizontalAlignment(HorizontalAlignment.CENTER);
         table.addCell(labelCell);

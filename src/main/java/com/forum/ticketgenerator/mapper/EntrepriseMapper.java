@@ -14,6 +14,7 @@ public class EntrepriseMapper {
     public static Entreprise map(String[] csvDatas) {
         Entreprise entreprise = new Entreprise();
         entreprise.setNom(csvDatas[1]);
+        entreprise.setStand(csvDatas[2]);
         List<String> secteursActivite = new ArrayList<>();
         secteursActivite.add(csvDatas[0]);
         entreprise.setSecteursActivite(secteursActivite);
