@@ -10,6 +10,7 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -116,7 +117,7 @@ public class ModelService {
             while ((csvDatas = csvReader.readNext()) != null) {
                 Entreprise entreprise = EntrepriseMapper.map(csvDatas);
                 for (Poste poste : entreprise.getPostes()) {
-                    if (famillesMetier.contains(poste.getFamilleMetier())) {
+                    if (famillesMetier.contains(StringUtils.deleteWhitespace(poste.getFamilleMetier()))) {
                         postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
                     }
                 }
@@ -160,7 +161,7 @@ public class ModelService {
             }
         }
         csvReader.close();
-        return famillesMetier.stream().distinct().collect(Collectors.toList());
+        return famillesMetier.stream().distinct().map(StringUtils::deleteWhitespace).collect(Collectors.toList());
     }
 
     public List<PosteMatching> searchFromFamilleMetier(String familleMetier) throws IOException {
