@@ -1,8 +1,8 @@
 package com.forum.ticketgenerator.mapper;
 
-import com.forum.ticketgenerator.model.Diplome;
-import com.forum.ticketgenerator.model.Formation;
-import com.forum.ticketgenerator.model.MetierDebouche;
+import com.forum.ticketgenerator.model.database.Diplome;
+import com.forum.ticketgenerator.model.database.Formation;
+import com.forum.ticketgenerator.model.database.MetierDebouche;
 
 public class FormationMapper {
 

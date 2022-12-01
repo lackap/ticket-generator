@@ -5,6 +5,8 @@ import com.forum.ticketgenerator.mapper.EntrepriseMapper;
 import com.forum.ticketgenerator.mapper.FormationMapper;
 import com.forum.ticketgenerator.mapper.PosteMatchingMapper;
 import com.forum.ticketgenerator.model.*;
+import com.forum.ticketgenerator.model.database.*;
+import com.forum.ticketgenerator.service.model.IModelService;
 import com.forum.ticketgenerator.utils.EncodingUtils;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
@@ -20,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class ModelService {
+public class ModelService implements IModelService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelService.class);
 
     public List<String> getAllDiplomesLabels() throws IOException {
@@ -82,7 +84,7 @@ public class ModelService {
         List<String> famillesMetier = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
             Entreprise entreprise = EntrepriseMapper.map(csvDatas);
-            famillesMetier.addAll(entreprise.getPostes().stream().map(Poste::getFamilleMetier).collect(Collectors.toList()));
+            famillesMetier.addAll(entreprise.getPostes().stream().map(poste -> poste.getFamilleMetier().getIntitule()).collect(Collectors.toList()));
         }
         csvReader.close();
         return famillesMetier.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
@@ -97,7 +99,7 @@ public class ModelService {
         List<String> secteurs = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
             Entreprise entreprise = EntrepriseMapper.map(csvDatas);
-            secteurs.addAll(entreprise.getSecteursActivite());
+            secteurs.addAll(entreprise.getSecteursActivite().stream().map(SecteurActivite::getName).collect(Collectors.toList()));
         }
         csvReader.close();
         return secteurs.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
@@ -117,7 +119,7 @@ public class ModelService {
             while ((csvDatas = csvReader.readNext()) != null) {
                 Entreprise entreprise = EntrepriseMapper.map(csvDatas);
                 for (Poste poste : entreprise.getPostes()) {
-                    if (famillesMetier.contains(StringUtils.deleteWhitespace(poste.getFamilleMetier()))) {
+                    if (famillesMetier.contains(StringUtils.deleteWhitespace(poste.getFamilleMetier().getIntitule()))) {
                         postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
                     }
                 }
@@ -174,7 +176,7 @@ public class ModelService {
         while ((csvDatas = csvReader.readNext()) != null) {
             Entreprise entreprise = EntrepriseMapper.map(csvDatas);
             for (Poste poste : entreprise.getPostes()) {
-                if (poste.getFamilleMetier().contains(familleMetier)) {
+                if (poste.getFamilleMetier().getIntitule().equals(familleMetier)) {
                     postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
                 }
             }
@@ -208,6 +210,9 @@ public class ModelService {
     }
 
     private CSVReader createCsvReader(String file) throws IOException {
+        if (file == null) {
+            return null;
+        }
         File fileToLoad = new File(file);
         if (!fileToLoad.exists()) {
             return null;

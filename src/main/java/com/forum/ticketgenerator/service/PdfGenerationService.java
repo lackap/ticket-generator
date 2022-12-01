@@ -18,7 +18,6 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.itextpdf.layout.property.VerticalAlignment;
-import org.dom4j.DocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -57,7 +56,7 @@ public class PdfGenerationService {
         return null;
     }
 
-    private Document createDocument(PdfWriter pdfWriter) throws FileNotFoundException, DocumentException {
+    private Document createDocument(PdfWriter pdfWriter) {
         PdfDocument pdfDocument = new PdfDocument(pdfWriter);
         Document document = new Document(pdfDocument, PageSize.A4.rotate());
         return document;
@@ -90,7 +89,7 @@ public class PdfGenerationService {
         table.addCell(cell);
     }
 
-    private void buildDocumentBody(Document document) throws DocumentException {
+    private void buildDocumentBody(Document document) {
         Table table = new Table(new float[] { 10, 10, 80, 10, 10});
         table.setWidthPercent(100);
         table.setBorder(DEFAULT_BORDER);
@@ -190,7 +189,7 @@ public class PdfGenerationService {
         return img;
     }
 
-    private void addLegendToHeader(Table mainTable) throws DocumentException {
+    private void addLegendToHeader(Table mainTable) {
         Table table = new Table(new float[] { 10, 15, 10, 15,10, 15, 10, 15});
         table.setWidthPercent(100);
         table.setBorder(DEFAULT_BORDER);
