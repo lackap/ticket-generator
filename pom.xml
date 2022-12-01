@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.8</version>
+		<version>2.7.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.forum</groupId>
@@ -14,7 +14,7 @@
 	<name>ticket-generator</name>
 	<description>Outil de génération de ticket</description>
 	<properties>
-		<vaadin.version>14.8.4</vaadin.version>
+		<vaadin.version>22.0.24</vaadin.version>
 	</properties>
 
 	<pluginRepositories>
@@ -71,17 +71,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>collaboration-engine</artifactId>
-			<version>3.2.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>exampledata</artifactId>
-			<version>4.1.1</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -106,11 +95,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-testbench</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<!-- Include JUnit 4 support for TestBench and others -->
@@ -151,6 +135,16 @@
 			<groupId>com.googlecode.juniversalchardet</groupId>
 			<artifactId>juniversalchardet</artifactId>
 			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.24</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -200,7 +194,6 @@
 
 	<profiles>
 		<profile>
-			<!-- Production mode is activated using -Pproduction -->
 			<id>production</id>
 			<build>
 				<plugins>
@@ -210,66 +203,21 @@
 						<version>${vaadin.version}</version>
 						<executions>
 							<execution>
+								<id>frontend</id>
+								<phase>compile</phase>
 								<goals>
+									<goal>prepare-frontend</goal>
 									<goal>build-frontend</goal>
 								</goals>
-								<phase>compile</phase>
+								<configuration>
+									<productionMode>true</productionMode>
+								</configuration>
 							</execution>
 						</executions>
-						<configuration>
-							<productionMode>true</productionMode>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
-
-		<profile>
-			<id>it</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>start-spring-boot</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>start</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>stop-spring-boot</id>
-								<phase>post-integration-test</phase>
-								<goals>
-									<goal>stop</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-
-					<!-- Runs the integration tests (*IT) after the server is started -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<executions>
-							<execution>
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<trimStackTrace>false</trimStackTrace>
-							<enableAssertions>true</enableAssertions>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
 	</profiles>
 
 </project>

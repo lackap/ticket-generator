@@ -18,22 +18,6 @@ public class TicketGeneratorApplication {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PdfGenerationService.class);
 
 	public static void main(String[] args) {
-		try {
-			String path = null;
-			if (	args.length > 0 && StringUtils.isNotEmpty(args[0])) {
-				path = args[0];
-				LOGGER.info("Path parameter : " + path);
-			} else {
-				path = new File(new File("toto").getAbsolutePath()).getParent();
-				LOGGER.info("Path automatique 1 : " + path);
- 			}
-			ModelService modelService = new ModelService();
-			Model.getInstance().setEntrepriseFile(path + "\\entreprises.csv");
-			Model.getInstance().setFormationsFile(path + "\\formations.csv");
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		SpringApplication.run(TicketGeneratorApplication.class, args);
 	}
 

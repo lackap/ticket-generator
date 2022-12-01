@@ -1,6 +1,5 @@
 package com.forum.ticketgenerator.utils;
 
-import com.forum.ticketgenerator.service.ModelService;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.io.FileUtils;
 import org.mozilla.universalchardet.UniversalDetector;
@@ -11,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class EncodingUtils {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ModelService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EncodingUtils.class);
 
     public static String getEncodingToUse(String file) throws IOException {
         UniversalDetector ud = new UniversalDetector(null);
