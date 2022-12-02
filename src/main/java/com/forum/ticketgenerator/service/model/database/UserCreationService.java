@@ -1,20 +1,32 @@
-package com.forum.ticketgenerator.service.model;
+package com.forum.ticketgenerator.service.model.database;
 
+import com.forum.ticketgenerator.constants.Roles;
 import com.forum.ticketgenerator.exception.UserCreationException;
+import com.forum.ticketgenerator.model.database.Entreprise;
+import com.forum.ticketgenerator.model.database.Formation;
 import com.forum.ticketgenerator.model.database.TicketUser;
+import com.forum.ticketgenerator.repository.EntrepriseRepository;
+import com.forum.ticketgenerator.repository.FormationRepository;
 import com.forum.ticketgenerator.repository.TicketUserRepository;
+import com.forum.ticketgenerator.view.formation.FormationView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TicketUserService {
+public class UserCreationService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private TicketUserRepository ticketUserRepository;
+
+    @Autowired
+    private EntrepriseRepository entrepriseRepository;
+
+    @Autowired
+    private FormationRepository formationRepository;
 
     public void createUser(String name, String password, String role, String displayedName, byte[] logo) throws UserCreationException {
         if (name == null) {
@@ -38,6 +50,17 @@ public class TicketUserService {
         ticketUser.setLogo(logo);
         ticketUser.setDisplayName(displayedName);
         ticketUserRepository.save(ticketUser);
+
+        if (Roles.ENTREPRISE.name().equals(role)) {
+            Entreprise entreprise = new Entreprise();
+            entreprise.setNom(displayedName);
+            entrepriseRepository.save(entreprise);
+        }
+        if (Roles.FORMATION.name().equals(role)) {
+            Formation formation = new Formation();
+            formation.setNomCentre(displayedName);
+            formationRepository.save(formation);
+        }
     }
 
 }

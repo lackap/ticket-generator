@@ -16,6 +16,6 @@ public class Formation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nomCentre;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
     private List<Diplome> diplomes = new ArrayList<>();
 }

@@ -21,19 +21,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public interface IModelService {
-    public List<String> getAllDiplomesLabels() throws IOException;
-
-    public List<String> getDiplomesLabels(String centreFormation) throws IOException;
-
-    public List<String> getCentreFormationLabels() throws IOException;
-
-    public List<String> getFamilleMetierEntreprises() throws IOException;
-
-    public List<String> getSecteursActivitesEntreprises() throws IOException;
 
     public List<PosteMatching> searchFromFormation(String nomCentre, String intituleFormation) throws IOException;
-
-    public List<PosteMatching> searchFromFamilleMetier(String familleMetier) throws IOException;
-
-    public List<PosteMatching> searchFromSecteurActivite(String secteur) throws IOException ;
 }

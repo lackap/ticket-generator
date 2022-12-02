@@ -13,7 +13,6 @@ public class Diplome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String intituleDiplome;
-    private String niveau;
-    @OneToMany
-    private List<MetierDebouche> metiersDebouche;
+    @ManyToOne
+    private FamilleMetier familleMetier;
 }

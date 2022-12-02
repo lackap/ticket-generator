@@ -7,7 +7,9 @@ import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
+import com.forum.ticketgenerator.view.admin.ParametrageAdminView;
 import com.forum.ticketgenerator.view.entreprise.EntrepriseView;
+import com.forum.ticketgenerator.view.formation.FormationView;
 import com.forum.ticketgenerator.view.ticket.*;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -46,10 +48,10 @@ public class EntryView extends Div implements BeforeEnterObserver {
                 event.rerouteTo(TicketView.class);
             }
             if (Roles.FORMATION.name().equals(grantedAuthority.getAuthority())) {
-                //TODO
+                event.rerouteTo(FormationView.class);
             }
             if (Roles.ADMIN.name().equals(grantedAuthority.getAuthority())) {
-                //TODO
+                event.rerouteTo(ParametrageAdminView.class);
             }
         }
     }

@@ -45,7 +45,7 @@ public class SearchBySecteurActiviteView extends ASearchByLayout {
         selectSecteurActivite = new Select<>();
         selectSecteurActivite.setLabel("Secteur activité");
         selectSecteurActivite.setEnabled(true);
-        selectSecteurActivite.setItems(modelFactory.getService().getSecteursActivitesEntreprises());
+        selectSecteurActivite.setItems(modelServiceFactory.getEntrepriseService().getSecteursActivitesEntreprises());
         selectSecteurActivite.addValueChangeListener(event -> buttonSearchSecteur.setEnabled(!StringUtils.isEmpty(selectSecteurActivite.getValue())));
         add(selectSecteurActivite);
         buttonSearchSecteur = new Button();
@@ -54,7 +54,7 @@ public class SearchBySecteurActiviteView extends ASearchByLayout {
         buttonSearchSecteur.addClickListener(event -> {
             try {
                 fireEvent(new SearchEvent(buttonSearchSecteur, false,
-                        modelFactory.getService().searchFromSecteurActivite(selectSecteurActivite.getValue()),
+                        modelServiceFactory.getEntrepriseService().searchFromSecteurActivite(selectSecteurActivite.getValue()),
                         SEARCH_LABEL + " " + selectSecteurActivite.getValue()));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors de la recherche depuis le secteur d'activité " + selectSecteurActivite.getValue(), e);

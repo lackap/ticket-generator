@@ -1,4 +1,4 @@
-package com.forum.ticketgenerator.service;
+package com.forum.ticketgenerator.service.model.csv;
 
 import com.forum.ticketgenerator.constants.ApplicationConstants;
 import com.forum.ticketgenerator.mapper.EntrepriseMapper;
@@ -17,13 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class ModelService implements IModelService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ModelService.class);
+public class CsvModelService {//implements IModelService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CsvModelService.class);
 
     public List<String> getAllDiplomesLabels() throws IOException {
         CSVReader csvReader =createCsvReader(Model.getInstance().getFormationsFile());
@@ -142,22 +143,19 @@ public class ModelService implements IModelService {
                 Formation formation = FormationMapper.map(csvDatas);
                 famillesMetier.addAll(formation.getDiplomes().stream()
                         .filter(di -> di.getIntituleDiplome().equals(intituleFormation))
-                        .map(di -> di.getMetiersDebouche().stream()
-                                .map(MetierDebouche::getFamilleMetier)
-                                .collect(Collectors.toList()))
-                        .flatMap(Collection::stream)
+                        .map(di -> di.getFamilleMetier().getIntitule())
                         .collect(Collectors.toList()));
             }
         } else {
             while ((csvDatas = csvReader.readNext()) != null) {
                 Formation formation = FormationMapper.map(csvDatas);
                 if (nomCentre.equals(formation.getNomCentre())) {
-                    Optional<List<String>> metiers = formation.getDiplomes().stream()
+                   Optional<String> metiers = formation.getDiplomes().stream()
                             .filter(di -> di.getIntituleDiplome().equals(intituleFormation))
                             .findFirst()
-                            .map(diplome -> diplome.getMetiersDebouche().stream().map(MetierDebouche::getFamilleMetier).collect(Collectors.toList()));
+                            .map(diplome -> diplome.getFamilleMetier().getIntitule());
                     if (metiers.isPresent()) {
-                        famillesMetier.addAll(metiers.get());
+                        famillesMetier.add(metiers.get());
                     }
                  }
             }

@@ -1,16 +1,13 @@
 package com.forum.ticketgenerator.view.login;
 
 import com.forum.ticketgenerator.constants.Roles;
-import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.exception.UserCreationException;
-import com.forum.ticketgenerator.model.Model;
-import com.forum.ticketgenerator.service.model.TicketUserService;
+import com.forum.ticketgenerator.service.model.database.UserCreationService;
 import com.forum.ticketgenerator.view.ticket.HeaderView;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -59,7 +56,7 @@ public class AccountCreationView extends VerticalLayout {
     private byte[] logo;
 
     @Autowired
-    private TicketUserService ticketUserService;
+    private UserCreationService userCreationService;
 
     @PostConstruct
     public void init() {
@@ -72,8 +69,10 @@ public class AccountCreationView extends VerticalLayout {
         selectRole.addValueChangeListener( event -> {
             if (selectRole.getValue() == Roles.ENTREPRISE.name() || selectRole.getValue() == Roles.FORMATION.name()) {
                 displayedName.setVisible(true);
+                uploadLogo.setVisible(true);
             } else {
                 displayedName.setVisible(false);
+                uploadLogo.setVisible(false);
             }
         });
         name = new TextField();
@@ -98,13 +97,14 @@ public class AccountCreationView extends VerticalLayout {
                 e.printStackTrace();
             }
         });
+        uploadLogo.setVisible(false);
 
 
         validationMessage = new Text("");
         validationButton = new Button("Créer le compte");
         validationButton.addClickListener(buttonClickEvent -> {
             try {
-                ticketUserService.createUser(name.getValue(), password.getValue(), selectRole.getValue(), displayedName.getValue(), logo);
+                userCreationService.createUser(name.getValue(), password.getValue(), selectRole.getValue(), displayedName.getValue(), logo);
 
                 UI.getCurrent().navigate("home");
             } catch (UserCreationException e) {

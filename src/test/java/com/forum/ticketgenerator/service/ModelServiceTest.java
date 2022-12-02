@@ -1,5 +1,6 @@
 package com.forum.ticketgenerator.service;
 
+import com.forum.ticketgenerator.service.model.csv.CsvModelService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,12 @@ import java.io.File;
 import java.io.IOException;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { ModelService.class})
+@SpringBootTest(classes = { CsvModelService.class})
 @EnableConfigurationProperties
 public class ModelServiceTest {
 
     @Autowired
-    private ModelService modelService;
+    private CsvModelService modelService;
 
     @Test
     public void test_entreprises_nominal() throws IOException {

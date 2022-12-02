@@ -1,4 +1,4 @@
-package com.forum.ticketgenerator.view.entreprise;
+package com.forum.ticketgenerator.view.formation;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
@@ -22,17 +22,14 @@ import javax.annotation.PostConstruct;
 
 @Component
 @UIScope
-public class AddPosteView extends HorizontalLayout {
+public class AddDiplomeView extends HorizontalLayout {
 
-    private TextField intitulePoste;
+    private TextField intituleDiplome;
     private ComboBox<FamilleMetier> familleMetier;
-    private ComboBox<Niveau> niveau;
-    private ComboBox<TypeContrat> typeContrat;
     private Button ajoutButton;
 
     @Autowired
     private ModelServiceFactory modelServiceFactory;
-
     @Autowired
     private SecurityService securityService;
 
@@ -40,32 +37,23 @@ public class AddPosteView extends HorizontalLayout {
     public void init() {
 
         setAlignItems(Alignment.CENTER);
-        intitulePoste = new TextField();
-        intitulePoste.setLabel("Intitulé de poste : ");
+        intituleDiplome = new TextField();
+        intituleDiplome.setLabel("Intitulé de diplome : ");
 
         familleMetier = new ComboBox<>();
         familleMetier.setItems(modelServiceFactory.getFamilleMetierService().searchAllFamilleMetier());
         familleMetier.setLabel("Famille métier : ");
         familleMetier.setItemLabelGenerator(FamilleMetier::getIntitule);
 
-        niveau = new ComboBox<>();
-        niveau.setItems(modelServiceFactory.getNiveauService().searchAllNiveau());
-        niveau.setLabel("Niveau : ");
-        niveau.setItemLabelGenerator(Niveau::getIntitule);
-
-        typeContrat = new ComboBox<>();
-        typeContrat.setItems(modelServiceFactory.getTypeContratService().searchAllTypeContrat());
-        typeContrat.setLabel("Type de contrat : ");
-        typeContrat.setItemLabelGenerator(TypeContrat::getIntitule);
         ajoutButton = new Button();
-        ajoutButton.setText("Ajouter poste");
+        ajoutButton.setText("Ajouter diplome");
         ajoutButton.addClickListener(event -> {
             ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
-            modelServiceFactory.getEntrepriseService().addPoste(userDetails.getTicketUser().getDisplayName(), intitulePoste.getValue(),
-                    familleMetier.getValue(), niveau.getValue(), typeContrat.getValue());
+            modelServiceFactory.getFormationService().addDiplome(userDetails.getTicketUser().getDisplayName(), intituleDiplome.getValue(),
+                    familleMetier.getValue());
             fireEvent(new ReloadEvent(ajoutButton, false));
         });
-        add(intitulePoste, familleMetier, niveau, typeContrat, ajoutButton);
+        add(intituleDiplome, familleMetier, ajoutButton);
 
     }
 

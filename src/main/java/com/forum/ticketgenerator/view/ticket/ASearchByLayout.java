@@ -1,6 +1,6 @@
 package com.forum.ticketgenerator.view.ticket;
 
-import com.forum.ticketgenerator.service.model.ModelFactory;
+import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ASearchByLayout extends VerticalLayout {
 
     @Autowired
-    protected ModelFactory modelFactory;
+    protected ModelServiceFactory modelServiceFactory;
 
     public ASearchByLayout () {
         getStyle().set("border", "1px solid black");

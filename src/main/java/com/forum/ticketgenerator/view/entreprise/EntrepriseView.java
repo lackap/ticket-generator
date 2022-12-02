@@ -1,16 +1,15 @@
 package com.forum.ticketgenerator.view.entreprise;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
-import com.forum.ticketgenerator.event.SearchResultEvent;
-import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
-import com.forum.ticketgenerator.service.model.DatabaseModelService;
+import com.forum.ticketgenerator.service.model.ModelServiceFactory;
+import com.forum.ticketgenerator.service.model.database.EntrepriseModelService;
+import com.forum.ticketgenerator.view.ParametersView;
 import com.forum.ticketgenerator.view.ticket.HeaderView;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -24,22 +23,16 @@ import java.io.IOException;
 @Route(value = "entreprise")
 @PermitAll
 @UIScope
-public class EntrepriseView extends VerticalLayout {
+public class EntrepriseView extends ParametersView {
 
     @Autowired
     private HeaderView headerView;
 
     @Autowired
-    private EntrepriseHeaderView entrepriseHeaderView;
-
-    @Autowired
     private AddPosteView addPosteView;
 
     @Autowired
-    private SecurityService securityService;
-
-    @Autowired
-    private DatabaseModelService databaseModelService;
+    private ModelServiceFactory modelServiceFactory;
 
     private Grid<PosteMatching> grid;
 
@@ -49,15 +42,16 @@ public class EntrepriseView extends VerticalLayout {
     public void init() throws IOException {
 
         add(headerView);
+        setAlignItems(Alignment.CENTER);
         ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
         addPosteView.addListener(ReloadEvent.class, event -> {
-            grid.setItems(databaseModelService.searchFromEntrepriseName(userDetails.getTicketUser().getDisplayName()));
+            grid.setItems(modelServiceFactory.getEntrepriseService().searchFromEntrepriseName(userDetails.getTicketUser().getDisplayName()));
             grid.getDataProvider().refreshAll();
         });
 
         configureGrid();
-        grid.setItems(databaseModelService.searchFromEntrepriseName(userDetails.getTicketUser().getDisplayName()));
-        add(entrepriseHeaderView, new H2("Ajouter un poste"), addPosteView, grid);
+        grid.setItems(modelServiceFactory.getEntrepriseService().searchFromEntrepriseName(userDetails.getTicketUser().getDisplayName()));
+        add(new H2("Ajouter un poste"), addPosteView, grid);
     }
 
 
@@ -71,5 +65,10 @@ public class EntrepriseView extends VerticalLayout {
         grid.getColumnByKey("intitule").setHeader("Intitulé de poste");
         grid.addColumn("stand");
         grid.getColumnByKey("stand").setHeader("N° de stand");
+    }
+
+    @Override
+    protected String getTitlePrefix() {
+        return "Paramétrage des offres ";
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface FormationRepository extends CrudRepository<Formation, String> {
-    public List<Formation> findByNomCentre(String nomCentre);
+    public Formation findByNomCentre(String nomCentre);
 
     public List<Formation> findByNomCentreAndDiplomesIntituleDiplome(String nomCentre, String intituleDiplome);
 
