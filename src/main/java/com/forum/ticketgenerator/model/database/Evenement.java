@@ -15,6 +15,4 @@ public class Evenement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String intitule;
-	@OneToMany
-	List<Poste> postes = new ArrayList<>();
 }

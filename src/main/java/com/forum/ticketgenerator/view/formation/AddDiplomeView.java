@@ -1,6 +1,8 @@
 package com.forum.ticketgenerator.view.formation;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
+import com.forum.ticketgenerator.exception.DiplomeCreationException;
+import com.forum.ticketgenerator.exception.PosteCreationException;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.forum.ticketgenerator.model.database.Niveau;
 import com.forum.ticketgenerator.model.database.TypeContrat;
@@ -48,10 +50,14 @@ public class AddDiplomeView extends HorizontalLayout {
         ajoutButton = new Button();
         ajoutButton.setText("Ajouter diplome");
         ajoutButton.addClickListener(event -> {
-            ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
-            modelServiceFactory.getFormationService().addDiplome(userDetails.getTicketUser().getDisplayName(), intituleDiplome.getValue(),
-                    familleMetier.getValue());
-            fireEvent(new ReloadEvent(ajoutButton, false));
+            try {
+                ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
+                modelServiceFactory.getFormationService().addDiplome(userDetails.getTicketUser().getDisplayName(), intituleDiplome.getValue(),
+                        familleMetier.getValue());
+                fireEvent(new ReloadEvent(ajoutButton, null,false));
+            } catch (DiplomeCreationException p) {
+                fireEvent(new ReloadEvent(ajoutButton, p.getErrorMessage(), false));
+            }
         });
         add(intituleDiplome, familleMetier, ajoutButton);
 

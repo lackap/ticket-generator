@@ -13,7 +13,7 @@ public class PosteMatchingMapper {
         posteMatching.setNom(entreprise.getNom());
         posteMatching.setStand(entreprise.getStand());
         if (CollectionUtils.isNotEmpty(entreprise.getSecteursActivite())) {
-            posteMatching.setSecteurActivite(entreprise.getSecteursActivite().get(0).getName());
+            posteMatching.setSecteurActivite(entreprise.getSecteursActivite().stream().findFirst().get().getName());
         }
         return posteMatching;
     }

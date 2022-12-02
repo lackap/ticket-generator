@@ -33,6 +33,9 @@ public class ModelServiceFactory {
     @Autowired
     private TypeContratModelService typeContratModelService;
 
+    @Autowired
+    private EvenementModelService evenementModelService;
+
     public IModelService getService() {
         switch (modelType) {
             case "csv":
@@ -89,6 +92,15 @@ public class ModelServiceFactory {
                 return null;
             default :
                 return niveauModelService;
+        }
+    }
+
+    public IEvenementModelService getEvenementService() {
+        switch (modelType) {
+            case "csv":
+                return null;
+            default :
+                return evenementModelService;
         }
 
     }

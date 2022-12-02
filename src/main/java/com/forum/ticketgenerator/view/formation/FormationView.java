@@ -32,7 +32,7 @@ public class FormationView extends ParametersView {
 
     private Grid<Diplome> grid;
 
-    private Text recherche;
+    private Text posteCreationResult;
 
     @PostConstruct
     public void init() throws IOException {
@@ -41,9 +41,13 @@ public class FormationView extends ParametersView {
         setAlignItems(FlexComponent.Alignment.CENTER);
         ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
         addDiplomeView.addListener(ReloadEvent.class, event -> {
-            Formation formation = modelServiceFactory.getFormationService().searchFromFormationName(userDetails.getTicketUser().getDisplayName());
-            grid.setItems(formation.getDiplomes());
-            grid.getDataProvider().refreshAll();
+            if (event.getErrorMessage() == null) {
+                Formation formation = modelServiceFactory.getFormationService().searchFromFormationName(userDetails.getTicketUser().getDisplayName());
+                grid.setItems(formation.getDiplomes());
+                grid.getDataProvider().refreshAll();
+            } else {
+                posteCreationResult.setText(event.getErrorMessage());
+            }
         });
 
         configureGrid();
@@ -53,8 +57,6 @@ public class FormationView extends ParametersView {
     }
 
     private void configureGrid() {
-        recherche  = new Text("");
-        add(recherche);
         grid = new Grid<>(Diplome.class, false);
         grid.addColumn("intituleDiplome");
         grid.getColumnByKey("intituleDiplome").setHeader("Intitulé de poste");

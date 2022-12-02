@@ -28,13 +28,10 @@ public class ParametrageAdminView extends VerticalLayout {
         add(headerView);
         setAlignItems(FlexComponent.Alignment.CENTER);
         RouterLink familleMetierLink = new RouterLink("Gerer les Familles métier", ParametrageFamilleMetierView.class);
-        add(familleMetierLink);
         RouterLink typeContratLink = new RouterLink("Gerer les types de contrat", ParametrageTypeContratView.class);
-        add(typeContratLink);
         RouterLink niveauLink = new RouterLink("Gerer les niveaux d'études", ParametrageNiveauView.class);
-        add(niveauLink);
-        Button gererEvenements = new Button("Gerer les evenements");
-        add(familleMetierLink, typeContratLink, niveauLink, gererEvenements);
+        RouterLink evenementsLink = new RouterLink("Gerer les évènements", ParametrageEvenementView.class);
+        add(familleMetierLink, typeContratLink, niveauLink, evenementsLink);
 
     }
 

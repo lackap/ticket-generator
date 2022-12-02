@@ -1,6 +1,7 @@
 package com.forum.ticketgenerator.repository;
 
 import com.forum.ticketgenerator.model.database.Entreprise;
+import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.forum.ticketgenerator.model.database.Formation;
 import org.springframework.data.repository.CrudRepository;
@@ -16,5 +17,7 @@ public interface EntrepriseRepository  extends CrudRepository<Entreprise, String
     public List<Entreprise> findBySecteursActiviteName(String secteur);
 
     public Entreprise findByNom(String nom);
+
+    public Entreprise findByNomAndPostesEvenement(String nom, Evenement evenement);
 
 }

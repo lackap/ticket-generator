@@ -1,5 +1,7 @@
 package com.forum.ticketgenerator.service.model.database;
 
+import com.forum.ticketgenerator.exception.PosteCreationException;
+import com.forum.ticketgenerator.exception.UserCreationException;
 import com.forum.ticketgenerator.mapper.PosteMatchingMapper;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
@@ -24,12 +26,24 @@ public class EntrepriseModelService implements IEntrepriseModelService {
 
     @Override
     @Transactional
-    public void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau, TypeContrat typeContrat) {
+    public void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau,
+                         TypeContrat typeContrat, Evenement evenement) throws PosteCreationException {
+
+        if (intitule == null) {
+            throw new PosteCreationException("L'intitule de poste doit être renseigné.");
+        }
+        if (familleMetier == null) {
+            throw new PosteCreationException("La famille métier doit être renseigné.");
+        }
+        if (evenement == null) {
+            throw new PosteCreationException("L'évènement doit être renseigné.");
+        }
         Poste poste = new Poste();
         poste.setIntitule(intitule);
         poste.setFamilleMetier(familleMetier);
         poste.setNiveau(niveau);
         poste.setTypeContrat(typeContrat);
+        poste.setEvenement(evenement);
 
         Entreprise entreprise = entrepriseRepository.findByNom(nomEntreprise);
         entreprise.getPostes().add(poste);
@@ -47,6 +61,22 @@ public class EntrepriseModelService implements IEntrepriseModelService {
             postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
         }
         Model.getInstance().setPostesMatching(postesMatching);
+        return postesMatching;
+    }
+
+    @Override
+    public List<PosteMatching> searchFromEntrepriseNameAndEvenement (String entrepriseName, Evenement evenement) {
+        List<PosteMatching> postesMatching = new ArrayList<>();
+
+        Entreprise entreprise = entrepriseRepository.findByNomAndPostesEvenement(entrepriseName, evenement);
+        if (entreprise != null) {
+            for (Poste poste : entreprise.getPostes()) {
+                if (evenement.equals(poste.getEvenement())) {
+                    postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
+                }
+            }
+            Model.getInstance().setPostesMatching(postesMatching);
+        }
         return postesMatching;
     }
 

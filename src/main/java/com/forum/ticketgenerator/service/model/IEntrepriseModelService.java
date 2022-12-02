@@ -1,5 +1,6 @@
 package com.forum.ticketgenerator.service.model;
 
+import com.forum.ticketgenerator.exception.PosteCreationException;
 import com.forum.ticketgenerator.mapper.PosteMatchingMapper;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public interface IEntrepriseModelService {
-    void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau, TypeContrat typeContrat);
+    void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau, TypeContrat typeContrat, Evenement evenement) throws PosteCreationException;
 
     public List<String> getFamilleMetierEntreprises() throws IOException;
 
@@ -24,5 +25,7 @@ public interface IEntrepriseModelService {
     public List<PosteMatching> searchFromSecteurActivite(String secteur) throws IOException;
 
     public List<PosteMatching> searchFromEntrepriseName(String entrepriseName);
+
+    public List<PosteMatching> searchFromEntrepriseNameAndEvenement(String entrepriseName, Evenement evenement);
 
 }

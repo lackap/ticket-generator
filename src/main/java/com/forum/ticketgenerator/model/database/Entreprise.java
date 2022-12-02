@@ -4,7 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -16,9 +18,9 @@ public class Entreprise {
 	private long id;
 	private String nom;
 	private String stand;
-	@OneToMany
-	private List<SecteurActivite> secteursActivite = new ArrayList<>();
-	@OneToMany(cascade = {CascadeType.ALL})
-	private List<Poste> postes = new ArrayList<>();
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	private Set<SecteurActivite> secteursActivite = new HashSet<>();
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	private Set<Poste> postes = new HashSet<>();
 
 }

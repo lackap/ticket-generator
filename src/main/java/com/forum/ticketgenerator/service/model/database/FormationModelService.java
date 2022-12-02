@@ -1,6 +1,8 @@
 package com.forum.ticketgenerator.service.model.database;
 
 import com.forum.ticketgenerator.constants.ApplicationConstants;
+import com.forum.ticketgenerator.exception.DiplomeCreationException;
+import com.forum.ticketgenerator.exception.PosteCreationException;
 import com.forum.ticketgenerator.mapper.PosteMatchingMapper;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
@@ -25,7 +27,13 @@ public class FormationModelService implements IFormationModelService {
 
     @Override
     @Transactional
-    public void addDiplome(String nomCentre, String intituleDiplome, FamilleMetier familleMetier) {
+    public void addDiplome(String nomCentre, String intituleDiplome, FamilleMetier familleMetier) throws DiplomeCreationException {
+        if (intituleDiplome == null) {
+            throw new DiplomeCreationException("L'intitule de poste doit être renseigné.");
+        }
+        if (familleMetier == null) {
+            throw new DiplomeCreationException("La famille métier doit être renseigné.");
+        }
         Diplome diplome = new Diplome();
         diplome.setIntituleDiplome(intituleDiplome);
         diplome.setFamilleMetier(familleMetier);

@@ -1,6 +1,7 @@
 package com.forum.ticketgenerator.service.model;
 
 import com.forum.ticketgenerator.constants.ApplicationConstants;
+import com.forum.ticketgenerator.exception.DiplomeCreationException;
 import com.forum.ticketgenerator.model.database.Diplome;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.forum.ticketgenerator.model.database.Formation;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public interface IFormationModelService {
-    void addDiplome(String nomCentre, String intituleDiplome, FamilleMetier familleMetier);
+    void addDiplome(String nomCentre, String intituleDiplome, FamilleMetier familleMetier) throws DiplomeCreationException;
 
     List<String> getAllDiplomesLabels() throws IOException;
 

@@ -41,7 +41,7 @@ public class LoadingView extends VerticalLayout {
         uploadEntreprise.addSucceededListener(event -> {
             try {
                 Model.getInstance().setEntrepriseFile(memoryBufferEntreprise.getFileData().getFile().getAbsolutePath());
-                fireEvent(new ReloadEvent(uploadEntreprise, false));
+                fireEvent(new ReloadEvent(uploadEntreprise, null, false));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors du chargement des entreprises", e);
             }
@@ -55,7 +55,7 @@ public class LoadingView extends VerticalLayout {
         uploadFormation.addSucceededListener(event -> {
             try {
                 Model.getInstance().setFormationsFile(memoryBufferFormation.getFileData().getFile().getAbsolutePath());
-                fireEvent(new ReloadEvent(uploadFormation, false));
+                fireEvent(new ReloadEvent(uploadFormation, null, false));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors du chargement des formations", e);
             }

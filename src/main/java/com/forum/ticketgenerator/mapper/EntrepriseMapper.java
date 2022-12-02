@@ -4,8 +4,8 @@ import com.forum.ticketgenerator.model.database.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EntrepriseMapper {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntrepriseMapper.class);
@@ -14,7 +14,7 @@ public class EntrepriseMapper {
         Entreprise entreprise = new Entreprise();
         entreprise.setNom(csvDatas[1]);
         entreprise.setStand(csvDatas[2]);
-        List<SecteurActivite> secteursActivite = new ArrayList<>();
+        Set<SecteurActivite> secteursActivite = new HashSet<>();
         SecteurActivite secteurActivite = new SecteurActivite();
         secteurActivite.setName(csvDatas[0]);
         secteursActivite.add(secteurActivite);
