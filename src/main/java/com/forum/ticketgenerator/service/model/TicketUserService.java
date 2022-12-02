@@ -16,7 +16,7 @@ public class TicketUserService {
     @Autowired
     private TicketUserRepository ticketUserRepository;
 
-    public void createUser(String name, String password, String role, String displayedName) throws UserCreationException {
+    public void createUser(String name, String password, String role, String displayedName, byte[] logo) throws UserCreationException {
         if (name == null) {
             throw new UserCreationException("L'identifiant doit être renseigné.");
         }
@@ -35,6 +35,7 @@ public class TicketUserService {
         ticketUser.setUsername(name);
         ticketUser.setPassword(passwordEncoder.encode(password));
         ticketUser.setRole(role);
+        ticketUser.setLogo(logo);
         ticketUser.setDisplayName(displayedName);
         ticketUserRepository.save(ticketUser);
     }

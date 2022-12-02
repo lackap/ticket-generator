@@ -1,4 +1,4 @@
-package com.forum.ticketgenerator.view;
+package com.forum.ticketgenerator.view.ticket;
 
 import com.forum.ticketgenerator.event.SearchEvent;
 import com.forum.ticketgenerator.event.SearchResultEvent;

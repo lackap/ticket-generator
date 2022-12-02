@@ -1,8 +1,7 @@
-package com.forum.ticketgenerator.view;
+package com.forum.ticketgenerator.view.ticket;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.model.Model;
-import com.forum.ticketgenerator.service.ModelService;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -14,7 +13,6 @@ import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -25,9 +23,6 @@ import java.io.IOException;
 public class LoadingView extends VerticalLayout {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadingView.class);
-
-    @Autowired
-    private ModelService modelService;
 
     private Upload uploadEntreprise;
 

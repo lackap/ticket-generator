@@ -20,4 +20,8 @@ public class TicketUser {
     private String displayName;
 
     private String role;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] logo;
 }

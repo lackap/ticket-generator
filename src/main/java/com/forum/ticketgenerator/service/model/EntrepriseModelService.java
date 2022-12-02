@@ -5,12 +5,15 @@ import com.forum.ticketgenerator.repository.EntrepriseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class EntrepriseModelService {
 
     @Autowired
     private EntrepriseRepository entrepriseRepository;
 
+    @Transactional
     public void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau, TypeContrat typeContrat) {
         Poste poste = new Poste();
         poste.setIntitule(intitule);

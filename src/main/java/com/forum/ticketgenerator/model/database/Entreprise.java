@@ -18,7 +18,7 @@ public class Entreprise {
 	private String stand;
 	@OneToMany
 	private List<SecteurActivite> secteursActivite = new ArrayList<>();
-	@OneToMany
+	@OneToMany(cascade = {CascadeType.ALL})
 	private List<Poste> postes = new ArrayList<>();
 
 }

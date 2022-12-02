@@ -1,11 +1,14 @@
-package com.forum.ticketgenerator.view;
+package com.forum.ticketgenerator.view.ticket;
 
+import com.forum.ticketgenerator.security.SecurityService;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +16,9 @@ import javax.annotation.PostConstruct;
 @Component
 @UIScope
 public class HeaderView extends HorizontalLayout {
+
+    @Autowired
+    private SecurityService securityService;
 
     public HeaderView() {}
 
@@ -32,6 +38,8 @@ public class HeaderView extends HorizontalLayout {
         span.add(html);
         titre.add(span);
         add(titre);
+        Button logout = new Button("Log out", e -> securityService.logout());
+        add(logout);
 
     }
 }

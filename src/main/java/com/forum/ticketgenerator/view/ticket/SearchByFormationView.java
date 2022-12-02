@@ -1,4 +1,4 @@
-package com.forum.ticketgenerator.view;
+package com.forum.ticketgenerator.view.ticket;
 
 import com.forum.ticketgenerator.constants.ApplicationConstants;
 import com.forum.ticketgenerator.event.SearchEvent;
@@ -43,7 +43,7 @@ public class SearchByFormationView extends ASearchByLayout {
         add(titre);
         selectCentre = new ComboBox<>();
         selectCentre.setLabel("Centre de formation");
-        selectCentre.setItems(modelService.getCentreFormationLabels());
+        selectCentre.setItems(modelFactory.getService().getCentreFormationLabels());
         selectCentre.addValueChangeListener(event -> {
             if (StringUtils.isEmpty(selectCentre.getValue())) {
                 selectDiplome.setEnabled(false);
@@ -52,13 +52,13 @@ public class SearchByFormationView extends ASearchByLayout {
                 selectDiplome.setEnabled(true);
                 if (ApplicationConstants.AUCUN_DIPLOME.equals(selectCentre.getValue())) {
                     try {
-                        selectDiplome.setItems(modelService.getAllDiplomesLabels());
+                        selectDiplome.setItems(modelFactory.getService().getAllDiplomesLabels());
                     } catch (IOException e) {
                         LOGGER.error("Erreur lors de la récupération de tout les libellés de diplomes", e);
                     }
                 } else {
                     try {
-                        selectDiplome.setItems(modelService.getDiplomesLabels((selectCentre.getValue())));
+                        selectDiplome.setItems(modelFactory.getService().getDiplomesLabels((selectCentre.getValue())));
                     } catch (IOException e) {
                         LOGGER.error("Erreur lors de la récupération des libellés de diplomes du centre " + selectCentre.getValue(), e);
                     }
@@ -77,7 +77,7 @@ public class SearchByFormationView extends ASearchByLayout {
         buttonSearchFormation.addClickListener(event -> {
             try {
                 fireEvent(new SearchEvent(buttonSearchFormation, false,
-                        modelService.searchFromFormation(selectCentre.getValue(), selectDiplome.getValue()),
+                        modelFactory.getService().searchFromFormation(selectCentre.getValue(), selectDiplome.getValue()),
                         SEARCH_LABEL + " " + selectCentre.getValue() + " / " + selectDiplome.getValue()));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors de la recherche des diplomes liés a " + selectCentre.getValue() + " / " + selectDiplome.getValue(), e);
