@@ -1,18 +1,8 @@
 package com.forum.ticketgenerator.view.admin;
 
-import com.forum.ticketgenerator.event.ReloadEvent;
-import com.forum.ticketgenerator.model.PosteMatching;
-import com.forum.ticketgenerator.model.database.Diplome;
-import com.forum.ticketgenerator.model.database.Formation;
-import com.forum.ticketgenerator.security.ApplicationUser;
-import com.forum.ticketgenerator.service.model.ModelServiceFactory;
-import com.forum.ticketgenerator.view.ParametersView;
-import com.forum.ticketgenerator.view.formation.AddDiplomeView;
-import com.forum.ticketgenerator.view.ticket.HeaderView;
-import com.vaadin.flow.component.Text;
+import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -27,9 +17,6 @@ public abstract class AParametrageView<T> extends VerticalLayout {
 
     @Autowired
     private HeaderView headerView;
-
-    @Autowired
-    private ModelServiceFactory modelServiceFactory;
 
     protected TextField valueToAdd;
 
@@ -52,14 +39,14 @@ public abstract class AParametrageView<T> extends VerticalLayout {
             save();
             grid.setItems(getItems());
         });
-        add(routerLink, new H2("Ajouter "), valueToAdd, ajoutButton, grid);
+        add(routerLink, valueToAdd, ajoutButton, grid);
     }
 
     protected void configureGrid() {
         grid = new Grid<>(getGridType(), false);
         grid.addColumn("intitule");
         grid.getColumnByKey("intitule").setHeader("Intitulé");
-    };
+    }
 
     protected abstract String getTitle();
 

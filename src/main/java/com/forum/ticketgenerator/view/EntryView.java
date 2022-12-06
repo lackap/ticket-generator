@@ -45,7 +45,7 @@ public class EntryView extends Div implements BeforeEnterObserver {
                 event.rerouteTo(EntrepriseView.class);
             }
             if (Roles.USER.name().equals(grantedAuthority.getAuthority())) {
-                event.rerouteTo(TicketView.class);
+                event.rerouteTo(SelectEventView.class);
             }
             if (Roles.FORMATION.name().equals(grantedAuthority.getAuthority())) {
                 event.rerouteTo(FormationView.class);

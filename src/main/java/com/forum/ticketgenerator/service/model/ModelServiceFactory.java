@@ -16,9 +16,6 @@ public class ModelServiceFactory {
     private CsvModelService modelService;
 
     @Autowired
-    private DatabaseModelService databaseModelService;
-
-    @Autowired
     private EntrepriseModelService entrepriseModelService;
 
     @Autowired
@@ -36,12 +33,15 @@ public class ModelServiceFactory {
     @Autowired
     private EvenementModelService evenementModelService;
 
+    @Autowired
+    private PosteModelService posteModelService;
+
     public IModelService getService() {
         switch (modelType) {
             case "csv":
                 return null;
             default :
-                return databaseModelService;
+                return null;
         }
 
     }
@@ -101,6 +101,16 @@ public class ModelServiceFactory {
                 return null;
             default :
                 return evenementModelService;
+        }
+
+    }
+
+    public IPosteModelService getPosteService() {
+        switch (modelType) {
+            case "csv":
+                return null;
+            default :
+                return posteModelService;
         }
 
     }

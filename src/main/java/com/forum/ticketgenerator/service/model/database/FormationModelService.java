@@ -52,38 +52,40 @@ public class FormationModelService implements IFormationModelService {
 
     @Override
     @Transactional
-    public List<String> getAllDiplomesLabels() throws IOException {
+    public List<Diplome> getAllDiplomes () throws IOException {
         Iterable<Formation> formations = formationRepository.findAll();
-        List<String> diplomesLabels = new ArrayList<>();
+        List<Diplome> diplomesLabels = new ArrayList<>();
         formations.forEach(
                 formation -> {
-                    diplomesLabels.addAll(formation.getDiplomes().stream().map(Diplome::getIntituleDiplome).collect(Collectors.toList()));
+                    diplomesLabels.addAll(formation.getDiplomes());
                 }
         );
-        return diplomesLabels.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        return diplomesLabels.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<String> getDiplomesLabels(String centreFormation) throws IOException {
+    public List<Diplome> getDiplomes (String centreFormation) throws IOException {
         Formation formation = formationRepository.findByNomCentre(centreFormation);
-        List<String> diplomesLabels = new ArrayList<>();
-        diplomesLabels.addAll(formation.getDiplomes().stream().map(Diplome::getIntituleDiplome).collect(Collectors.toList()));
-        return diplomesLabels.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        List<Diplome> diplomesLabels = new ArrayList<>();
+        diplomesLabels.addAll(formation.getDiplomes().stream().collect(Collectors.toList()));
+        return diplomesLabels.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<String> getCentreFormationLabels() throws IOException {
+    public List<Formation> getCentresFormation () throws IOException {
         Iterable<Formation> formations = formationRepository.findAll();
-        List<String> centreFormationLabels = new ArrayList<>();
+        List<Formation> centreFormationLabels = new ArrayList<>();
         formations.forEach(
                 formation -> {
-                    centreFormationLabels.add(formation.getNomCentre());
+                    centreFormationLabels.add(formation);
                 } );
-        List<String> sortedList = new ArrayList<>();
-        sortedList.add(ApplicationConstants.AUCUN_DIPLOME);
-        sortedList.addAll(centreFormationLabels.stream().sorted(Comparator.naturalOrder()).distinct().collect(Collectors.toList()));
+        List<Formation> sortedList = new ArrayList<>();
+        Formation formation = new Formation();
+        formation.setNomCentre(ApplicationConstants.AUCUN_DIPLOME);
+        sortedList.add(formation);
+        sortedList.addAll(centreFormationLabels.stream().distinct().collect(Collectors.toList()));
         return sortedList;
     }
 }

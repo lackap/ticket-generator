@@ -2,6 +2,7 @@ package com.forum.ticketgenerator.view.ticket;
 
 import com.forum.ticketgenerator.event.SearchEvent;
 import com.forum.ticketgenerator.event.SearchResultEvent;
+import com.forum.ticketgenerator.model.database.Evenement;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -20,10 +21,10 @@ public class SearchView extends HorizontalLayout {
     private SearchByFormationView formationView;
 
     @Autowired
-    private SearchByIntitulePosteView searchIntitulePosteView;
+    private SearchByFamilleMetierView searchIntitulePosteView;
 
     @Autowired
-    private SearchBySecteurActiviteView searchSecteurActiviteView;
+    private SearchByEntrepriseView searchView;
 
     public SearchView () {
     }
@@ -35,11 +36,11 @@ public class SearchView extends HorizontalLayout {
         addListener(SearchEvent.class, event -> fireEvent(new SearchResultEvent(event.getSource(), false, event.getPostesMatching(), event.getLabel())));
         formationView.addListener(SearchEvent.class, this::fireEvent);
         searchIntitulePosteView.addListener(SearchEvent.class, this::fireEvent);
-        searchSecteurActiviteView.addListener(SearchEvent.class, this::fireEvent);
+        searchView.addListener(SearchEvent.class, this::fireEvent);
 
         add(formationView);
         add(searchIntitulePosteView);
-        add(searchSecteurActiviteView);
+        add(searchView);
     }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,

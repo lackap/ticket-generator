@@ -1,5 +1,6 @@
 package com.forum.ticketgenerator.security;
 
+import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.TicketUser;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +14,9 @@ import java.util.List;
 public class ApplicationUser implements UserDetails {
 
     private TicketUser ticketUser;
-    
+
+    private Evenement evenement;
+
     public ApplicationUser(TicketUser ticketUser) {
         this.ticketUser = ticketUser;
     }

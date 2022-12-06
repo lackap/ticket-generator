@@ -1,8 +1,6 @@
 package com.forum.ticketgenerator.view.admin;
 
-import com.forum.ticketgenerator.view.entreprise.EntrepriseView;
-import com.forum.ticketgenerator.view.ticket.HeaderView;
-import com.vaadin.flow.component.button.Button;
+import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;

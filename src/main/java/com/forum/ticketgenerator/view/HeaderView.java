@@ -1,8 +1,8 @@
-package com.forum.ticketgenerator.view.ticket;
+package com.forum.ticketgenerator.view;
 
 import com.forum.ticketgenerator.security.SecurityService;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -39,17 +39,19 @@ public class HeaderView extends HorizontalLayout implements BeforeEnterObserver 
     public void init() {
         setWidth("100%");
         titreDiv = new Div();
-        titreDiv.setWidth("100%");
+        titreDiv.setWidth("70%");
         titreDiv.getElement().getStyle().set("font-size", "40px");
         titreDiv.getElement().getStyle().set("font-weight", "bold");
         titreDiv.getElement().getStyle().set("text-align", "center");
         imageDiv = new Div();
-        imageDiv.setWidth("150px");
+        imageDiv.setWidth("15%");
         Button logout = new Button("Se déconnecter", e -> securityService.logout());
-        logout.setWidth("150px");
+        logout.setWidth("15%");
         add(imageDiv);
         add(titreDiv);
-        add(logout);
+        if (securityService.getAuthenticatedUser() != null) {
+            add(logout);
+        }
     }
 
     public void customizeHeader(Image imageLogo, String title) {
@@ -64,6 +66,7 @@ public class HeaderView extends HorizontalLayout implements BeforeEnterObserver 
     private void updateDisplay() {
         if (imageLogo != null) {
             imageDiv.removeAll();
+            imageLogo.setWidth(100, Unit.PIXELS);
             imageDiv.add(imageLogo);
         }
 

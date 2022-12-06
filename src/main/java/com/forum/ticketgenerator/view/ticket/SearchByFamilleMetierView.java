@@ -1,13 +1,14 @@
 package com.forum.ticketgenerator.view.ticket;
 
 import com.forum.ticketgenerator.event.SearchEvent;
+import com.forum.ticketgenerator.model.database.Evenement;
+import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,16 +18,16 @@ import java.io.IOException;
 
 @Component
 @UIScope
-public class SearchByIntitulePosteView extends ASearchByLayout {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchByIntitulePosteView.class);
+public class SearchByFamilleMetierView extends ASearchByLayout {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchByFamilleMetierView.class);
 
     private final static String SEARCH_LABEL = "Recherche par famille métier";
 
-    private ComboBox<String> selectFamilleMetier;
+    private ComboBox<FamilleMetier> selectFamilleMetier;
 
     private Button buttonSearchPoste;
 
-    public SearchByIntitulePosteView () {
+    public SearchByFamilleMetierView () {
 
     }
 
@@ -46,7 +47,8 @@ public class SearchByIntitulePosteView extends ASearchByLayout {
         selectFamilleMetier.setLabel("Famille Métier");
         selectFamilleMetier.setEnabled(true);
         selectFamilleMetier.setItems(modelServiceFactory.getEntrepriseService().getFamilleMetierEntreprises());
-        selectFamilleMetier.addValueChangeListener(event -> buttonSearchPoste.setEnabled(!StringUtils.isEmpty(selectFamilleMetier.getValue())));
+        selectFamilleMetier.setItemLabelGenerator(FamilleMetier::getIntitule);
+        selectFamilleMetier.addValueChangeListener(event -> buttonSearchPoste.setEnabled(selectFamilleMetier.getValue() != null));
         add(selectFamilleMetier);
         buttonSearchPoste = new Button();
         buttonSearchPoste.setText("Chercher par famille métier");
@@ -54,8 +56,8 @@ public class SearchByIntitulePosteView extends ASearchByLayout {
         buttonSearchPoste.addClickListener(event -> {
             try {
                 fireEvent(new SearchEvent(buttonSearchPoste, false,
-                        modelServiceFactory.getEntrepriseService().searchFromFamilleMetier(selectFamilleMetier.getValue()),
-                        SEARCH_LABEL + " " + selectFamilleMetier.getValue()));
+                        modelServiceFactory.getPosteService().searchFromFamilleMetier(selectFamilleMetier.getValue(), getEvenement()),
+                        SEARCH_LABEL + " " + selectFamilleMetier.getValue().getIntitule()));
             } catch (IOException e) {
                 LOGGER.error("Erreur lors de la recherche depuis la famille métier " + selectFamilleMetier.getValue(), e);
             }

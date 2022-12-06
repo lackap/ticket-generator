@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 public interface IFormationModelService {
     void addDiplome(String nomCentre, String intituleDiplome, FamilleMetier familleMetier) throws DiplomeCreationException;
 
-    List<String> getAllDiplomesLabels() throws IOException;
+    List<Diplome> getAllDiplomes () throws IOException;
 
-    List<String> getDiplomesLabels(String centreFormation) throws IOException;
+    List<Diplome> getDiplomes (String centreFormation) throws IOException;
 
-    List<String> getCentreFormationLabels() throws IOException;
+    List<Formation> getCentresFormation () throws IOException;
 
     Formation searchFromFormationName(String formationName);
 }

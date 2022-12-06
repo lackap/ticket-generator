@@ -1,5 +1,6 @@
 package com.forum.ticketgenerator.security;
 
+import com.forum.ticketgenerator.model.database.Evenement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.security.core.context.SecurityContext;
@@ -13,12 +14,12 @@ public class SecurityService {
 
     private static final String LOGOUT_SUCCESS_URL = "/";
 
-    public UserDetails getAuthenticatedUser() {
+    public ApplicationUser getAuthenticatedUser() {
         SecurityContext context = SecurityContextHolder.getContext();
         if (context != null && context.getAuthentication() != null) {
             Object principal = context.getAuthentication().getPrincipal();
             if (principal instanceof UserDetails) {
-                return (UserDetails) principal;
+                return (ApplicationUser) principal;
             }
         }
         return null;

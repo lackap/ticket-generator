@@ -1,22 +1,22 @@
 package com.forum.ticketgenerator.view.ticket;
 
-import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.event.SearchResultEvent;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
+import com.forum.ticketgenerator.model.database.Evenement;
+import com.forum.ticketgenerator.security.SecurityService;
+import com.forum.ticketgenerator.service.model.ModelServiceFactory;
+import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 
 @Route(value = "ticket")
 @UIScope
@@ -30,20 +30,20 @@ public class TicketView extends VerticalLayout {
     private SearchView searchView;
 
     @Autowired
-    private LoadingView loadingView;
-
-    @Autowired
     private PdfGenerationView pdfGenerationView;
 
     private Grid<PosteMatching> grid;
     private Text recherche;
 
+    private ComboBox<Evenement> evenement;
+
+    @Autowired
+    private SecurityService securityService;
+
     @PostConstruct
     public void init() {
 
         add(headerView);
-        add(loadingView);
-        loadingView.addListener(ReloadEvent.class, event -> UI.getCurrent().getPage().reload());
         add(searchView);
         searchView.addListener(SearchResultEvent.class, event -> {
             Model.getInstance().setPostesMatching(event.getPostesMatching());

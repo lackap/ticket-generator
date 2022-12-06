@@ -1,31 +1,26 @@
 package com.forum.ticketgenerator.service.model;
 
 import com.forum.ticketgenerator.exception.PosteCreationException;
-import com.forum.ticketgenerator.mapper.PosteMatchingMapper;
-import com.forum.ticketgenerator.model.Model;
+import com.forum.ticketgenerator.model.EntrepriseDTO;
 import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.model.database.*;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public interface IEntrepriseModelService {
     void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau, TypeContrat typeContrat, Evenement evenement) throws PosteCreationException;
 
-    public List<String> getFamilleMetierEntreprises() throws IOException;
+    List<FamilleMetier> getFamilleMetierEntreprises() throws IOException;
 
-    public List<String> getSecteursActivitesEntreprises() throws IOException;
+    List<SecteurActivite> getSecteursActivitesEntreprises() throws IOException;
 
-    public List<PosteMatching> searchFromFamilleMetier(String familleMetier) throws IOException;
+    List<PosteMatching> searchFromSecteurActivite(SecteurActivite secteur, Evenement evenement) throws IOException;
 
-    public List<PosteMatching> searchFromSecteurActivite(String secteur) throws IOException;
+    List<PosteMatching> searchFromEntrepriseName(String entrepriseName);
 
-    public List<PosteMatching> searchFromEntrepriseName(String entrepriseName);
+    List<PosteMatching> searchFromEntrepriseNameAndEvenement(String entrepriseName, Evenement evenement);
 
-    public List<PosteMatching> searchFromEntrepriseNameAndEvenement(String entrepriseName, Evenement evenement);
+    List<EntrepriseDTO> searchAllEntreprise(Evenement evenement);
 
 }

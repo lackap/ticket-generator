@@ -3,7 +3,7 @@ package com.forum.ticketgenerator.view.login;
 import com.forum.ticketgenerator.constants.Roles;
 import com.forum.ticketgenerator.exception.UserCreationException;
 import com.forum.ticketgenerator.service.model.database.UserCreationService;
-import com.forum.ticketgenerator.view.ticket.HeaderView;
+import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -11,6 +11,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
@@ -43,7 +44,7 @@ public class AccountCreationView extends VerticalLayout {
 
     private TextField name;
 
-    private TextField password;
+    private PasswordField password;
 
     private TextField displayedName;
 
@@ -77,7 +78,7 @@ public class AccountCreationView extends VerticalLayout {
         });
         name = new TextField();
         name.setLabel("Identifiant : ");
-        password = new TextField();
+        password = new PasswordField();
         password.setLabel("Mot de passe : ");
         displayedName = new TextField();
         displayedName.setLabel("Désignation : ");

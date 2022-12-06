@@ -1,8 +1,9 @@
 package com.forum.ticketgenerator.service.model.database;
 
 import com.forum.ticketgenerator.exception.PosteCreationException;
-import com.forum.ticketgenerator.exception.UserCreationException;
+import com.forum.ticketgenerator.mapper.EntrepriseDTOMapper;
 import com.forum.ticketgenerator.mapper.PosteMatchingMapper;
+import com.forum.ticketgenerator.model.EntrepriseDTO;
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.model.database.*;
@@ -12,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +45,7 @@ public class EntrepriseModelService implements IEntrepriseModelService {
         poste.setEvenement(evenement);
 
         Entreprise entreprise = entrepriseRepository.findByNom(nomEntreprise);
+        poste.setEntreprise(entreprise);
         entreprise.getPostes().add(poste);
         entrepriseRepository.save(entreprise);
 
@@ -65,6 +65,7 @@ public class EntrepriseModelService implements IEntrepriseModelService {
     }
 
     @Override
+    @Transactional
     public List<PosteMatching> searchFromEntrepriseNameAndEvenement (String entrepriseName, Evenement evenement) {
         List<PosteMatching> postesMatching = new ArrayList<>();
 
@@ -83,59 +84,47 @@ public class EntrepriseModelService implements IEntrepriseModelService {
 
     @Override
     @Transactional
-    public List<String> getFamilleMetierEntreprises() throws IOException {
+    public List<FamilleMetier> getFamilleMetierEntreprises() {
         Iterable<Entreprise> entreprises = entrepriseRepository.findAll();
-        List<String> famillesMetier = new ArrayList<>();
+        List<FamilleMetier> famillesMetier = new ArrayList<>();
         entreprises.forEach(
-                entreprise -> {
-                    famillesMetier.addAll(entreprise.getPostes().stream().map(poste -> poste.getFamilleMetier().getIntitule()).collect(Collectors.toList()));
-                });
-        return famillesMetier.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+                entreprise -> famillesMetier.addAll(entreprise.getPostes().stream().map(Poste::getFamilleMetier).collect(Collectors.toList())));
+        return famillesMetier.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<String> getSecteursActivitesEntreprises() throws IOException {
+    public List<SecteurActivite> getSecteursActivitesEntreprises() {
         Iterable<Entreprise> entreprises = entrepriseRepository.findAll();
-        List<String> secteurs = new ArrayList<>();
+        List<SecteurActivite> secteurs = new ArrayList<>();
         entreprises.forEach(
-                entreprise -> {
-                    secteurs.addAll(entreprise.getSecteursActivite().stream().map(SecteurActivite::getName).collect(Collectors.toList()));
-                }
+                entreprise -> secteurs.addAll(entreprise.getSecteursActivite())
         );
-        return secteurs.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        return secteurs.stream().distinct().collect(Collectors.toList());
 
     }
 
     @Override
     @Transactional
-    public List<PosteMatching> searchFromFamilleMetier(String familleMetier) throws IOException {
+    public List<PosteMatching> searchFromSecteurActivite(SecteurActivite secteur, Evenement evenement) {
         List<PosteMatching> postesMatching = new ArrayList<>();
-
-        List<Entreprise> entreprises = entrepriseRepository.findByPostesFamilleMetier(familleMetier);
+        List<Entreprise> entreprises = entrepriseRepository.findBySecteursActiviteNameAndPostesEvenement(secteur, evenement);
         entreprises.forEach(
                 entreprise -> {
                     for (Poste poste : entreprise.getPostes()) {
-                        postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
+                        if (poste.getEvenement().equals(evenement)) {
+                            postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
+                        }
                     }
                 });
         Model.getInstance().setPostesMatching(postesMatching);
         return postesMatching;
     }
 
-
     @Override
     @Transactional
-    public List<PosteMatching> searchFromSecteurActivite(String secteur) throws IOException {
-        List<PosteMatching> postesMatching = new ArrayList<>();
-        List<Entreprise> entreprises = entrepriseRepository.findBySecteursActiviteName(secteur);
-        entreprises.forEach(
-                entreprise -> {
-                    for (Poste poste : entreprise.getPostes()) {
-                        postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
-                    }
-                });
-        Model.getInstance().setPostesMatching(postesMatching);
-        return postesMatching;
+    public List<EntrepriseDTO> searchAllEntreprise(Evenement evenement) {
+        List<Entreprise> entreprises = entrepriseRepository.findByPostesEvenement(evenement);
+        return entreprises.stream().map(EntrepriseDTOMapper::map).collect(Collectors.toList());
     }
 }

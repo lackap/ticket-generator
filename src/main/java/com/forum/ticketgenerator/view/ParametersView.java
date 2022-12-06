@@ -2,7 +2,6 @@ package com.forum.ticketgenerator.view;
 
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
-import com.forum.ticketgenerator.view.ticket.HeaderView;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;

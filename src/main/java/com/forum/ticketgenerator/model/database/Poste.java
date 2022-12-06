@@ -21,4 +21,18 @@ public class Poste {
 	private Evenement evenement;
 	@ManyToOne
 	private FamilleMetier familleMetier;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Entreprise entreprise;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Poste )) return false;
+		return id == ((Poste) o).getId();
+	}
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }
