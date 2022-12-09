@@ -1,21 +1,12 @@
 package com.forum.ticketgenerator.view;
 
 import com.forum.ticketgenerator.constants.Roles;
-import com.forum.ticketgenerator.event.ReloadEvent;
-import com.forum.ticketgenerator.event.SearchResultEvent;
-import com.forum.ticketgenerator.model.Model;
-import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.view.admin.ParametrageAdminView;
 import com.forum.ticketgenerator.view.entreprise.EntrepriseView;
 import com.forum.ticketgenerator.view.formation.FormationView;
-import com.forum.ticketgenerator.view.ticket.*;
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
@@ -24,7 +15,6 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 
 @Route(value = "home")
@@ -51,7 +41,7 @@ public class EntryView extends Div implements BeforeEnterObserver {
                 event.rerouteTo(FormationView.class);
             }
             if (Roles.ADMIN.name().equals(grantedAuthority.getAuthority())) {
-                event.rerouteTo(ParametrageAdminView.class);
+                event.rerouteTo(SelectEventView.class);
             }
         }
     }

@@ -2,6 +2,7 @@ package com.forum.ticketgenerator.service;
 
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
+import com.forum.ticketgenerator.model.database.Evenement;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,6 +21,6 @@ public class PdfGenerationServiceTest {
         liste.add(posteMatching);
         Model.getInstance().setPostesMatching(liste);
         PdfGenerationService pdfGenerationService = new PdfGenerationService();
-        pdfGenerationService.genererPdf();
+        pdfGenerationService.genererPdf(new Evenement());
     }
 }

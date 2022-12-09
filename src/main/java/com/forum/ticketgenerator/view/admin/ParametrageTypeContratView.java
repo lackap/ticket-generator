@@ -1,22 +1,21 @@
 package com.forum.ticketgenerator.view.admin;
 
 import com.forum.ticketgenerator.model.database.FamilleMetier;
+import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.model.database.TypeContrat;
+import com.forum.ticketgenerator.service.model.IParametrageService;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
-@Route(value = "parametrageTypeContrat")
-@PermitAll
+@Component
 @UIScope
 public class ParametrageTypeContratView extends AParametrageView<TypeContrat> {
-
-    @Autowired
-    private ModelServiceFactory modelServiceFactory;
 
     @Override
     protected String getTitle () {
@@ -29,12 +28,7 @@ public class ParametrageTypeContratView extends AParametrageView<TypeContrat> {
     }
 
     @Override
-    protected List<TypeContrat> getItems () {
-        return modelServiceFactory.getTypeContratService().searchAllTypeContrat();
-    }
-
-    @Override
-    protected void save () {
-        modelServiceFactory.getTypeContratService().enregistrer(valueToAdd.getValue());
+    protected IParametrageService<TypeContrat> getParametrageService () {
+        return modelServiceFactory.getTypeContratService();
     }
 }

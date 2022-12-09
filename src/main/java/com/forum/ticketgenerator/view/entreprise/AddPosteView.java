@@ -2,10 +2,7 @@ package com.forum.ticketgenerator.view.entreprise;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.exception.PosteCreationException;
-import com.forum.ticketgenerator.model.database.Evenement;
-import com.forum.ticketgenerator.model.database.FamilleMetier;
-import com.forum.ticketgenerator.model.database.Niveau;
-import com.forum.ticketgenerator.model.database.TypeContrat;
+import com.forum.ticketgenerator.model.database.*;
 import com.forum.ticketgenerator.repository.EvenementRepository;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
@@ -32,6 +29,7 @@ public class AddPosteView extends HorizontalLayout {
     private ComboBox<FamilleMetier> familleMetier;
     private ComboBox<Niveau> niveau;
     private ComboBox<TypeContrat> typeContrat;
+    private ComboBox<SecteurActivite> secteurActivite;
     private Button ajoutButton;
 
     @Autowired
@@ -51,17 +49,14 @@ public class AddPosteView extends HorizontalLayout {
         intitulePoste.setLabel("Intitulé de poste : ");
 
         familleMetier = new ComboBox<>();
-        familleMetier.setItems(modelServiceFactory.getFamilleMetierService().searchAllFamilleMetier());
         familleMetier.setLabel("Famille métier : ");
         familleMetier.setItemLabelGenerator(FamilleMetier::getIntitule);
 
         niveau = new ComboBox<>();
-        niveau.setItems(modelServiceFactory.getNiveauService().searchAllNiveau());
         niveau.setLabel("Niveau : ");
         niveau.setItemLabelGenerator(Niveau::getIntitule);
 
         typeContrat = new ComboBox<>();
-        typeContrat.setItems(modelServiceFactory.getTypeContratService().searchAllTypeContrat());
         typeContrat.setLabel("Type de contrat : ");
         typeContrat.setItemLabelGenerator(TypeContrat::getIntitule);
         ajoutButton = new Button();
@@ -82,6 +77,10 @@ public class AddPosteView extends HorizontalLayout {
 
     public void setEvenement(Evenement evenement) {
         this.evenement = evenement;
+        niveau.setItems(modelServiceFactory.getNiveauService().searchParEvenement(this.evenement));
+        typeContrat.setItems(modelServiceFactory.getTypeContratService().searchParEvenement(this.evenement));
+        familleMetier.setItems(modelServiceFactory.getFamilleMetierService().searchParEvenement(evenement));
+        secteurActivite.setItems(modelServiceFactory.getSecteurService().searchParEvenement(evenement));
     }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,

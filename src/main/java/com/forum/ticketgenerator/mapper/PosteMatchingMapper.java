@@ -12,8 +12,8 @@ public class PosteMatchingMapper {
         posteMatching.setIntitule(poste.getIntitule());
         posteMatching.setNom(entreprise.getNom());
         posteMatching.setStand(entreprise.getStand());
-        if (CollectionUtils.isNotEmpty(entreprise.getSecteursActivite())) {
-            posteMatching.setSecteurActivite(entreprise.getSecteursActivite().stream().findFirst().get().getName());
+        if (entreprise.getSecteurActivite() != null) {
+            posteMatching.setSecteurActivite(entreprise.getSecteurActivite().getCouleur());
         }
         return posteMatching;
     }

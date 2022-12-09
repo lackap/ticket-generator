@@ -14,5 +14,7 @@ public class Diplome {
     private long id;
     private String intituleDiplome;
     @ManyToOne
+    private Evenement evenement;
+    @ManyToOne
     private FamilleMetier familleMetier;
 }

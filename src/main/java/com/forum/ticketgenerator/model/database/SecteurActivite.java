@@ -11,6 +11,8 @@ public class SecteurActivite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private String name;
+    private String intitule;
+    @ManyToOne
+    private Evenement evenement;
+    private String couleur;
 }

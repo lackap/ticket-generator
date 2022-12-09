@@ -2,11 +2,13 @@ package com.forum.ticketgenerator.view.formation;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.model.database.Diplome;
+import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.Formation;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.forum.ticketgenerator.view.ParametersView;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -34,6 +36,8 @@ public class FormationView extends ParametersView {
 
     private Text posteCreationResult;
 
+    private ComboBox<Evenement> evenement;
+
     @PostConstruct
     public void init() throws IOException {
 
@@ -42,8 +46,8 @@ public class FormationView extends ParametersView {
         ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
         addDiplomeView.addListener(ReloadEvent.class, event -> {
             if (event.getErrorMessage() == null) {
-                Formation formation = modelServiceFactory.getFormationService().searchFromFormationName(userDetails.getTicketUser().getDisplayName());
-                grid.setItems(formation.getDiplomes());
+                grid.setItems(modelServiceFactory.getFormationService().searchFromFormationNameAndEvenement(
+                        userDetails.getTicketUser().getDisplayName(), evenement.getValue()));
                 grid.getDataProvider().refreshAll();
             } else {
                 posteCreationResult.setText(event.getErrorMessage());
@@ -51,9 +55,16 @@ public class FormationView extends ParametersView {
         });
 
         configureGrid();
-        Formation formation = modelServiceFactory.getFormationService().searchFromFormationName(userDetails.getTicketUser().getDisplayName());
-        grid.setItems(formation.getDiplomes());
-        add(new H2("Ajouter un diplome"), addDiplomeView, grid);
+        evenement = new ComboBox<>();
+        evenement.setLabel("Sélectionner un évènement : ");
+        evenement.setItems(modelServiceFactory.getEvenementService().searchAllEvenement());
+        evenement.setItemLabelGenerator(Evenement::getIntitule);
+        evenement.addValueChangeListener(event -> {
+            addDiplomeView.setEvenement(evenement.getValue());
+            grid.setItems(modelServiceFactory.getFormationService().searchFromFormationNameAndEvenement(
+                    userDetails.getTicketUser().getDisplayName(), evenement.getValue()));
+        });
+        add(evenement, new H2("Ajouter un diplome"), addDiplomeView, grid);
     }
 
     private void configureGrid() {

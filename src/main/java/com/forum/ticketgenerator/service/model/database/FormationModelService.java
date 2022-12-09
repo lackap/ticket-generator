@@ -27,7 +27,7 @@ public class FormationModelService implements IFormationModelService {
 
     @Override
     @Transactional
-    public void addDiplome(String nomCentre, String intituleDiplome, FamilleMetier familleMetier) throws DiplomeCreationException {
+    public void addDiplome(String nomCentre, String intituleDiplome, FamilleMetier familleMetier, Evenement evenement) throws DiplomeCreationException {
         if (intituleDiplome == null) {
             throw new DiplomeCreationException("L'intitule de poste doit être renseigné.");
         }
@@ -37,6 +37,7 @@ public class FormationModelService implements IFormationModelService {
         Diplome diplome = new Diplome();
         diplome.setIntituleDiplome(intituleDiplome);
         diplome.setFamilleMetier(familleMetier);
+        diplome.setEvenement(evenement);
 
         Formation formation = formationRepository.findByNomCentre(nomCentre);
         formation.getDiplomes().add(diplome);
@@ -46,8 +47,17 @@ public class FormationModelService implements IFormationModelService {
 
     @Override
     @Transactional
-    public Formation searchFromFormationName(String formationName) {
-        return formationRepository.findByNomCentre(formationName);
+    public List<Diplome> searchFromFormationNameAndEvenement(String formationName, Evenement evenement) {
+        List<Diplome> diplomes = new ArrayList<>();
+        Formation formation = formationRepository.findByNomCentreAndDiplomesEvenement(formationName, evenement);
+        if (formation != null) {
+            for (Diplome diplome : formation.getDiplomes()) {
+                //if (evenement.equals(diplome.getEvenement())) {
+                    diplomes.add(diplome);
+                //}
+            }
+        }
+        return diplomes;
     }
 
     @Override

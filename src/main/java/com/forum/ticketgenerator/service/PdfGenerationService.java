@@ -2,7 +2,10 @@ package com.forum.ticketgenerator.service;
 
 import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
+import com.forum.ticketgenerator.model.database.Evenement;
+import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.pdf.bean.PdfLegendBean;
+import com.forum.ticketgenerator.repository.SecteurActiviteRepository;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
 import com.itextpdf.kernel.color.Color;
@@ -20,18 +23,15 @@ import com.itextpdf.layout.property.UnitValue;
 import com.itextpdf.layout.property.VerticalAlignment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,14 +39,18 @@ public class PdfGenerationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PdfGenerationService.class);
 
     private List<PdfLegendBean> pdfLegendBeans;
+
     private Border DEFAULT_BORDER = new GrooveBorder(1.0f);
 
-    public byte[] genererPdf() {
+    @Autowired
+    private SecteurActiviteRepository secteurActiviteRepository;
+
+    public byte[] genererPdf(Evenement evenement) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             PdfWriter pdfWriter = new PdfWriter(byteArrayOutputStream);
             Document document = createDocument(pdfWriter);
-            buildDocumentHeader(document);
+            buildDocumentHeader(document, evenement);
             buildDocumentBody(document);
             document.close();
             return byteArrayOutputStream.toByteArray();
@@ -62,13 +66,13 @@ public class PdfGenerationService {
         return document;
     }
 
-    private void buildDocumentHeader(Document document) {
+    private void buildDocumentHeader(Document document, Evenement evenement) {
         try {
             Table pdfPTable = new Table(UnitValue.createPercentArray(new float[]{70, 30}));
             float cellSize = (document.getPdfDocument().getDefaultPageSize().getWidth() - document.getLeftMargin() - document.getRightMargin()) / 4;
             pdfPTable.setWidth(UnitValue.createPercentValue(100));
             pdfPTable.setFixedLayout();
-            addLegendToHeader(pdfPTable);
+            addLegendToHeader(pdfPTable, evenement);
             addImageToHeader(pdfPTable, "META-INF/resources/img/metropole.png", cellSize);
             document.add(pdfPTable);
         } catch (Exception e ) {
@@ -116,12 +120,10 @@ public class PdfGenerationService {
     }
 
     private void addRow(Table table, PosteMatching posteMatching) {
-        Optional<Color> cellColor = getPdfLegendBeans().stream().filter(bean -> bean.getId().equals(posteMatching.getSecteurActivite())).map(PdfLegendBean::getColor).findFirst();
+        Color cellColor = getCouleur(posteMatching.getSecteurActiviteColor());
         Cell colorCell = new Cell();
         Paragraph paragraph = new Paragraph();
-        if (cellColor.isPresent()) {
-            paragraph.setBackgroundColor(cellColor.get());
-        }
+        paragraph.setBackgroundColor(cellColor);
         paragraph.setPadding(2);
         paragraph.setWidth(8);
         paragraph.setHeight(8);
@@ -189,7 +191,7 @@ public class PdfGenerationService {
         return img;
     }
 
-    private void addLegendToHeader(Table mainTable) {
+    private void addLegendToHeader(Table mainTable, Evenement evenement) {
         Table table = new Table(new float[] { 10, 15, 10, 15,10, 15, 10, 15});
         table.setWidthPercent(100);
         table.setBorder(DEFAULT_BORDER);
@@ -201,18 +203,19 @@ public class PdfGenerationService {
         headerCell.setHorizontalAlignment(HorizontalAlignment.CENTER);
         headerCell.add(legend);
         table.addCell(headerCell);
-        for (PdfLegendBean pdfLegendBean : getPdfLegendBeans()) {
-            addLegendCell(table, pdfLegendBean.getColor(), pdfLegendBean.getLabel());
+        List<SecteurActivite> secteurActivites = secteurActiviteRepository.findByEvenement(evenement);
+        for (SecteurActivite secteurActivite : secteurActivites) {
+            addLegendCell(table, secteurActivite.getCouleur(), secteurActivite.getIntitule());
         }
         Cell cell = new Cell();
         cell.add(table);
         mainTable.addCell(cell);
     }
 
-    public void addLegendCell(Table table, Color color, String label) {
+    public void addLegendCell(Table table, String couleur, String label) {
         Cell colorCell = new Cell();
         Paragraph paragraph = new Paragraph();
-        paragraph.setBackgroundColor(color);
+        paragraph.setBackgroundColor(getCouleur(couleur));
         paragraph.setPadding(2);
         paragraph.setWidth(8);
         paragraph.setHeight(8);
@@ -233,19 +236,27 @@ public class PdfGenerationService {
         table.addCell(labelCell);
     }
 
-    private List<PdfLegendBean> getPdfLegendBeans() {
-        if (this.pdfLegendBeans == null) {
-            pdfLegendBeans = new ArrayList<>();
-            pdfLegendBeans.add(new PdfLegendBean("AGRICULTURE", "Agriculture", Color.GREEN));
-            pdfLegendBeans.add(new PdfLegendBean("BTP", "BTP", Color.YELLOW));
-            pdfLegendBeans.add(new PdfLegendBean("HOTELLERIE RESTAURATION", "Hôtellerie Restauration", Color.ORANGE));
-            pdfLegendBeans.add(new PdfLegendBean("FONCTION PUBLIQUE", "Fonction Publique", new DeviceRgb(194, 178, 128)));
-            pdfLegendBeans.add(new PdfLegendBean("INDUSTRIE", "Industrie", Color.RED));
-            pdfLegendBeans.add(new PdfLegendBean("NUMERIQUE", "Numérique", Color.LIGHT_GRAY));
-            pdfLegendBeans.add(new PdfLegendBean("SANTE SOCIAL", "Santé Social", Color.PINK));
-            pdfLegendBeans.add(new PdfLegendBean("SERVICE", "Service", Color.BLUE));
+    private Color getCouleur(String couleur) {
+        switch (couleur) {
+            case "GREEN" :
+                return Color.GREEN;
+            case "ORANGE":
+                return Color.ORANGE;
+            case "YELLOW":
+                return Color.YELLOW;
+            case "RED":
+                return Color.RED;
+            case "LIGHT_GRAY":
+                return Color.LIGHT_GRAY;
+            case "PINK":
+                return Color.PINK;
+            case "BLUE":
+                return Color.BLUE;
+            case "SABLE":
+                return new DeviceRgb(194, 178, 128);
+            default:
+                return Color.WHITE;
         }
-        return pdfLegendBeans;
     }
 
 }

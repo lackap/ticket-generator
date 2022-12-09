@@ -1,11 +1,8 @@
 package com.forum.ticketgenerator.service.model.database;
 
 import com.forum.ticketgenerator.model.database.Evenement;
-import com.forum.ticketgenerator.model.database.Niveau;
 import com.forum.ticketgenerator.repository.EvenementRepository;
-import com.forum.ticketgenerator.repository.NiveauRepository;
 import com.forum.ticketgenerator.service.model.IEvenementModelService;
-import com.forum.ticketgenerator.service.model.INiveauModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +26,15 @@ public class EvenementModelService implements IEvenementModelService {
     }
 
     @Override
-    public void enregistrer (String evenementValue) {
+    public Evenement enregistrer (String evenementValue, String labelSecteurActivite) {
         Evenement evenement = new Evenement();
         evenement.setIntitule(evenementValue);
-        evenementRepository.save(evenement);
+        evenement.setLabelSecteurActivité(labelSecteurActivite);
+        return evenementRepository.save(evenement);
+    }
+
+    @Override
+    public void supprimer (Evenement evenement) {
+        evenementRepository.delete(evenement);
     }
 }

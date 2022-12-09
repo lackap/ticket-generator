@@ -1,5 +1,6 @@
 package com.forum.ticketgenerator.view.ticket;
 
+import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.service.PdfGenerationService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -27,6 +28,9 @@ public class PdfGenerationView extends VerticalLayout {
     @Autowired
     private PdfGenerationService pdfGenerationService;
 
+    @Autowired
+    private SecurityService securityService;
+
     public PdfGenerationView () {
         setAlignItems(Alignment.CENTER);
     }
@@ -43,7 +47,7 @@ public class PdfGenerationView extends VerticalLayout {
         image.setVisible(false);
         buttonGeneratePdf.addClickListener(
                 event -> {
-                    byte[] pdfValue = pdfGenerationService.genererPdf();
+                    byte[] pdfValue = pdfGenerationService.genererPdf(securityService.getAuthenticatedUser().getEvenement());
                     StreamResource resource = new StreamResource("forum" + Instant.now().toEpochMilli() + ".pdf",
                             () -> new ByteArrayInputStream(pdfValue));
                     image.setAttribute("data", resource);

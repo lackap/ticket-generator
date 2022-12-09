@@ -3,6 +3,7 @@ package com.forum.ticketgenerator.view.formation;
 import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.exception.DiplomeCreationException;
 import com.forum.ticketgenerator.exception.PosteCreationException;
+import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.forum.ticketgenerator.model.database.Niveau;
 import com.forum.ticketgenerator.model.database.TypeContrat;
@@ -35,6 +36,8 @@ public class AddDiplomeView extends HorizontalLayout {
     @Autowired
     private SecurityService securityService;
 
+    private Evenement evenement;
+
     @PostConstruct
     public void init() {
 
@@ -43,7 +46,6 @@ public class AddDiplomeView extends HorizontalLayout {
         intituleDiplome.setLabel("Intitulé de diplome : ");
 
         familleMetier = new ComboBox<>();
-        familleMetier.setItems(modelServiceFactory.getFamilleMetierService().searchAllFamilleMetier());
         familleMetier.setLabel("Famille métier : ");
         familleMetier.setItemLabelGenerator(FamilleMetier::getIntitule);
 
@@ -53,7 +55,7 @@ public class AddDiplomeView extends HorizontalLayout {
             try {
                 ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
                 modelServiceFactory.getFormationService().addDiplome(userDetails.getTicketUser().getDisplayName(), intituleDiplome.getValue(),
-                        familleMetier.getValue());
+                        familleMetier.getValue(), this.evenement);
                 fireEvent(new ReloadEvent(ajoutButton, null,false));
             } catch (DiplomeCreationException p) {
                 fireEvent(new ReloadEvent(ajoutButton, p.getErrorMessage(), false));
@@ -61,6 +63,11 @@ public class AddDiplomeView extends HorizontalLayout {
         });
         add(intituleDiplome, familleMetier, ajoutButton);
 
+    }
+
+    public void setEvenement(Evenement evenement) {
+        this.evenement = evenement;
+        familleMetier.setItems(modelServiceFactory.getFamilleMetierService().searchParEvenement(evenement));
     }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,

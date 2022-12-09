@@ -11,13 +11,7 @@ import java.util.List;
 public interface IEntrepriseModelService {
     void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau, TypeContrat typeContrat, Evenement evenement) throws PosteCreationException;
 
-    List<FamilleMetier> getFamilleMetierEntreprises() throws IOException;
-
-    List<SecteurActivite> getSecteursActivitesEntreprises() throws IOException;
-
-    List<PosteMatching> searchFromSecteurActivite(SecteurActivite secteur, Evenement evenement) throws IOException;
-
-    List<PosteMatching> searchFromEntrepriseName(String entrepriseName);
+    List<FamilleMetier> getFamilleMetierEntreprises(Evenement evenement) throws IOException;
 
     List<PosteMatching> searchFromEntrepriseNameAndEvenement(String entrepriseName, Evenement evenement);
 

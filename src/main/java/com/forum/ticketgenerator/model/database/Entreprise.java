@@ -18,8 +18,8 @@ public class Entreprise {
 	private long id;
 	private String nom;
 	private String stand;
-	@OneToMany(cascade = {CascadeType.ALL})
-	private List<SecteurActivite> secteursActivite = new ArrayList<>();
+	@OneToOne
+	private SecteurActivite secteurActivite;
 	@OneToMany(mappedBy = "entreprise", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Poste> postes = new ArrayList<>();
 

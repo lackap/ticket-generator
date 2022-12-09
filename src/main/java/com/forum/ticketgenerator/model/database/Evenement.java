@@ -13,4 +13,5 @@ public class Evenement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String intitule;
+	private String labelSecteurActivité;
 }

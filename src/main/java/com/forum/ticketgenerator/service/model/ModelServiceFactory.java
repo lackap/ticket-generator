@@ -1,5 +1,9 @@
 package com.forum.ticketgenerator.service.model;
 
+import com.forum.ticketgenerator.model.database.FamilleMetier;
+import com.forum.ticketgenerator.model.database.Niveau;
+import com.forum.ticketgenerator.model.database.SecteurActivite;
+import com.forum.ticketgenerator.model.database.TypeContrat;
 import com.forum.ticketgenerator.service.model.csv.CsvModelService;
 import com.forum.ticketgenerator.service.model.database.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +40,9 @@ public class ModelServiceFactory {
     @Autowired
     private PosteModelService posteModelService;
 
+    @Autowired
+    private SecteurActiviteModelService secteurActiviteModelService;
+
     public IModelService getService() {
         switch (modelType) {
             case "csv":
@@ -66,7 +73,7 @@ public class ModelServiceFactory {
 
     }
 
-    public IFamilleMetierModelService getFamilleMetierService() {
+    public IParametrageService<FamilleMetier> getFamilleMetierService() {
         switch (modelType) {
             case "csv":
                 return null;
@@ -76,7 +83,7 @@ public class ModelServiceFactory {
 
     }
 
-    public ITypeContratModelService getTypeContratService() {
+    public IParametrageService<TypeContrat> getTypeContratService() {
         switch (modelType) {
             case "csv":
                 return null;
@@ -86,7 +93,7 @@ public class ModelServiceFactory {
 
     }
 
-    public INiveauModelService getNiveauService() {
+    public IParametrageService<Niveau> getNiveauService() {
         switch (modelType) {
             case "csv":
                 return null;
@@ -111,6 +118,16 @@ public class ModelServiceFactory {
                 return null;
             default :
                 return posteModelService;
+        }
+
+    }
+
+    public IParametrageService<SecteurActivite> getSecteurService() {
+        switch (modelType) {
+            case "csv":
+                return null;
+            default :
+                return secteurActiviteModelService;
         }
 
     }

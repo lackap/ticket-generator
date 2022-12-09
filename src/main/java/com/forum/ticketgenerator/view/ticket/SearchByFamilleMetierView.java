@@ -46,7 +46,7 @@ public class SearchByFamilleMetierView extends ASearchByLayout {
         selectFamilleMetier = new ComboBox<>();
         selectFamilleMetier.setLabel("Famille Métier");
         selectFamilleMetier.setEnabled(true);
-        selectFamilleMetier.setItems(modelServiceFactory.getEntrepriseService().getFamilleMetierEntreprises());
+        selectFamilleMetier.setItems(modelServiceFactory.getEntrepriseService().getFamilleMetierEntreprises(getEvenement()));
         selectFamilleMetier.setItemLabelGenerator(FamilleMetier::getIntitule);
         selectFamilleMetier.addValueChangeListener(event -> buttonSearchPoste.setEnabled(selectFamilleMetier.getValue() != null));
         add(selectFamilleMetier);

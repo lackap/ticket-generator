@@ -8,5 +8,6 @@ import java.util.List;
 public interface IEvenementModelService {
 
     List<Evenement> searchAllEvenement();
-    void enregistrer(String evenement);
+    Evenement enregistrer(String evenement, String labelSecteurActivite);
+    void supprimer(Evenement evenement);
 }

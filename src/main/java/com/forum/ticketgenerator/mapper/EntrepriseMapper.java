@@ -16,11 +16,9 @@ public class EntrepriseMapper {
         Entreprise entreprise = new Entreprise();
         entreprise.setNom(csvDatas[1]);
         entreprise.setStand(csvDatas[2]);
-        List<SecteurActivite> secteursActivite = new ArrayList<>();
         SecteurActivite secteurActivite = new SecteurActivite();
-        secteurActivite.setName(csvDatas[0]);
-        secteursActivite.add(secteurActivite);
-        entreprise.setSecteursActivite(secteursActivite);
+        secteurActivite.setIntitule(csvDatas[0]);
+        entreprise.setSecteurActivite(secteurActivite);
         Poste poste = new Poste();
         poste.setIntitule(csvDatas[3]);
         FamilleMetier familleMetier = new FamilleMetier();

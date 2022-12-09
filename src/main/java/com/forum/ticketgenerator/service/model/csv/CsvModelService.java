@@ -100,7 +100,7 @@ public class CsvModelService {//implements IModelService {
         List<String> secteurs = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
             Entreprise entreprise = EntrepriseMapper.map(csvDatas);
-            secteurs.addAll(entreprise.getSecteursActivite().stream().map(SecteurActivite::getName).collect(Collectors.toList()));
+            secteurs.add(entreprise.getSecteurActivite().getIntitule());
         }
         csvReader.close();
         return secteurs.stream().distinct().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
@@ -196,7 +196,7 @@ public class CsvModelService {//implements IModelService {
         List<PosteMatching> postesMatching = new ArrayList<>();
         while ((csvDatas = csvReader.readNext()) != null) {
             Entreprise entreprise = EntrepriseMapper.map(csvDatas);
-            if (entreprise.getSecteursActivite().contains(secteur)) {
+            if (entreprise.getSecteurActivite().equals(secteur)) {
                 for (Poste poste : entreprise.getPostes()) {
                     postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
                 }

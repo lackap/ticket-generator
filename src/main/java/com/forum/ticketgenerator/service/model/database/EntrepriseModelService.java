@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,19 +54,6 @@ public class EntrepriseModelService implements IEntrepriseModelService {
 
     @Override
     @Transactional
-    public List<PosteMatching> searchFromEntrepriseName(String entrepriseName) {
-        List<PosteMatching> postesMatching = new ArrayList<>();
-
-        Entreprise entreprise = entrepriseRepository.findByNom(entrepriseName);
-        for (Poste poste : entreprise.getPostes()) {
-            postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
-        }
-        Model.getInstance().setPostesMatching(postesMatching);
-        return postesMatching;
-    }
-
-    @Override
-    @Transactional
     public List<PosteMatching> searchFromEntrepriseNameAndEvenement (String entrepriseName, Evenement evenement) {
         List<PosteMatching> postesMatching = new ArrayList<>();
 
@@ -84,41 +72,18 @@ public class EntrepriseModelService implements IEntrepriseModelService {
 
     @Override
     @Transactional
-    public List<FamilleMetier> getFamilleMetierEntreprises() {
-        Iterable<Entreprise> entreprises = entrepriseRepository.findAll();
-        List<FamilleMetier> famillesMetier = new ArrayList<>();
-        entreprises.forEach(
-                entreprise -> famillesMetier.addAll(entreprise.getPostes().stream().map(Poste::getFamilleMetier).collect(Collectors.toList())));
+    public List<FamilleMetier> getFamilleMetierEntreprises(Evenement evenement) {
+        List<Entreprise> entreprises = entrepriseRepository.findByPostesEvenement(evenement);
+        List<FamilleMetier> famillesMetier = entreprises.stream()
+                .map(entreprise -> entreprise.getPostes().stream()
+                        .filter(poste -> poste.getEvenement().equals(evenement))
+                        .map(poste -> poste.getFamilleMetier())
+
+                        .collect(Collectors.toList())
+                )
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
         return famillesMetier.stream().distinct().collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public List<SecteurActivite> getSecteursActivitesEntreprises() {
-        Iterable<Entreprise> entreprises = entrepriseRepository.findAll();
-        List<SecteurActivite> secteurs = new ArrayList<>();
-        entreprises.forEach(
-                entreprise -> secteurs.addAll(entreprise.getSecteursActivite())
-        );
-        return secteurs.stream().distinct().collect(Collectors.toList());
-
-    }
-
-    @Override
-    @Transactional
-    public List<PosteMatching> searchFromSecteurActivite(SecteurActivite secteur, Evenement evenement) {
-        List<PosteMatching> postesMatching = new ArrayList<>();
-        List<Entreprise> entreprises = entrepriseRepository.findBySecteursActiviteNameAndPostesEvenement(secteur, evenement);
-        entreprises.forEach(
-                entreprise -> {
-                    for (Poste poste : entreprise.getPostes()) {
-                        if (poste.getEvenement().equals(evenement)) {
-                            postesMatching.add(PosteMatchingMapper.map(entreprise, poste));
-                        }
-                    }
-                });
-        Model.getInstance().setPostesMatching(postesMatching);
-        return postesMatching;
     }
 
     @Override
