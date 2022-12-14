@@ -1,11 +1,14 @@
 package com.forum.ticketgenerator.view.admin;
 
+import com.forum.ticketgenerator.exception.ModelCreationException;
 import com.forum.ticketgenerator.model.ColorAvailable;
 import com.forum.ticketgenerator.model.database.SecteurActivite;
+import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.service.model.IParametrageService;
 import com.forum.ticketgenerator.service.model.database.SecteurActiviteModelService;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,11 +18,15 @@ import java.util.List;
 @UIScope
 public class ParametrageSecteurActiviteView extends AParametrageView<SecteurActivite> {
 
-    private ComboBox<ColorAvailable> colorAvailableComboBox;
+    @Autowired
+    private AjoutSecteurActiviteView ajoutSecteurActivite;
+
+    @Autowired
+    private SecurityService securityService;
 
     @Override
     protected String getTitle () {
-        return "Paramétrage secteur d'activité";
+        return "Paramétrage " + securityService.getAuthenticatedUser().getEvenement().getLabelSecteurActivité();
     }
 
     @Override
@@ -28,28 +35,18 @@ public class ParametrageSecteurActiviteView extends AParametrageView<SecteurActi
     }
 
     @Override
+    protected AAddParametrageView getParametrageView () {
+        return ajoutSecteurActivite;
+    }
+
+    @Override
     protected IParametrageService<SecteurActivite> getParametrageService () {
         return modelServiceFactory.getSecteurService();
     }
 
-    protected List<com.vaadin.flow.component.Component> getCustomComponents() {
-        List<com.vaadin.flow.component.Component> components = new ArrayList<>();
-        colorAvailableComboBox = new ComboBox<>();
-        colorAvailableComboBox.setItems(ColorAvailable.values());
-        colorAvailableComboBox.setItemLabelGenerator(ColorAvailable::getValue);
-        components.add(colorAvailableComboBox);
-        return components;
-    }
-
     @Override
     protected void addCustomColumns() {
-        grid.addColumn("couleur");
-        grid.getColumnByKey("couleur").setHeader("Couleur associée");
+        grid.addColumn("couleur").setWidth("15%").setHeader("Couleur associée").setFlexGrow(0);
     }
 
-    @Override
-    protected SecteurActivite save () {
-        SecteurActiviteModelService secteurActiviteModelService = (SecteurActiviteModelService) getParametrageService();
-        return secteurActiviteModelService.enregistrer(valueToAdd.getValue(), this.colorAvailableComboBox.getValue().getValue(), this.evenement);
-    }
 }

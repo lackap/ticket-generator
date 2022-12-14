@@ -2,7 +2,6 @@ package com.forum.ticketgenerator.event;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
-import lombok.Data;
 
 public class ParametrageTabEvent extends ComponentEvent<Component> {
 

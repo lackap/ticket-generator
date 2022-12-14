@@ -1,15 +1,13 @@
 package com.forum.ticketgenerator.view.entreprise;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
-import com.forum.ticketgenerator.exception.PosteCreationException;
+import com.forum.ticketgenerator.exception.ModelCreationException;
 import com.forum.ticketgenerator.model.database.*;
-import com.forum.ticketgenerator.repository.EvenementRepository;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -59,19 +57,22 @@ public class AddPosteView extends HorizontalLayout {
         typeContrat = new ComboBox<>();
         typeContrat.setLabel("Type de contrat : ");
         typeContrat.setItemLabelGenerator(TypeContrat::getIntitule);
+
+        secteurActivite = new ComboBox<>();
+        secteurActivite.setItemLabelGenerator(SecteurActivite::getIntitule);
+
         ajoutButton = new Button();
         ajoutButton.setText("Ajouter poste");
         ajoutButton.addClickListener(event -> {
             try {
                 ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
                 modelServiceFactory.getEntrepriseService().addPoste(userDetails.getTicketUser().getDisplayName(), intitulePoste.getValue(),
-                        familleMetier.getValue(), niveau.getValue(), typeContrat.getValue(), evenement);
+                        familleMetier.getValue(), niveau.getValue(), typeContrat.getValue(), secteurActivite.getValue(), evenement);
                 fireEvent(new ReloadEvent(ajoutButton, null,false));
-            } catch (PosteCreationException p) {
+            } catch (ModelCreationException p) {
                 fireEvent(new ReloadEvent(ajoutButton, p.getErrorMessage(), false));
             }
         });
-        add(intitulePoste, familleMetier, niveau, typeContrat, ajoutButton);
 
     }
 
@@ -81,6 +82,22 @@ public class AddPosteView extends HorizontalLayout {
         typeContrat.setItems(modelServiceFactory.getTypeContratService().searchParEvenement(this.evenement));
         familleMetier.setItems(modelServiceFactory.getFamilleMetierService().searchParEvenement(evenement));
         secteurActivite.setItems(modelServiceFactory.getSecteurService().searchParEvenement(evenement));
+        if (evenement != null && evenement.getLabelSecteurActivité() != null) {
+            secteurActivite.setLabel(evenement.getLabelSecteurActivité() + " :");
+        } else {
+            secteurActivite.setLabel("Secteur activité : ");
+        }
+        add(intitulePoste, familleMetier);
+        if (evenement.getDisplayNiveau()) {
+            add(niveau);
+        }
+        if (evenement.getDisplayTypeContrat()) {
+            add(typeContrat);
+        }
+        if (evenement.getDisplaySecteur()) {
+            add(secteurActivite);
+        }
+        add(ajoutButton);
     }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,

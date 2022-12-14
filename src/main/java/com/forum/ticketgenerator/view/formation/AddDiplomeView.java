@@ -2,11 +2,8 @@ package com.forum.ticketgenerator.view.formation;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.exception.DiplomeCreationException;
-import com.forum.ticketgenerator.exception.PosteCreationException;
 import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
-import com.forum.ticketgenerator.model.database.Niveau;
-import com.forum.ticketgenerator.model.database.TypeContrat;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;

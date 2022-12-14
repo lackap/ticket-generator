@@ -13,4 +13,6 @@ import java.util.List;
 public interface TypeContratRepository extends CrudRepository<TypeContrat, String> {
 
     List<TypeContrat> findByEvenement(Evenement evenement);
+
+    TypeContrat findByEvenementAndIntitule(Evenement evenement, String intitule);
 }

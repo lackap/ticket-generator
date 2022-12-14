@@ -16,14 +16,22 @@ import java.util.List;
 @UIScope
 public class ParametrageNiveauView extends AParametrageView<Niveau> {
 
+    @Autowired
+    private AjoutNiveauView ajoutNiveau;
+
     @Override
     protected String getTitle () {
-        return "Paramétrage des niveaux de contrats";
+        return "Paramétrage niveaux";
     }
 
     @Override
     protected Class<Niveau> getGridType () {
         return Niveau.class;
+    }
+
+    @Override
+    protected AAddParametrageView getParametrageView () {
+        return ajoutNiveau;
     }
 
     @Override

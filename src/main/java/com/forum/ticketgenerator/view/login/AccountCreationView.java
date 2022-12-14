@@ -2,6 +2,7 @@ package com.forum.ticketgenerator.view.login;
 
 import com.forum.ticketgenerator.constants.Roles;
 import com.forum.ticketgenerator.exception.UserCreationException;
+import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.service.model.database.UserCreationService;
 import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.Text;

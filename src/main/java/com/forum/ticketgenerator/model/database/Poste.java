@@ -21,6 +21,8 @@ public class Poste {
 	private Evenement evenement;
 	@ManyToOne
 	private FamilleMetier familleMetier;
+	@OneToOne
+	private SecteurActivite secteurActivite;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Entreprise entreprise;
 

@@ -1,10 +1,14 @@
 package com.forum.ticketgenerator.service.model.database;
 
+import com.forum.ticketgenerator.exception.ModelCreationException;
+import com.forum.ticketgenerator.model.ColorAvailable;
 import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.forum.ticketgenerator.model.database.SecteurActivite;
+import com.forum.ticketgenerator.model.database.TypeContrat;
 import com.forum.ticketgenerator.repository.SecteurActiviteRepository;
 import com.forum.ticketgenerator.service.model.IParametrageService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +39,23 @@ public class SecteurActiviteModelService implements IParametrageService<SecteurA
         return secteurActiviteRepository.save(secteur);
     }
 
-    public SecteurActivite enregistrer (String secteurValue, String couleur, Evenement evenement) {
+    public SecteurActivite enregistrer (String secteurValue, ColorAvailable couleur, Evenement evenement) throws ModelCreationException {
+        if (evenement == null) {
+            throw new ModelCreationException("Un évènement doit être rattaché a la création du secteur d'activité");
+        }
+        if (StringUtils.isEmpty(secteurValue)) {
+            throw new ModelCreationException("Le " + evenement.getLabelSecteurActivité() + " doit être renseigné");
+        }
+        if (couleur == null) {
+            throw new ModelCreationException("Une couleur doit être associée au " + evenement.getLabelSecteurActivité());
+        }
+        SecteurActivite secteurExisting = secteurActiviteRepository.findByEvenementAndIntitule(evenement, secteurValue);
+        if (secteurExisting != null) {
+            throw new ModelCreationException(evenement.getLabelSecteurActivité() + " " + secteurValue + " déjà existant pour l'évènement " + evenement.getIntitule());
+        }
         SecteurActivite secteur = new SecteurActivite();
         secteur.setIntitule(secteurValue);
-        secteur.setCouleur(couleur);
+        secteur.setCouleur(couleur.name());
         secteur.setEvenement(evenement);
         return secteurActiviteRepository.save(secteur);
     }

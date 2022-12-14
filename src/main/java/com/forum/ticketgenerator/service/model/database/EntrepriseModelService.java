@@ -1,6 +1,6 @@
 package com.forum.ticketgenerator.service.model.database;
 
-import com.forum.ticketgenerator.exception.PosteCreationException;
+import com.forum.ticketgenerator.exception.ModelCreationException;
 import com.forum.ticketgenerator.mapper.EntrepriseDTOMapper;
 import com.forum.ticketgenerator.mapper.PosteMatchingMapper;
 import com.forum.ticketgenerator.model.EntrepriseDTO;
@@ -27,16 +27,16 @@ public class EntrepriseModelService implements IEntrepriseModelService {
     @Override
     @Transactional
     public void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau,
-                         TypeContrat typeContrat, Evenement evenement) throws PosteCreationException {
+                         TypeContrat typeContrat, SecteurActivite secteurActivite, Evenement evenement) throws ModelCreationException {
 
         if (intitule == null) {
-            throw new PosteCreationException("L'intitule de poste doit être renseigné.");
+            throw new ModelCreationException("L'intitule de poste doit être renseigné.");
         }
         if (familleMetier == null) {
-            throw new PosteCreationException("La famille métier doit être renseigné.");
+            throw new ModelCreationException("La famille métier doit être renseigné.");
         }
         if (evenement == null) {
-            throw new PosteCreationException("L'évènement doit être renseigné.");
+            throw new ModelCreationException("L'évènement doit être renseigné.");
         }
         Poste poste = new Poste();
         poste.setIntitule(intitule);
@@ -44,6 +44,7 @@ public class EntrepriseModelService implements IEntrepriseModelService {
         poste.setNiveau(niveau);
         poste.setTypeContrat(typeContrat);
         poste.setEvenement(evenement);
+        poste.setSecteurActivite(secteurActivite);
 
         Entreprise entreprise = entrepriseRepository.findByNom(nomEntreprise);
         poste.setEntreprise(entreprise);
@@ -91,5 +92,16 @@ public class EntrepriseModelService implements IEntrepriseModelService {
     public List<EntrepriseDTO> searchAllEntreprise(Evenement evenement) {
         List<Entreprise> entreprises = entrepriseRepository.findByPostesEvenement(evenement);
         return entreprises.stream().map(EntrepriseDTOMapper::map).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void supprimerPoste(String entrepriseName, Evenement evenement, PosteMatching posteMatching) {
+        Entreprise entreprise = entrepriseRepository.findByNomAndPostesEvenement(entrepriseName, evenement);
+        entreprise.setPostes(entreprise.getPostes().stream().filter(poste -> !(poste.getEvenement().getId() == evenement.getId())
+                || !(poste.getIntitule().equals(posteMatching.getIntitule()))).collect(Collectors.toList()));
+        entrepriseRepository.save(entreprise);
+
+
     }
 }

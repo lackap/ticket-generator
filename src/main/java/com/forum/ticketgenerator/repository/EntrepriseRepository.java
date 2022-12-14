@@ -13,8 +13,6 @@ import java.util.List;
 @Repository
 public interface EntrepriseRepository  extends CrudRepository<Entreprise, String> {
 
-    List<Entreprise> findBySecteurActiviteIntituleAndPostesEvenement (SecteurActivite secteur, Evenement evenement);
-
     Entreprise findByNom(String nom);
 
     Entreprise findByNomAndPostesEvenement(String nom, Evenement evenement);

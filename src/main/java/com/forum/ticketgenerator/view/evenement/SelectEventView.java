@@ -1,4 +1,4 @@
-package com.forum.ticketgenerator.view;
+package com.forum.ticketgenerator.view.evenement;
 
 import com.forum.ticketgenerator.constants.Roles;
 import com.forum.ticketgenerator.event.SearchResultEvent;
@@ -44,28 +44,16 @@ public class SelectEventView extends VerticalLayout {
     @Autowired
     private SecurityService securityService;
 
+    @Autowired
+    private EventListView eventListView;
+
     @PostConstruct
     public void init() {
 
         add(headerView);
+        headerView.customizeHeader("Sélection d'un évènement : ");
         setAlignItems(Alignment.CENTER);
-        evenement = new ComboBox<>();
-        evenement.setLabel("Sélectionner un évènement : ");
-        evenement.setItems(modelServiceFactory.getEvenementService().searchAllEvenement());
-        evenement.setItemLabelGenerator(Evenement::getIntitule);
-        ApplicationUser applicationUser = securityService.getAuthenticatedUser();
-        evenement.addValueChangeListener(event -> {
-            applicationUser.setEvenement(evenement.getValue());
-            for (GrantedAuthority grantedAuthority : securityService.getAuthenticatedUser().getAuthorities()) {
-                if (Roles.USER.name().equals(grantedAuthority.getAuthority())) {
-                    UI.getCurrent().navigate(TicketView.class);
-                }
-                if (Roles.ADMIN.name().equals(grantedAuthority.getAuthority())) {
-                    UI.getCurrent().navigate(ParametrageAdminView.class);
-                }
-            }
-        });
-        add(evenement);
+        add(eventListView);
         for (GrantedAuthority grantedAuthority : securityService.getAuthenticatedUser().getAuthorities()) {
             if (Roles.ADMIN.name().equals(grantedAuthority.getAuthority())) {
                 Button creerEvenement = new Button("Créer évènement");
@@ -76,6 +64,8 @@ public class SelectEventView extends VerticalLayout {
             }
 
         }
+
+
 
     }
 }

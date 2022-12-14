@@ -9,17 +9,19 @@ import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import javafx.scene.control.CheckBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
@@ -29,10 +31,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-@Route(value = "parametrageEvenement")
-@PermitAll
+@Component
 @UIScope
-public class ParametrageEvenementView extends VerticalLayout {
+public class ParametrageComportementEvenementView extends VerticalLayout {
 
     @Autowired
     private SecurityService securityService;
@@ -42,26 +43,42 @@ public class ParametrageEvenementView extends VerticalLayout {
     @Autowired
     protected ModelServiceFactory modelServiceFactory;
 
+    protected TextField labelSecteurActivite;
+
     protected Text resultatInsertion;
 
-    protected TextField intituleEvenement;
-
-    protected TextField labelSecteurActivite;
+    protected Checkbox displaySecteurActivite;
+    protected Checkbox displayTypeContrat;
+    protected Checkbox displayNiveau;
 
     private Upload uploadAffiche;
 
     private byte[] affiche;
 
-    private Grid<Evenement> grid;
 
     @PostConstruct
     public void init() throws IOException {
+        ApplicationUser applicationUser = securityService.getAuthenticatedUser();
         add(headerView);
-        setAlignItems(FlexComponent.Alignment.CENTER);
-        intituleEvenement = new TextField();
-        intituleEvenement.setLabel("Nom évènement : ");
         labelSecteurActivite = new TextField();
+        labelSecteurActivite.setWidth("50%");
         labelSecteurActivite.setLabel("Label a utiliser pour les secteurs d'activité : ");
+        labelSecteurActivite.setValue(applicationUser.getEvenement().getLabelSecteurActivité());
+        displaySecteurActivite = new Checkbox();
+        displaySecteurActivite.setLabel("Afficher les secteurs d'activité");
+        if (applicationUser.getEvenement().getDisplaySecteur() != null) {
+            displaySecteurActivite.setValue(applicationUser.getEvenement().getDisplaySecteur());
+        }
+        displayNiveau = new Checkbox();
+        displayNiveau.setLabel("Afficher les niveaux");
+        if (applicationUser.getEvenement().getDisplayNiveau() != null) {
+            displayNiveau.setValue(applicationUser.getEvenement().getDisplayNiveau());
+        }
+        displayTypeContrat = new Checkbox();
+        displayTypeContrat.setLabel("Afficher les types de contrat");
+        if (applicationUser.getEvenement().getDisplayTypeContrat() != null) {
+            displayTypeContrat.setValue(applicationUser.getEvenement().getDisplayTypeContrat());
+        }
         FileBuffer memoryBufferLogo = new FileBuffer();
         uploadAffiche = new Upload(memoryBufferLogo);
         uploadAffiche.setUploadButton(new Button("Charger l'affiche : "));
@@ -76,49 +93,30 @@ public class ParametrageEvenementView extends VerticalLayout {
                 e.printStackTrace();
             }
         });
-        configureGrid();
-        grid.setItems(getItems());
-        Button ajoutButton = new Button("Ajouter");
+
+        Button ajoutButton = new Button("Enregistrer");
         ajoutButton.addClickListener(event -> {
             Evenement item = null;
             try {
-                item = save();
-                grid.setItems(getItems());
-                grid.getDataProvider().refreshAll();
-                ApplicationUser applicationUser = securityService.getAuthenticatedUser();
+                item = save(applicationUser.getEvenement());
                 applicationUser.setEvenement(item);
-                UI.getCurrent().navigate(ParametrageAdminView.class);
+                resultatInsertion.setText("Les paramètres ont été modifiés");
             } catch (ModelCreationException e) {
                 resultatInsertion.setText(e.getErrorMessage());
             }
         });
         resultatInsertion = new Text("");
-        add(new H3("Paramétrage evenement"), resultatInsertion, intituleEvenement, labelSecteurActivite, uploadAffiche, ajoutButton, grid);
+        add(new H3("Paramétrage evenement"), resultatInsertion, labelSecteurActivite, displaySecteurActivite, displayNiveau, displayTypeContrat, uploadAffiche, ajoutButton);
     }
 
-    protected void configureGrid() {
-        grid = new Grid<>(Evenement.class, false);
-        grid.addColumn("intitule");
-        grid.getColumnByKey("intitule").setHeader("Intitulé");
-        grid.addColumn("labelSecteurActivité");
-        grid.getColumnByKey("labelSecteurActivité").setHeader("Label secteur activité");
-        Grid.Column<Evenement> deleteColumn = this.grid.addComponentColumn(item -> {
-            DeleteButtonComponent deleteButtonComponent = new DeleteButtonComponent();
-            deleteButtonComponent.addClickListener(event -> {
-                modelServiceFactory.getEvenementService().supprimer(item);
-                grid.setItems(getItems());
-                grid.getDataProvider().refreshAll();
-            });
-            return deleteButtonComponent;
-        });
-        deleteColumn.setWidth("5%").setFlexGrow(0);
-    }
 
     protected List<Evenement> getItems () {
         return modelServiceFactory.getEvenementService().searchAllEvenement();
     }
 
-    protected Evenement save () throws ModelCreationException {
-        return modelServiceFactory.getEvenementService().enregistrer(intituleEvenement.getValue(), labelSecteurActivite.getValue(), affiche);
+    protected Evenement save (Evenement evenement) throws ModelCreationException {
+        return modelServiceFactory.getEvenementService().mettreAJourParametres(
+                evenement, labelSecteurActivite.getValue(), displaySecteurActivite.getValue(),
+                displayNiveau.getValue(), displayTypeContrat.getValue(), affiche);
     }
 }

@@ -17,6 +17,9 @@ import java.util.List;
 @UIScope
 public class ParametrageTypeContratView extends AParametrageView<TypeContrat> {
 
+    @Autowired
+    private AjoutTypeContratView ajoutTypeContrat;
+
     @Override
     protected String getTitle () {
         return "Paramétrage des types de contrat";
@@ -25,6 +28,11 @@ public class ParametrageTypeContratView extends AParametrageView<TypeContrat> {
     @Override
     protected Class<TypeContrat> getGridType () {
         return TypeContrat.class;
+    }
+
+    @Override
+    protected AAddParametrageView getParametrageView () {
+        return ajoutTypeContrat;
     }
 
     @Override

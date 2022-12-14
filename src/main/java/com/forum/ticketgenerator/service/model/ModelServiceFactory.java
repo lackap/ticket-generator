@@ -4,7 +4,6 @@ import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.forum.ticketgenerator.model.database.Niveau;
 import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.model.database.TypeContrat;
-import com.forum.ticketgenerator.service.model.csv.CsvModelService;
 import com.forum.ticketgenerator.service.model.database.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +14,6 @@ public class ModelServiceFactory {
 
     @Value( "${model.loading.type}" )
     private String modelType;
-
-    @Autowired
-    private CsvModelService modelService;
 
     @Autowired
     private EntrepriseModelService entrepriseModelService;
@@ -45,8 +41,6 @@ public class ModelServiceFactory {
 
     public IModelService getService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return null;
         }
@@ -55,8 +49,6 @@ public class ModelServiceFactory {
 
     public IEntrepriseModelService getEntrepriseService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return entrepriseModelService;
         }
@@ -65,8 +57,6 @@ public class ModelServiceFactory {
 
     public IFormationModelService getFormationService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return formationModelService;
         }
@@ -75,8 +65,6 @@ public class ModelServiceFactory {
 
     public IParametrageService<FamilleMetier> getFamilleMetierService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return familleMetierModelService;
         }
@@ -85,8 +73,6 @@ public class ModelServiceFactory {
 
     public IParametrageService<TypeContrat> getTypeContratService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return typeContratModelService;
         }
@@ -95,8 +81,6 @@ public class ModelServiceFactory {
 
     public IParametrageService<Niveau> getNiveauService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return niveauModelService;
         }
@@ -104,8 +88,6 @@ public class ModelServiceFactory {
 
     public IEvenementModelService getEvenementService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return evenementModelService;
         }
@@ -114,8 +96,6 @@ public class ModelServiceFactory {
 
     public IPosteModelService getPosteService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return posteModelService;
         }
@@ -124,8 +104,6 @@ public class ModelServiceFactory {
 
     public IParametrageService<SecteurActivite> getSecteurService() {
         switch (modelType) {
-            case "csv":
-                return null;
             default :
                 return secteurActiviteModelService;
         }

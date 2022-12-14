@@ -7,6 +7,7 @@ import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.forum.ticketgenerator.view.ParametersView;
 import com.forum.ticketgenerator.view.HeaderView;
+import com.forum.ticketgenerator.view.admin.DeleteButtonComponent;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -55,7 +56,7 @@ public class EntrepriseView extends ParametersView {
                 posteCreationResult.setText(event.getErrorMessage());
             }
         });
-        configureGrid();
+        grid = new Grid<>(PosteMatching.class, false);
         evenement = new ComboBox<>();
         evenement.setLabel("Sélectionner un évènement : ");
         evenement.setItems(modelServiceFactory.getEvenementService().searchAllEvenement());
@@ -63,6 +64,7 @@ public class EntrepriseView extends ParametersView {
         evenement.addValueChangeListener(event -> {
             ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
             addPosteView.setEvenement(evenement.getValue());
+            configureGrid();
             grid.setItems(modelServiceFactory.getEntrepriseService().searchFromEntrepriseNameAndEvenement(
                     userDetails.getTicketUser().getDisplayName(), evenement.getValue()));
         });
@@ -71,13 +73,36 @@ public class EntrepriseView extends ParametersView {
 
 
     private void configureGrid() {
-        grid = new Grid<>(PosteMatching.class, false);
-        grid.addColumn("nom");
-        grid.getColumnByKey("nom").setHeader("Entreprise");
-        grid.addColumn("intitule");
-        grid.getColumnByKey("intitule").setHeader("Intitulé de poste");
-        grid.addColumn("stand");
-        grid.getColumnByKey("stand").setHeader("N° de stand");
+        grid.addColumn("nom").setHeader("Entreprise").setWidth("15%").setFlexGrow(0);
+        grid.addColumn("intitule").setHeader("Intitulé de poste").setAutoWidth(true).setFlexGrow(1);
+        grid.addColumn("familleMetier").setHeader("Famille métier").setWidth("12%").setFlexGrow(0);
+        if (evenement.getValue().getDisplayNiveau()) {
+            grid.addColumn("niveau")
+                    .setHeader("Niveau").setWidth("12%").setFlexGrow(0);;
+        }
+        if (evenement.getValue().getDisplayTypeContrat()) {
+            grid.addColumn("typeContrat")
+                    .setHeader("Type de contrat").setWidth("12%").setFlexGrow(0);;
+        }
+        if (evenement.getValue().getDisplaySecteur()) {
+            grid.addColumn("secteurActivite")
+                    .setHeader(evenement.getValue().getLabelSecteurActivité()).setWidth("12%").setFlexGrow(0);;
+        }
+
+        grid.addColumn("stand").setHeader("N° de stand").setWidth("12%").setFlexGrow(0);
+        Grid.Column<PosteMatching> deleteColumn = this.grid.addComponentColumn(item -> {
+            DeleteButtonComponent deleteButtonComponent = new DeleteButtonComponent();
+            deleteButtonComponent.addClickListener(event -> {
+                ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
+                modelServiceFactory.getEntrepriseService().supprimerPoste(userDetails.getTicketUser().getDisplayName(),
+                        evenement.getValue(), item);
+                grid.setItems(modelServiceFactory.getEntrepriseService().searchFromEntrepriseNameAndEvenement(
+                        userDetails.getTicketUser().getDisplayName(), evenement.getValue()));
+                grid.getDataProvider().refreshAll();
+            });
+            return deleteButtonComponent;
+        });
+        deleteColumn.setWidth("5%").setFlexGrow(0);
     }
 
     @Override

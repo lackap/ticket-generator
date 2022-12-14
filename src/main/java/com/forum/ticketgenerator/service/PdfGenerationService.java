@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,9 +100,9 @@ public class PdfGenerationService {
         table.setBorder(DEFAULT_BORDER);
         table.setMarginTop(40.0f);
         addTableHeader(table);
-        Map<String, List<PosteMatching>> orderedPostes = Model.getInstance().getPostesMatching().stream().collect(
-                Collectors.groupingBy(PosteMatching::getSecteurActivite));
-        for (Map.Entry<String, List<PosteMatching>> entry : orderedPostes.entrySet()) {
+        Map<Optional<String>, List<PosteMatching>> orderedPostes = Model.getInstance().getPostesMatching().stream().collect(
+                Collectors.groupingBy(posteMatching -> Optional.ofNullable(posteMatching.getSecteurActivite())));
+        for (Map.Entry<Optional<String>, List<PosteMatching>> entry : orderedPostes.entrySet()) {
             entry.getValue().forEach(poste -> addRow(table, poste));
         }
         document.add(table);
@@ -196,7 +197,8 @@ public class PdfGenerationService {
         table.setWidthPercent(100);
         table.setBorder(DEFAULT_BORDER);
         Cell headerCell = new Cell(1, 8);
-        Paragraph legend = new Paragraph(new Text("Légende"));
+        String secteurName = evenement.getLabelSecteurActivité() != null ? evenement.getLabelSecteurActivité() : "secteurs d'activité";
+        Paragraph legend = new Paragraph(new Text("Légende " + secteurName));
         legend.setHorizontalAlignment(HorizontalAlignment.CENTER);
         legend.setBold();
         headerCell.setBorder(DEFAULT_BORDER);
@@ -237,6 +239,9 @@ public class PdfGenerationService {
     }
 
     private Color getCouleur(String couleur) {
+        if (couleur == null) {
+            return Color.WHITE;
+        }
         switch (couleur) {
             case "GREEN" :
                 return Color.GREEN;

@@ -2,10 +2,6 @@ package com.forum.ticketgenerator.service.model.database;
 
 import com.forum.ticketgenerator.constants.ApplicationConstants;
 import com.forum.ticketgenerator.exception.DiplomeCreationException;
-import com.forum.ticketgenerator.exception.PosteCreationException;
-import com.forum.ticketgenerator.mapper.PosteMatchingMapper;
-import com.forum.ticketgenerator.model.Model;
-import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.model.database.*;
 import com.forum.ticketgenerator.repository.FormationRepository;
 import com.forum.ticketgenerator.service.model.IFormationModelService;
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 

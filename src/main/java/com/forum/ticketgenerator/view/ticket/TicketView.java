@@ -35,8 +35,6 @@ public class TicketView extends VerticalLayout {
     private Grid<PosteMatching> grid;
     private Text recherche;
 
-    private ComboBox<Evenement> evenement;
-
     @Autowired
     private SecurityService securityService;
 
@@ -44,6 +42,7 @@ public class TicketView extends VerticalLayout {
     public void init() {
 
         add(headerView);
+        headerView.customizeHeader(securityService.getAuthenticatedUser().getEvenement().getIntitule());
         add(searchView);
         searchView.addListener(SearchResultEvent.class, event -> {
             Model.getInstance().setPostesMatching(event.getPostesMatching());

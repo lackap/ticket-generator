@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EvenementRepository  extends CrudRepository<Evenement, String> {
+    Evenement findByIntitule(String intitule);
 }

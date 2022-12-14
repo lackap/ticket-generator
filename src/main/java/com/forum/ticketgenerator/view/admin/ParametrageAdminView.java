@@ -6,11 +6,9 @@ import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,10 +37,10 @@ public class ParametrageAdminView extends VerticalLayout {
 
     @PostConstruct
     public void init() throws IOException {
-        headerView.customizeHeader("Gestion des paramétrages administrateur");
+        ApplicationUser applicationUser = securityService.getAuthenticatedUser();
+        headerView.customizeHeader("Paramétrage " + applicationUser.getEvenement().getIntitule());
         add(headerView);
         setAlignItems(FlexComponent.Alignment.CENTER);
-        ApplicationUser applicationUser = securityService.getAuthenticatedUser();
         parametrageAdminTabs.updateEvent(applicationUser.getEvenement());
         add(parametrageAdminTabs);
 

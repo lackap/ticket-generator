@@ -12,9 +12,13 @@ public class PosteMatchingMapper {
         posteMatching.setIntitule(poste.getIntitule());
         posteMatching.setNom(entreprise.getNom());
         posteMatching.setStand(entreprise.getStand());
-        if (entreprise.getSecteurActivite() != null) {
-            posteMatching.setSecteurActivite(entreprise.getSecteurActivite().getCouleur());
+        if (poste.getSecteurActivite() != null) {
+            posteMatching.setSecteurActivite(poste.getSecteurActivite().getIntitule());
+            posteMatching.setSecteurActiviteColor(poste.getSecteurActivite().getCouleur());
         }
+        posteMatching.setNiveau(poste.getNiveau().getIntitule());
+        posteMatching.setTypeContrat(poste.getTypeContrat().getIntitule());
+        posteMatching.setFamilleMetier(poste.getFamilleMetier().getIntitule());
         return posteMatching;
     }
 }

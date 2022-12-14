@@ -13,4 +13,7 @@ import java.util.List;
 public interface FamilleMetierRepository extends CrudRepository<FamilleMetier, String> {
 
     List<FamilleMetier> findByEvenement(Evenement evenement);
+
+    FamilleMetier findByEvenementAndIntitule(Evenement evenement, String intitule);
+
 }

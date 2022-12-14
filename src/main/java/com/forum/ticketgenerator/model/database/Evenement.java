@@ -14,4 +14,10 @@ public class Evenement {
 	private long id;
 	private String intitule;
 	private String labelSecteurActivité;
+	private Boolean displaySecteur;
+	private Boolean displayNiveau;
+	private Boolean displayTypeContrat;
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	private byte[] affiche;
 }

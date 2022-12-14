@@ -1,7 +1,6 @@
 package com.forum.ticketgenerator.view.admin;
 
 import com.forum.ticketgenerator.model.database.Evenement;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -28,11 +27,15 @@ public class ParametrageAdminTabsView extends VerticalLayout {
     @Autowired
     private ParametrageSecteurActiviteView parametrageSecteurActivite;
 
+    @Autowired
+    private ParametrageComportementEvenementView parametrageComportementEvenement;
+
     private VerticalLayout content;
     private Tab familleMetierTab;
     private Tab niveauTab;
     private Tab typeContratTab;
     private Tab secteurActiviteTab;
+    private Tab comportementTab;
 
     @PostConstruct
     public void init() throws IOException {
@@ -40,7 +43,8 @@ public class ParametrageAdminTabsView extends VerticalLayout {
         niveauTab = new Tab("Niveau");
         typeContratTab = new Tab("Type contrat");
         secteurActiviteTab = new Tab("Secteur activite");
-        Tabs tabs = new Tabs(familleMetierTab, niveauTab, typeContratTab, secteurActiviteTab);
+        comportementTab = new Tab("Comportement Evenement");
+        Tabs tabs = new Tabs(familleMetierTab, niveauTab, typeContratTab, secteurActiviteTab, comportementTab);
         tabs.addSelectedChangeListener(
                 event -> setContent(event.getSelectedTab()));
         content = new VerticalLayout();
@@ -71,6 +75,8 @@ public class ParametrageAdminTabsView extends VerticalLayout {
             content.add(parametrageTypeContrat);
         } else if (tab.equals(secteurActiviteTab)) {
             content.add(parametrageSecteurActivite);
+        } else if (tab.equals(comportementTab)) {
+            content.add(parametrageComportementEvenement);
         }
     }
 }
