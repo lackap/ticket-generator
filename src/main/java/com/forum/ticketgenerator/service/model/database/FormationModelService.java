@@ -79,8 +79,8 @@ public class FormationModelService implements IFormationModelService {
 
     @Override
     @Transactional
-    public List<Formation> getCentresFormation () throws IOException {
-        Iterable<Formation> formations = formationRepository.findAll();
+    public List<Formation> getCentresFormation (Evenement evenement) throws IOException {
+        Iterable<Formation> formations = formationRepository.findByDiplomesEvenement(evenement);
         List<Formation> centreFormationLabels = new ArrayList<>();
         formations.forEach(
                 formation -> {

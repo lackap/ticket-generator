@@ -10,6 +10,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,7 +23,7 @@ import java.io.IOException;
 
 @Component
 @UIScope
-public class SearchByFormationView extends ASearchByLayout {
+public class SearchByFormationView extends ASearchByLayout implements BeforeEnterObserver {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchByFormationView.class);
 
     private final static String SEARCH_LABEL = "Recherche par formation";
@@ -46,7 +48,6 @@ public class SearchByFormationView extends ASearchByLayout {
         add(titre);
         selectCentre = new ComboBox<>();
         selectCentre.setLabel("Centre de formation");
-        selectCentre.setItems(modelServiceFactory.getFormationService().getCentresFormation());
         selectCentre.setItemLabelGenerator(Formation::getNomCentre);
         selectCentre.addValueChangeListener(event -> {
             if (selectCentre.getValue() == null) {
@@ -89,5 +90,14 @@ public class SearchByFormationView extends ASearchByLayout {
             }
         });
         add(buttonSearchFormation);
+    }
+
+    @Override
+    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+        try {
+            selectCentre.setItems(modelServiceFactory.getFormationService().getCentresFormation(getEvenement()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

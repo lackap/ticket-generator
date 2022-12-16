@@ -32,6 +32,7 @@ public class SecteurActiviteModelService implements IParametrageService<SecteurA
     }
 
     @Override
+    @Transactional
     public SecteurActivite enregistrer (String secteurValue, Evenement evenement) {
         SecteurActivite secteur = new SecteurActivite();
         secteur.setIntitule(secteurValue);

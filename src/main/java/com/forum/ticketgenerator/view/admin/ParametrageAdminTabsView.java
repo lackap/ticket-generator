@@ -1,6 +1,7 @@
 package com.forum.ticketgenerator.view.admin;
 
 import com.forum.ticketgenerator.model.database.Evenement;
+import com.forum.ticketgenerator.security.SecurityService;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -30,12 +31,19 @@ public class ParametrageAdminTabsView extends VerticalLayout {
     @Autowired
     private ParametrageComportementEvenementView parametrageComportementEvenement;
 
+    @Autowired
+    private ParametrageLienEntrepriseSecteurView parametrageLienEntrepriseSecteur;
+
+    @Autowired
+    private SecurityService securityService;
+
     private VerticalLayout content;
     private Tab familleMetierTab;
     private Tab niveauTab;
     private Tab typeContratTab;
     private Tab secteurActiviteTab;
     private Tab comportementTab;
+    private Tab lienEntrepriseSecteurTab;
 
     @PostConstruct
     public void init() throws IOException {
@@ -44,7 +52,9 @@ public class ParametrageAdminTabsView extends VerticalLayout {
         typeContratTab = new Tab("Type contrat");
         secteurActiviteTab = new Tab("Secteur activite");
         comportementTab = new Tab("Comportement Evenement");
-        Tabs tabs = new Tabs(familleMetierTab, niveauTab, typeContratTab, secteurActiviteTab, comportementTab);
+        lienEntrepriseSecteurTab = new Tab("Lien entreprise / " + securityService.getAuthenticatedUser().getEvenement().getLabelSecteurActivité());
+        Tabs tabs = new Tabs(familleMetierTab, niveauTab, typeContratTab, secteurActiviteTab,
+                comportementTab, lienEntrepriseSecteurTab);
         tabs.addSelectedChangeListener(
                 event -> setContent(event.getSelectedTab()));
         content = new VerticalLayout();
@@ -77,6 +87,9 @@ public class ParametrageAdminTabsView extends VerticalLayout {
             content.add(parametrageSecteurActivite);
         } else if (tab.equals(comportementTab)) {
             content.add(parametrageComportementEvenement);
+        } else if (tab.equals(lienEntrepriseSecteurTab))  {
+            parametrageLienEntrepriseSecteur.update();
+            content.add(parametrageLienEntrepriseSecteur);
         }
     }
 }

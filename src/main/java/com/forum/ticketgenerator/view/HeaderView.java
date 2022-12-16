@@ -1,9 +1,15 @@
 package com.forum.ticketgenerator.view;
 
+import com.forum.ticketgenerator.model.database.Evenement;
+import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
+import com.forum.ticketgenerator.service.model.ModelServiceFactory;
+import com.forum.ticketgenerator.view.evenement.SelectEventView;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -23,12 +29,19 @@ public class HeaderView extends HorizontalLayout implements BeforeEnterObserver 
     @Autowired
     private SecurityService securityService;
 
+    @Autowired
+    private ModelServiceFactory modelServiceFactory;
+
     private Image imageLogo;
 
     private String title;
 
     private Div titreDiv;
     private Div imageDiv;
+    private Div logoutDiv;
+    private Button logout;
+
+    private Button changeEvent;
 
     public HeaderView() {
         imageLogo = new Image("img/metropole.png", "Orleans Metropole 2");
@@ -45,13 +58,13 @@ public class HeaderView extends HorizontalLayout implements BeforeEnterObserver 
         titreDiv.getElement().getStyle().set("text-align", "center");
         imageDiv = new Div();
         imageDiv.setWidth("15%");
-        Button logout = new Button("Se déconnecter", e -> securityService.logout());
-        logout.setWidth("15%");
+        logoutDiv = new Div();
+        logoutDiv.setWidth("20%");
+        logout = new Button("Se déconnecter", e -> securityService.logout());
         add(imageDiv);
         add(titreDiv);
-        if (securityService.getAuthenticatedUser() != null) {
-            add(logout);
-        }
+        add(logoutDiv);
+
     }
 
     public void customizeHeader(Image imageLogo, String title) {
@@ -75,6 +88,18 @@ public class HeaderView extends HorizontalLayout implements BeforeEnterObserver 
         Text html = new Text(title);
         span.add(html);
         titreDiv.add(span);
+        logoutDiv.removeAll();
+        if (securityService.getAuthenticatedUser() != null) {
+            if (securityService.getAuthenticatedUser().getEvenement() != null) {
+                changeEvent = new Button("Changer d'évènement");
+                changeEvent.addClickListener(event -> {
+                    UI.getCurrent().navigate(SelectEventView.class);
+                });
+                logoutDiv.add(changeEvent);
+            }
+            logoutDiv.add(logout);
+        }
+
 
     }
 

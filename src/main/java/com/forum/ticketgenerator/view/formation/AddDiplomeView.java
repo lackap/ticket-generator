@@ -13,6 +13,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ import javax.annotation.PostConstruct;
 
 @Component
 @UIScope
-public class AddDiplomeView extends HorizontalLayout {
+public class AddDiplomeView extends HorizontalLayout implements BeforeEnterObserver {
 
     private TextField intituleDiplome;
     private ComboBox<FamilleMetier> familleMetier;
@@ -32,8 +34,6 @@ public class AddDiplomeView extends HorizontalLayout {
     private ModelServiceFactory modelServiceFactory;
     @Autowired
     private SecurityService securityService;
-
-    private Evenement evenement;
 
     @PostConstruct
     public void init() {
@@ -52,23 +52,22 @@ public class AddDiplomeView extends HorizontalLayout {
             try {
                 ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
                 modelServiceFactory.getFormationService().addDiplome(userDetails.getTicketUser().getDisplayName(), intituleDiplome.getValue(),
-                        familleMetier.getValue(), this.evenement);
+                        familleMetier.getValue(), securityService.getAuthenticatedUser().getEvenement());
                 fireEvent(new ReloadEvent(ajoutButton, null,false));
             } catch (DiplomeCreationException p) {
                 fireEvent(new ReloadEvent(ajoutButton, p.getErrorMessage(), false));
             }
         });
         add(intituleDiplome, familleMetier, ajoutButton);
-
-    }
-
-    public void setEvenement(Evenement evenement) {
-        this.evenement = evenement;
-        familleMetier.setItems(modelServiceFactory.getFamilleMetierService().searchParEvenement(evenement));
     }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
                                                                   ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
+    }
+
+    @Override
+    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+        familleMetier.setItems(modelServiceFactory.getFamilleMetierService().searchParEvenement(securityService.getAuthenticatedUser().getEvenement()));
     }
 }

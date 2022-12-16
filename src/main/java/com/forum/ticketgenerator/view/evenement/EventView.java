@@ -5,6 +5,8 @@ import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.view.admin.ParametrageAdminView;
+import com.forum.ticketgenerator.view.entreprise.EntrepriseView;
+import com.forum.ticketgenerator.view.formation.FormationView;
 import com.forum.ticketgenerator.view.ticket.TicketView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -37,6 +39,8 @@ public class EventView extends VerticalLayout {
         if (evenement.getAffiche() != null) {
             StreamResource resource = new StreamResource("myimage.jpg", () -> new ByteArrayInputStream(evenement.getAffiche()));
             Image affiche = new Image(resource, "Logo");
+            affiche.setHeight("100%");
+            affiche.setWidth("100%");
             affiche.getStyle().set("cursor", "pointer");
             affiche.addClickListener(event -> {
                 goToEvent();
@@ -60,6 +64,12 @@ public class EventView extends VerticalLayout {
             }
             if (Roles.ADMIN.name().equals(grantedAuthority.getAuthority())) {
                 UI.getCurrent().navigate(ParametrageAdminView.class);
+            }
+            if (Roles.ENTREPRISE.name().equals(grantedAuthority.getAuthority())) {
+                UI.getCurrent().navigate(EntrepriseView.class);
+            }
+            if (Roles.FORMATION.name().equals(grantedAuthority.getAuthority())) {
+                UI.getCurrent().navigate(FormationView.class);
             }
         }
     }

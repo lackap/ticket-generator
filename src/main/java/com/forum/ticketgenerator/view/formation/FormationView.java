@@ -12,6 +12,8 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +38,16 @@ public class FormationView extends ParametersView {
 
     private Text posteCreationResult;
 
-    private ComboBox<Evenement> evenement;
-
     @PostConstruct
     public void init() throws IOException {
 
         add(headerView);
         setAlignItems(FlexComponent.Alignment.CENTER);
-        ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
+        ApplicationUser userDetails = securityService.getAuthenticatedUser();
         addDiplomeView.addListener(ReloadEvent.class, event -> {
             if (event.getErrorMessage() == null) {
                 grid.setItems(modelServiceFactory.getFormationService().searchFromFormationNameAndEvenement(
-                        userDetails.getTicketUser().getDisplayName(), evenement.getValue()));
+                        userDetails.getTicketUser().getDisplayName(), userDetails.getEvenement()));
                 grid.getDataProvider().refreshAll();
             } else {
                 posteCreationResult.setText(event.getErrorMessage());
@@ -55,16 +55,7 @@ public class FormationView extends ParametersView {
         });
 
         configureGrid();
-        evenement = new ComboBox<>();
-        evenement.setLabel("Sélectionner un évènement : ");
-        evenement.setItems(modelServiceFactory.getEvenementService().searchAllEvenement());
-        evenement.setItemLabelGenerator(Evenement::getIntitule);
-        evenement.addValueChangeListener(event -> {
-            addDiplomeView.setEvenement(evenement.getValue());
-            grid.setItems(modelServiceFactory.getFormationService().searchFromFormationNameAndEvenement(
-                    userDetails.getTicketUser().getDisplayName(), evenement.getValue()));
-        });
-        add(evenement, new H2("Ajouter un diplome"), addDiplomeView, grid);
+        add(new H2("Ajouter un diplome"), addDiplomeView, grid);
     }
 
     private void configureGrid() {
@@ -78,5 +69,13 @@ public class FormationView extends ParametersView {
     @Override
     protected String getTitlePrefix() {
         return "Paramétrage des diplômes ";
+    }
+
+    @Override
+    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+        super.beforeEnter(beforeEnterEvent);
+        ApplicationUser userDetails = securityService.getAuthenticatedUser();
+        grid.setItems(modelServiceFactory.getFormationService().searchFromFormationNameAndEvenement(
+                userDetails.getTicketUser().getDisplayName(),  userDetails.getEvenement()));
     }
 }

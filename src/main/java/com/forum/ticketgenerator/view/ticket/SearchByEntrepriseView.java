@@ -2,13 +2,13 @@ package com.forum.ticketgenerator.view.ticket;
 
 import com.forum.ticketgenerator.event.SearchEvent;
 import com.forum.ticketgenerator.model.EntrepriseDTO;
-import com.forum.ticketgenerator.model.database.Entreprise;
-import com.forum.ticketgenerator.model.database.Evenement;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import java.io.IOException;
 
 @Component
 @UIScope
-public class SearchByEntrepriseView extends ASearchByLayout {
+public class SearchByEntrepriseView extends ASearchByLayout implements BeforeEnterObserver {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchByEntrepriseView.class);
 
     private final static String SEARCH_LABEL = "Recherche par entreprise";
@@ -47,7 +47,6 @@ public class SearchByEntrepriseView extends ASearchByLayout {
         selectEntreprise = new Select<>();
         selectEntreprise.setLabel("Entreprise");
         selectEntreprise.setEnabled(true);
-        selectEntreprise.setItems(modelServiceFactory.getEntrepriseService().searchAllEntreprise(getEvenement()));
         selectEntreprise.setItemLabelGenerator(EntrepriseDTO::getNom);
         selectEntreprise.addValueChangeListener(event -> buttonSearchEntreprise.setEnabled(selectEntreprise.getValue() != null));
         add(selectEntreprise);
@@ -61,6 +60,11 @@ public class SearchByEntrepriseView extends ASearchByLayout {
                     SEARCH_LABEL + " " + selectEntreprise.getValue().getNom()));
         });
         add(buttonSearchEntreprise);
+    }
+
+    @Override
+    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+        selectEntreprise.setItems(modelServiceFactory.getEntrepriseService().searchAllEntrepriseWithPosteInEvent(getEvenement()));
     }
 }
 

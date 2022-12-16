@@ -14,6 +14,8 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -21,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AParametrageView<T> extends VerticalLayout {
+public abstract class AParametrageView<T> extends VerticalLayout implements BeforeEnterObserver {
 
     @Autowired
     protected ModelServiceFactory modelServiceFactory;
@@ -37,7 +39,6 @@ public abstract class AParametrageView<T> extends VerticalLayout {
     public void init() throws IOException {
         setAlignItems(FlexComponent.Alignment.CENTER);
         configureGrid();
-        grid.setItems(getItems());
         getParametrageView().addListener(ReloadEvent.class, event -> {
             ReloadEvent reloadEvent = (ReloadEvent) event;
             if (reloadEvent.getErrorMessage() == null) {
@@ -89,6 +90,11 @@ public abstract class AParametrageView<T> extends VerticalLayout {
 
     protected List<T> getItems () {
         return getParametrageService().searchParEvenement(this.evenement);
+    }
+
+    @Override
+    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+        grid.setItems(getItems());
     }
 
     protected abstract Class<T> getGridType();

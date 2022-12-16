@@ -18,4 +18,6 @@ public interface FormationRepository extends CrudRepository<Formation, String> {
     public List<Formation> findByNomCentreAndDiplomesIntituleDiplome(String nomCentre, String intituleDiplome);
 
     public List<Formation> findByDiplomesIntituleDiplome(String intituleDiplome);
+
+    public List<Formation> findByDiplomesEvenement(Evenement evenement);
 }

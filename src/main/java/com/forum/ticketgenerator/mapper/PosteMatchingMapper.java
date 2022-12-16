@@ -3,7 +3,10 @@ package com.forum.ticketgenerator.mapper;
 import com.forum.ticketgenerator.model.database.Entreprise;
 import com.forum.ticketgenerator.model.database.Poste;
 import com.forum.ticketgenerator.model.PosteMatching;
+import com.forum.ticketgenerator.model.database.SecteurActivite;
 import org.apache.commons.collections.CollectionUtils;
+
+import java.util.Optional;
 
 public class PosteMatchingMapper {
 
@@ -12,9 +15,14 @@ public class PosteMatchingMapper {
         posteMatching.setIntitule(poste.getIntitule());
         posteMatching.setNom(entreprise.getNom());
         posteMatching.setStand(entreprise.getStand());
-        if (poste.getSecteurActivite() != null) {
-            posteMatching.setSecteurActivite(poste.getSecteurActivite().getIntitule());
-            posteMatching.setSecteurActiviteColor(poste.getSecteurActivite().getCouleur());
+        if (entreprise.getSecteursActivite() != null) {
+            Optional<SecteurActivite> secteurActivite = entreprise.getSecteursActivite().stream()
+                            .filter(secteur -> secteur.getEvenement().equals(poste.getEvenement()))
+                                    .findFirst();
+            if (secteurActivite.isPresent()) {
+                posteMatching.setSecteurActivite(secteurActivite.get().getIntitule());
+                posteMatching.setSecteurActiviteColor(secteurActivite.get().getCouleur());
+            }
         }
         posteMatching.setNiveau(poste.getNiveau().getIntitule());
         posteMatching.setTypeContrat(poste.getTypeContrat().getIntitule());

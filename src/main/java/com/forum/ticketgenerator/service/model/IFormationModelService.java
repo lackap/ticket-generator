@@ -21,7 +21,7 @@ public interface IFormationModelService {
 
     List<Diplome> getDiplomes (String centreFormation) throws IOException;
 
-    List<Formation> getCentresFormation () throws IOException;
+    List<Formation> getCentresFormation (Evenement evenement) throws IOException;
 
     public List<Diplome> searchFromFormationNameAndEvenement (String formationName, Evenement evenement);
 

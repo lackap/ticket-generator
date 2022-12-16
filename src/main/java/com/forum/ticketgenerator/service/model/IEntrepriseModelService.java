@@ -10,15 +10,17 @@ import java.util.List;
 
 public interface IEntrepriseModelService {
     void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau,
-                  TypeContrat typeContrat, SecteurActivite secteurActivite, Evenement evenement) throws ModelCreationException;
+                  TypeContrat typeContrat, Evenement evenement) throws ModelCreationException;
 
     List<FamilleMetier> getFamilleMetierEntreprises(Evenement evenement) throws IOException;
 
     List<PosteMatching> searchFromEntrepriseNameAndEvenement(String entrepriseName, Evenement evenement);
 
-    List<EntrepriseDTO> searchAllEntreprise(Evenement evenement);
+    List<EntrepriseDTO> searchAllEntrepriseWithPosteInEvent (Evenement evenement);
+
+    List<EntrepriseDTO> searchAllEntreprise (Evenement evenement);
 
     void supprimerPoste(String entrepriseName, Evenement evenement, PosteMatching posteMatching);
 
-
+    void ajouterSecteurActivite(String entrepriseName, SecteurActivite secteurActivite);
 }

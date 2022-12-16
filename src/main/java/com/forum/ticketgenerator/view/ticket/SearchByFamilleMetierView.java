@@ -8,6 +8,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +20,7 @@ import java.io.IOException;
 
 @Component
 @UIScope
-public class SearchByFamilleMetierView extends ASearchByLayout {
+public class SearchByFamilleMetierView extends ASearchByLayout implements BeforeEnterObserver {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchByFamilleMetierView.class);
 
     private final static String SEARCH_LABEL = "Recherche par famille métier";
@@ -46,7 +48,6 @@ public class SearchByFamilleMetierView extends ASearchByLayout {
         selectFamilleMetier = new ComboBox<>();
         selectFamilleMetier.setLabel("Famille Métier");
         selectFamilleMetier.setEnabled(true);
-        selectFamilleMetier.setItems(modelServiceFactory.getEntrepriseService().getFamilleMetierEntreprises(getEvenement()));
         selectFamilleMetier.setItemLabelGenerator(FamilleMetier::getIntitule);
         selectFamilleMetier.addValueChangeListener(event -> buttonSearchPoste.setEnabled(selectFamilleMetier.getValue() != null));
         add(selectFamilleMetier);
@@ -63,6 +64,15 @@ public class SearchByFamilleMetierView extends ASearchByLayout {
             }
         });
         add(buttonSearchPoste);
+    }
+
+    @Override
+    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+        try {
+            selectFamilleMetier.setItems(modelServiceFactory.getEntrepriseService().getFamilleMetierEntreprises(getEvenement()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

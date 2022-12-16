@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public class EntrepriseModelService implements IEntrepriseModelService {
     @Override
     @Transactional
     public void addPoste(String nomEntreprise, String intitule, FamilleMetier familleMetier, Niveau niveau,
-                         TypeContrat typeContrat, SecteurActivite secteurActivite, Evenement evenement) throws ModelCreationException {
+                         TypeContrat typeContrat, Evenement evenement) throws ModelCreationException {
 
         if (intitule == null) {
             throw new ModelCreationException("L'intitule de poste doit être renseigné.");
@@ -44,7 +45,6 @@ public class EntrepriseModelService implements IEntrepriseModelService {
         poste.setNiveau(niveau);
         poste.setTypeContrat(typeContrat);
         poste.setEvenement(evenement);
-        poste.setSecteurActivite(secteurActivite);
 
         Entreprise entreprise = entrepriseRepository.findByNom(nomEntreprise);
         poste.setEntreprise(entreprise);
@@ -89,9 +89,18 @@ public class EntrepriseModelService implements IEntrepriseModelService {
 
     @Override
     @Transactional
-    public List<EntrepriseDTO> searchAllEntreprise(Evenement evenement) {
+    public List<EntrepriseDTO> searchAllEntrepriseWithPosteInEvent (Evenement evenement) {
         List<Entreprise> entreprises = entrepriseRepository.findByPostesEvenement(evenement);
-        return entreprises.stream().map(EntrepriseDTOMapper::map).collect(Collectors.toList());
+        return entreprises.stream().map(entreprise -> EntrepriseDTOMapper.map(entreprise, evenement)).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<EntrepriseDTO> searchAllEntreprise (Evenement evenement) {
+        Iterable<Entreprise> entreprises = entrepriseRepository.findAll();
+        List<EntrepriseDTO> returnList = new ArrayList<>();
+        entreprises.forEach(ent -> returnList.add(EntrepriseDTOMapper.map(ent, evenement)));
+        return returnList;
     }
 
     @Override
@@ -101,7 +110,16 @@ public class EntrepriseModelService implements IEntrepriseModelService {
         entreprise.setPostes(entreprise.getPostes().stream().filter(poste -> !(poste.getEvenement().getId() == evenement.getId())
                 || !(poste.getIntitule().equals(posteMatching.getIntitule()))).collect(Collectors.toList()));
         entrepriseRepository.save(entreprise);
+    }
 
-
+    @Override
+    @Transactional
+    public void ajouterSecteurActivite(String entrepriseName, SecteurActivite secteurActivite) {
+        Entreprise entreprise = entrepriseRepository.findByNom(entrepriseName);
+        if (entreprise.getSecteursActivite() == null) {
+            entreprise.setSecteursActivite(new HashSet<>());
+        }
+        entreprise.getSecteursActivite().add(secteurActivite);
+        entrepriseRepository.save(entreprise);
     }
 }

@@ -17,6 +17,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import javafx.scene.control.CheckBox;
@@ -33,7 +35,7 @@ import java.util.List;
 
 @Component
 @UIScope
-public class ParametrageComportementEvenementView extends VerticalLayout {
+public class ParametrageComportementEvenementView extends VerticalLayout implements BeforeEnterObserver {
 
     @Autowired
     private SecurityService securityService;
@@ -63,22 +65,12 @@ public class ParametrageComportementEvenementView extends VerticalLayout {
         labelSecteurActivite = new TextField();
         labelSecteurActivite.setWidth("50%");
         labelSecteurActivite.setLabel("Label a utiliser pour les secteurs d'activité : ");
-        labelSecteurActivite.setValue(applicationUser.getEvenement().getLabelSecteurActivité());
         displaySecteurActivite = new Checkbox();
         displaySecteurActivite.setLabel("Afficher les secteurs d'activité");
-        if (applicationUser.getEvenement().getDisplaySecteur() != null) {
-            displaySecteurActivite.setValue(applicationUser.getEvenement().getDisplaySecteur());
-        }
         displayNiveau = new Checkbox();
         displayNiveau.setLabel("Afficher les niveaux");
-        if (applicationUser.getEvenement().getDisplayNiveau() != null) {
-            displayNiveau.setValue(applicationUser.getEvenement().getDisplayNiveau());
-        }
         displayTypeContrat = new Checkbox();
         displayTypeContrat.setLabel("Afficher les types de contrat");
-        if (applicationUser.getEvenement().getDisplayTypeContrat() != null) {
-            displayTypeContrat.setValue(applicationUser.getEvenement().getDisplayTypeContrat());
-        }
         FileBuffer memoryBufferLogo = new FileBuffer();
         uploadAffiche = new Upload(memoryBufferLogo);
         uploadAffiche.setUploadButton(new Button("Charger l'affiche : "));
@@ -118,5 +110,20 @@ public class ParametrageComportementEvenementView extends VerticalLayout {
         return modelServiceFactory.getEvenementService().mettreAJourParametres(
                 evenement, labelSecteurActivite.getValue(), displaySecteurActivite.getValue(),
                 displayNiveau.getValue(), displayTypeContrat.getValue(), affiche);
+    }
+
+    @Override
+    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+        ApplicationUser applicationUser = securityService.getAuthenticatedUser();
+        labelSecteurActivite.setValue(applicationUser.getEvenement().getLabelSecteurActivité());
+        if (applicationUser.getEvenement().getDisplaySecteur() != null) {
+            displaySecteurActivite.setValue(applicationUser.getEvenement().getDisplaySecteur());
+        }
+        if (applicationUser.getEvenement().getDisplayNiveau() != null) {
+            displayNiveau.setValue(applicationUser.getEvenement().getDisplayNiveau());
+        }
+        if (applicationUser.getEvenement().getDisplayTypeContrat() != null) {
+            displayTypeContrat.setValue(applicationUser.getEvenement().getDisplayTypeContrat());
+        }
     }
 }

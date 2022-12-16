@@ -15,7 +15,7 @@ public class EntrepriseDTO {
     private long id;
     private String nom;
     private String stand;
-    private Set<SecteurActivite> secteursActivite = new HashSet<>();
+    private SecteurActivite secteurActivite;
     private Set<PosteDTO> postes = new HashSet<>();
 
     @Override
