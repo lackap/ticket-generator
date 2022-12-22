@@ -2,7 +2,6 @@ package com.forum.ticketgenerator.service.model.database;
 
 import com.forum.ticketgenerator.exception.ModelCreationException;
 import com.forum.ticketgenerator.model.database.Evenement;
-import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.model.database.TypeContrat;
 import com.forum.ticketgenerator.repository.TypeContratRepository;
 import com.forum.ticketgenerator.service.model.IParametrageService;
@@ -25,7 +24,7 @@ public class TypeContratModelService implements IParametrageService<TypeContrat>
     public List<TypeContrat> searchParEvenement(Evenement evenement) {
         Iterable<TypeContrat> typesContrat = typeContratRepository.findByEvenement(evenement);
         List<TypeContrat> typesContratList = new ArrayList<>();
-        typesContrat.forEach(typeContrat -> typesContratList.add(typeContrat));
+        typesContrat.forEach(typesContratList::add);
         return typesContratList;
     }
 

@@ -1,6 +1,7 @@
 package com.forum.ticketgenerator.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 public class DiplomeCreationException extends Exception {

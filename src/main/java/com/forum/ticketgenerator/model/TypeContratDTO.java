@@ -2,8 +2,6 @@ package com.forum.ticketgenerator.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
-
 @Data
 public class TypeContratDTO {
     private long id;

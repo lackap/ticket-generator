@@ -78,7 +78,7 @@ public class EntrepriseModelService implements IEntrepriseModelService {
         List<FamilleMetier> famillesMetier = entreprises.stream()
                 .map(entreprise -> entreprise.getPostes().stream()
                         .filter(poste -> poste.getEvenement().equals(evenement))
-                        .map(poste -> poste.getFamilleMetier())
+                        .map(Poste::getFamilleMetier)
 
                         .collect(Collectors.toList())
                 )

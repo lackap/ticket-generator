@@ -5,7 +5,7 @@ import com.vaadin.flow.component.ComponentEvent;
 
 public class ReloadEvent extends ComponentEvent<Component> {
 
-    private String errorMessage;
+    private final String errorMessage;
 
     public ReloadEvent (Component source, String errorMessage, boolean fromClient) {
         super(source, fromClient);

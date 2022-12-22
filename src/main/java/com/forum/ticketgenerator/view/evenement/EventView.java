@@ -16,20 +16,18 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 
 @Component
 @UIScope
 public class EventView extends VerticalLayout {
 
-    private Evenement evenement;
+    private final Evenement evenement;
 
-    private SecurityService securityService;
+    private final SecurityService securityService;
 
     public EventView(Evenement evenement, SecurityService securityService) {
         this.evenement = evenement;
@@ -42,15 +40,11 @@ public class EventView extends VerticalLayout {
             affiche.setHeight("100%");
             affiche.setWidth("100%");
             affiche.getStyle().set("cursor", "pointer");
-            affiche.addClickListener(event -> {
-                goToEvent();
-            });
+            affiche.addClickListener(event -> goToEvent());
             add(affiche);
         } else {
             Button goToEvent = new Button("Aller a l'évènement");
-            goToEvent.addClickListener( event ->{
-                goToEvent();
-            });
+            goToEvent.addClickListener( event -> goToEvent());
             add(goToEvent);
         }
     }

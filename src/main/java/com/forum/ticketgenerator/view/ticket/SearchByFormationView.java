@@ -3,7 +3,6 @@ package com.forum.ticketgenerator.view.ticket;
 import com.forum.ticketgenerator.constants.ApplicationConstants;
 import com.forum.ticketgenerator.event.SearchEvent;
 import com.forum.ticketgenerator.model.database.Diplome;
-import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.Formation;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -13,7 +12,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -55,7 +53,7 @@ public class SearchByFormationView extends ASearchByLayout implements BeforeEnte
                 selectDiplome.setValue(null);
             } else {
                 selectDiplome.setEnabled(true);
-                if (ApplicationConstants.AUCUN_DIPLOME.equals(selectCentre.getValue())) {
+                if (ApplicationConstants.AUCUN_DIPLOME.equals(selectCentre.getValue().getNomCentre())) {
                     try {
                         selectDiplome.setItems(modelServiceFactory.getFormationService().getAllDiplomes());
                     } catch (IOException e) {

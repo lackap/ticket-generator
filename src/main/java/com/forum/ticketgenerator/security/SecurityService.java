@@ -1,6 +1,5 @@
 package com.forum.ticketgenerator.security;
 
-import com.forum.ticketgenerator.model.database.Evenement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.security.core.context.SecurityContext;

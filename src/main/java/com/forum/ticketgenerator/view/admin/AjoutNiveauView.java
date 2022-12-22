@@ -1,6 +1,5 @@
 package com.forum.ticketgenerator.view.admin;
 
-import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.forum.ticketgenerator.model.database.Niveau;
 import com.forum.ticketgenerator.service.model.IParametrageService;
 import com.vaadin.flow.spring.annotation.UIScope;

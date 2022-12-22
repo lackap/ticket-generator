@@ -13,7 +13,7 @@ public class Evenement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String intitule;
-	private String labelSecteurActivité;
+	private String labelSecteurActivite;
 	private Boolean displaySecteur;
 	private Boolean displayNiveau;
 	private Boolean displayTypeContrat;

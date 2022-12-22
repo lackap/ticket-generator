@@ -5,11 +5,10 @@ import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
-import com.forum.ticketgenerator.view.ParametersView;
 import com.forum.ticketgenerator.view.HeaderView;
+import com.forum.ticketgenerator.view.ParametersView;
 import com.forum.ticketgenerator.view.admin.DeleteButtonComponent;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -69,22 +68,22 @@ public class EntrepriseView extends ParametersView implements BeforeEnterObserve
         grid.addColumn("familleMetier").setHeader("Famille métier").setWidth("12%").setFlexGrow(0);
         if (evenement.getDisplayNiveau()) {
             grid.addColumn("niveau")
-                    .setHeader("Niveau").setWidth("12%").setFlexGrow(0);;
+                    .setHeader("Niveau").setWidth("12%").setFlexGrow(0);
         }
         if (evenement.getDisplayTypeContrat()) {
             grid.addColumn("typeContrat")
-                    .setHeader("Type de contrat").setWidth("12%").setFlexGrow(0);;
+                    .setHeader("Type de contrat").setWidth("12%").setFlexGrow(0);
         }
         if (evenement.getDisplaySecteur()) {
             grid.addColumn("secteurActivite")
-                    .setHeader(evenement.getLabelSecteurActivité()).setWidth("12%").setFlexGrow(0);;
+                    .setHeader(evenement.getLabelSecteurActivite()).setWidth("12%").setFlexGrow(0);
         }
 
         grid.addColumn("stand").setHeader("N° de stand").setWidth("12%").setFlexGrow(0);
         Grid.Column<PosteMatching> deleteColumn = this.grid.addComponentColumn(item -> {
             DeleteButtonComponent deleteButtonComponent = new DeleteButtonComponent();
             deleteButtonComponent.addClickListener(event -> {
-                ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
+                ApplicationUser userDetails = securityService.getAuthenticatedUser();
                 modelServiceFactory.getEntrepriseService().supprimerPoste(userDetails.getTicketUser().getDisplayName(),
                         evenement, item);
                 grid.setItems(modelServiceFactory.getEntrepriseService().searchFromEntrepriseNameAndEvenement(

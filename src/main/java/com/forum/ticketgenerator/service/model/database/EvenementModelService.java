@@ -2,7 +2,6 @@ package com.forum.ticketgenerator.service.model.database;
 
 import com.forum.ticketgenerator.exception.ModelCreationException;
 import com.forum.ticketgenerator.model.database.Evenement;
-import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.repository.EvenementRepository;
 import com.forum.ticketgenerator.service.model.IEvenementModelService;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +23,7 @@ public class EvenementModelService implements IEvenementModelService {
     public List<Evenement> searchAllEvenement() {
         Iterable<Evenement> evenementsIterable = evenementRepository.findAll();
         List<Evenement> evenements = new ArrayList<>();
-        evenementsIterable.forEach(evenement -> evenements.add(evenement));
+        evenementsIterable.forEach(evenements::add);
         return evenements;
     }
 
@@ -42,7 +41,7 @@ public class EvenementModelService implements IEvenementModelService {
         }
         Evenement evenement = new Evenement();
         evenement.setIntitule(evenementValue);
-        evenement.setLabelSecteurActivité(labelSecteurActivite);
+        evenement.setLabelSecteurActivite(labelSecteurActivite);
         evenement.setAffiche(affiche);
         return evenementRepository.save(evenement);
     }
@@ -50,7 +49,7 @@ public class EvenementModelService implements IEvenementModelService {
     @Override
     public Evenement mettreAJourParametres (Evenement evenement, String labelSecteurActivite, boolean displaySecteur,
                                                   boolean displayNiveau, boolean displayContrat, byte[] affiche) throws ModelCreationException {
-        evenement.setLabelSecteurActivité(labelSecteurActivite);
+        evenement.setLabelSecteurActivite(labelSecteurActivite);
         evenement.setDisplaySecteur(displaySecteur);
         evenement.setDisplayNiveau(displayNiveau);
         evenement.setDisplayTypeContrat(displayContrat);

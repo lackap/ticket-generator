@@ -2,7 +2,6 @@ package com.forum.ticketgenerator.view.ticket;
 
 import com.forum.ticketgenerator.event.SearchEvent;
 import com.forum.ticketgenerator.event.SearchResultEvent;
-import com.forum.ticketgenerator.model.database.Evenement;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;

@@ -38,9 +38,8 @@ public class ParametrageLienEntrepriseSecteurView extends VerticalLayout impleme
         setAlignItems(FlexComponent.Alignment.CENTER);
         ApplicationUser applicationUser = securityService.getAuthenticatedUser();
         configureGrid(applicationUser.getEvenement());
-        ajoutEntrepriseSecteur.addListener(ReloadEvent.class, event -> {
-            grid.setItems(modelServiceFactory.getEntrepriseService().searchAllEntreprise(applicationUser.getEvenement()));
-        });
+        ajoutEntrepriseSecteur.addListener(ReloadEvent.class,
+                event -> grid.setItems(modelServiceFactory.getEntrepriseService().searchAllEntreprise(applicationUser.getEvenement())));
         add(ajoutEntrepriseSecteur, grid);
     }
 
@@ -53,7 +52,7 @@ public class ParametrageLienEntrepriseSecteurView extends VerticalLayout impleme
     protected void configureGrid(Evenement evenement) {
         grid = new Grid<>(EntrepriseDTO.class, false);
         grid.addColumn("nom").setHeader("Dénomination");
-        grid.addColumn("secteurActivite.intitule").setHeader(evenement.getLabelSecteurActivité());
+        grid.addColumn("secteurActivite.intitule").setHeader(evenement.getLabelSecteurActivite());
         grid.setNestedNullBehavior(Grid.NestedNullBehavior.ALLOW_NULLS);
 
     }

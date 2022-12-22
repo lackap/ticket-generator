@@ -2,16 +2,12 @@ package com.forum.ticketgenerator.view.admin;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.model.database.Evenement;
-import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.service.model.IParametrageService;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
-import com.forum.ticketgenerator.view.HeaderView;
-import com.forum.ticketgenerator.view.entreprise.AddPosteView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -40,12 +36,11 @@ public abstract class AParametrageView<T> extends VerticalLayout implements Befo
         setAlignItems(FlexComponent.Alignment.CENTER);
         configureGrid();
         getParametrageView().addListener(ReloadEvent.class, event -> {
-            ReloadEvent reloadEvent = (ReloadEvent) event;
-            if (reloadEvent.getErrorMessage() == null) {
+            if (event.getErrorMessage() == null) {
                 grid.setItems(getItems());
                 grid.getDataProvider().refreshAll();
             } else {
-                resultatInsertion.setText(reloadEvent.getErrorMessage());
+                resultatInsertion.setText(event.getErrorMessage());
             }
         });
         resultatInsertion = new Text("");
@@ -99,7 +94,7 @@ public abstract class AParametrageView<T> extends VerticalLayout implements Befo
 
     protected abstract Class<T> getGridType();
 
-    protected abstract AAddParametrageView getParametrageView();
+    protected abstract AAddParametrageView<T> getParametrageView();
 
     protected abstract IParametrageService<T> getParametrageService();
 

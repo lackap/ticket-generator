@@ -3,8 +3,6 @@ package com.forum.ticketgenerator.service.model.database;
 import com.forum.ticketgenerator.exception.ModelCreationException;
 import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
-import com.forum.ticketgenerator.model.database.Niveau;
-import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.repository.FamilleMetierRepository;
 import com.forum.ticketgenerator.service.model.IParametrageService;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +24,7 @@ public class FamilleMetierModelService implements IParametrageService<FamilleMet
     public List<FamilleMetier> searchParEvenement(Evenement evenement) {
         Iterable<FamilleMetier> famillesMetier = familleMetierRepository.findByEvenement(evenement);
         List<FamilleMetier> famillesMetierList = new ArrayList<>();
-        famillesMetier.forEach(familleMetier -> famillesMetierList.add(familleMetier));
+        famillesMetier.forEach(famillesMetierList::add);
         return famillesMetierList;
     }
 

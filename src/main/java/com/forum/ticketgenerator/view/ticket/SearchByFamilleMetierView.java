@@ -1,7 +1,6 @@
 package com.forum.ticketgenerator.view.ticket;
 
 import com.forum.ticketgenerator.event.SearchEvent;
-import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;

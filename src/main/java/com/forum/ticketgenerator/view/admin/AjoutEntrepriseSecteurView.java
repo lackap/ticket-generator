@@ -15,7 +15,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +45,7 @@ public class AjoutEntrepriseSecteurView extends VerticalLayout implements Before
         entreprise.setLabel("Dénomination");
         entreprise.setItemLabelGenerator(EntrepriseDTO::getNom);
         secteurActivite = new ComboBox<>();
-        secteurActivite.setLabel(applicationUser.getEvenement().getLabelSecteurActivité());
+        secteurActivite.setLabel(applicationUser.getEvenement().getLabelSecteurActivite());
         secteurActivite.setItemLabelGenerator(SecteurActivite::getIntitule);
         Button addButton = new Button("Assigner secteur");
         addButton.addClickListener(event -> {

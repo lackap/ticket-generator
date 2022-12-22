@@ -1,11 +1,8 @@
 package com.forum.ticketgenerator.view.admin;
 
-import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
-import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.forum.ticketgenerator.view.HeaderView;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -25,15 +22,10 @@ public class ParametrageAdminView extends VerticalLayout {
     private HeaderView headerView;
 
     @Autowired
-    private ModelServiceFactory modelServiceFactory;
-
-    @Autowired
     private ParametrageAdminTabsView parametrageAdminTabs;
 
     @Autowired
     private SecurityService securityService;
-
-    private ComboBox<Evenement> evenement;
 
     @PostConstruct
     public void init() throws IOException {

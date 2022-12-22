@@ -6,14 +6,10 @@ import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.model.database.TypeContrat;
 import com.forum.ticketgenerator.service.model.database.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ModelServiceFactory {
-
-    @Value( "${model.loading.type}" )
-    private String modelType;
 
     @Autowired
     private EntrepriseModelService entrepriseModelService;
@@ -39,74 +35,35 @@ public class ModelServiceFactory {
     @Autowired
     private SecteurActiviteModelService secteurActiviteModelService;
 
-    public IModelService getService() {
-        switch (modelType) {
-            default :
-                return null;
-        }
-
-    }
-
     public IEntrepriseModelService getEntrepriseService() {
-        switch (modelType) {
-            default :
-                return entrepriseModelService;
-        }
-
+        return entrepriseModelService;
     }
 
     public IFormationModelService getFormationService() {
-        switch (modelType) {
-            default :
-                return formationModelService;
-        }
-
+        return formationModelService;
     }
 
     public IParametrageService<FamilleMetier> getFamilleMetierService() {
-        switch (modelType) {
-            default :
-                return familleMetierModelService;
-        }
-
+        return familleMetierModelService;
     }
 
     public IParametrageService<TypeContrat> getTypeContratService() {
-        switch (modelType) {
-            default :
-                return typeContratModelService;
-        }
-
+        return typeContratModelService;
     }
 
     public IParametrageService<Niveau> getNiveauService() {
-        switch (modelType) {
-            default :
-                return niveauModelService;
-        }
+        return niveauModelService;
     }
 
     public IEvenementModelService getEvenementService() {
-        switch (modelType) {
-            default :
-                return evenementModelService;
-        }
-
+        return evenementModelService;
     }
 
     public IPosteModelService getPosteService() {
-        switch (modelType) {
-            default :
-                return posteModelService;
-        }
-
+        return posteModelService;
     }
 
     public IParametrageService<SecteurActivite> getSecteurService() {
-        switch (modelType) {
-            default :
-                return secteurActiviteModelService;
-        }
-
+        return secteurActiviteModelService;
     }
 }

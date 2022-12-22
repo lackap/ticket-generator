@@ -3,9 +3,7 @@ package com.forum.ticketgenerator.service.model.database;
 import com.forum.ticketgenerator.exception.ModelCreationException;
 import com.forum.ticketgenerator.model.ColorAvailable;
 import com.forum.ticketgenerator.model.database.Evenement;
-import com.forum.ticketgenerator.model.database.FamilleMetier;
 import com.forum.ticketgenerator.model.database.SecteurActivite;
-import com.forum.ticketgenerator.model.database.TypeContrat;
 import com.forum.ticketgenerator.repository.SecteurActiviteRepository;
 import com.forum.ticketgenerator.service.model.IParametrageService;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +25,7 @@ public class SecteurActiviteModelService implements IParametrageService<SecteurA
     public List<SecteurActivite> searchParEvenement(Evenement evenement) {
         Iterable<SecteurActivite> secteursIterable = secteurActiviteRepository.findByEvenement(evenement);
         List<SecteurActivite> secteurs = new ArrayList<>();
-        secteursIterable.forEach(secteur -> secteurs.add(secteur));
+        secteursIterable.forEach(secteurs::add);
         return secteurs;
     }
 
@@ -45,14 +43,14 @@ public class SecteurActiviteModelService implements IParametrageService<SecteurA
             throw new ModelCreationException("Un évènement doit être rattaché a la création du secteur d'activité");
         }
         if (StringUtils.isEmpty(secteurValue)) {
-            throw new ModelCreationException("Le " + evenement.getLabelSecteurActivité() + " doit être renseigné");
+            throw new ModelCreationException("Le " + evenement.getLabelSecteurActivite() + " doit être renseigné");
         }
         if (couleur == null) {
-            throw new ModelCreationException("Une couleur doit être associée au " + evenement.getLabelSecteurActivité());
+            throw new ModelCreationException("Une couleur doit être associée au " + evenement.getLabelSecteurActivite());
         }
         SecteurActivite secteurExisting = secteurActiviteRepository.findByEvenementAndIntitule(evenement, secteurValue);
         if (secteurExisting != null) {
-            throw new ModelCreationException(evenement.getLabelSecteurActivité() + " " + secteurValue + " déjà existant pour l'évènement " + evenement.getIntitule());
+            throw new ModelCreationException(evenement.getLabelSecteurActivite() + " " + secteurValue + " déjà existant pour l'évènement " + evenement.getIntitule());
         }
         SecteurActivite secteur = new SecteurActivite();
         secteur.setIntitule(secteurValue);

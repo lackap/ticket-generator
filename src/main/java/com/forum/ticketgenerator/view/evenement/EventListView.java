@@ -24,7 +24,7 @@ public class EventListView extends HorizontalLayout {
     @PostConstruct
     public void init() {
         List<Evenement> evenements = modelServiceFactory.getEvenementService().searchAllEvenement();
-        Integer count = 0;
+        int count = 0;
         for (Evenement evenement : evenements) {
             EventView eventView = new EventView(evenement, securityService);
             eventView.setWidth("25%");

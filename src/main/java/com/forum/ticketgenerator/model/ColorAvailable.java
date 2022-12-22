@@ -1,10 +1,5 @@
 package com.forum.ticketgenerator.model;
 
-import com.forum.ticketgenerator.pdf.bean.PdfLegendBean;
-import com.itextpdf.kernel.color.Color;
-import com.itextpdf.kernel.color.DeviceRgb;
-import lombok.Data;
-
 public enum ColorAvailable {
     GREEN("Vert"),
     YELLOW("Jaune"),
@@ -14,7 +9,7 @@ public enum ColorAvailable {
     PINK("Rose"),
     BLUE("Bleu");
 
-    private String value;
+    private final String value;
 
     ColorAvailable(String value) {
         this.value = value;

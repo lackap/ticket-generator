@@ -17,13 +17,10 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
 
     @Autowired
     private DatabaseUserDetailService databaseUserDetailService;
-    @Autowired
-    CustomSuccessHandler customSuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        //http.formLogin().loginPage("/login").successHandler(customSuccessHandler);
         setLoginView(http, LoginView.class);
     }
 

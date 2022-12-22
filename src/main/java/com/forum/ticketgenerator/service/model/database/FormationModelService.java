@@ -2,7 +2,10 @@ package com.forum.ticketgenerator.service.model.database;
 
 import com.forum.ticketgenerator.constants.ApplicationConstants;
 import com.forum.ticketgenerator.exception.DiplomeCreationException;
-import com.forum.ticketgenerator.model.database.*;
+import com.forum.ticketgenerator.model.database.Diplome;
+import com.forum.ticketgenerator.model.database.Evenement;
+import com.forum.ticketgenerator.model.database.FamilleMetier;
+import com.forum.ticketgenerator.model.database.Formation;
 import com.forum.ticketgenerator.repository.FormationRepository;
 import com.forum.ticketgenerator.service.model.IFormationModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +50,9 @@ public class FormationModelService implements IFormationModelService {
         Formation formation = formationRepository.findByNomCentreAndDiplomesEvenement(formationName, evenement);
         if (formation != null) {
             for (Diplome diplome : formation.getDiplomes()) {
-                //if (evenement.equals(diplome.getEvenement())) {
+                if (evenement.equals(diplome.getEvenement())) {
                     diplomes.add(diplome);
-                //}
+                }
             }
         }
         return diplomes;
@@ -61,19 +64,16 @@ public class FormationModelService implements IFormationModelService {
         Iterable<Formation> formations = formationRepository.findAll();
         List<Diplome> diplomesLabels = new ArrayList<>();
         formations.forEach(
-                formation -> {
-                    diplomesLabels.addAll(formation.getDiplomes());
-                }
+                formation -> diplomesLabels.addAll(formation.getDiplomes())
         );
         return diplomesLabels.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<Diplome> getDiplomes (String centreFormation) throws IOException {
+    public List<Diplome> getDiplomes (String centreFormation) {
         Formation formation = formationRepository.findByNomCentre(centreFormation);
-        List<Diplome> diplomesLabels = new ArrayList<>();
-        diplomesLabels.addAll(formation.getDiplomes().stream().collect(Collectors.toList()));
+        List<Diplome> diplomesLabels = new ArrayList<>(formation.getDiplomes());
         return diplomesLabels.stream().distinct().collect(Collectors.toList());
     }
 
@@ -82,10 +82,7 @@ public class FormationModelService implements IFormationModelService {
     public List<Formation> getCentresFormation (Evenement evenement) throws IOException {
         Iterable<Formation> formations = formationRepository.findByDiplomesEvenement(evenement);
         List<Formation> centreFormationLabels = new ArrayList<>();
-        formations.forEach(
-                formation -> {
-                    centreFormationLabels.add(formation);
-                } );
+        formations.forEach(centreFormationLabels::add);
         List<Formation> sortedList = new ArrayList<>();
         Formation formation = new Formation();
         formation.setNomCentre(ApplicationConstants.AUCUN_DIPLOME);

@@ -1,12 +1,8 @@
 package com.forum.ticketgenerator.model;
 
-import com.forum.ticketgenerator.model.database.Poste;
 import com.forum.ticketgenerator.model.database.SecteurActivite;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 

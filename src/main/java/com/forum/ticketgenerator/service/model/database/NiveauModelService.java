@@ -3,7 +3,6 @@ package com.forum.ticketgenerator.service.model.database;
 import com.forum.ticketgenerator.exception.ModelCreationException;
 import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.Niveau;
-import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.repository.NiveauRepository;
 import com.forum.ticketgenerator.service.model.IParametrageService;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +24,7 @@ public class NiveauModelService implements IParametrageService<Niveau> {
     public List<Niveau> searchParEvenement(Evenement evenement) {
         Iterable<Niveau> niveaux = niveauRepository.findByEvenement(evenement);
         List<Niveau> niveauList = new ArrayList<>();
-        niveaux.forEach(niveau -> niveauList.add(niveau));
+        niveaux.forEach(niveauList::add);
         return niveauList;
     }
 

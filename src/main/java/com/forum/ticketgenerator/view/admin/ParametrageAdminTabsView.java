@@ -50,9 +50,9 @@ public class ParametrageAdminTabsView extends VerticalLayout {
         familleMetierTab = new Tab("Famille métier");
         niveauTab = new Tab("Niveau");
         typeContratTab = new Tab("Type contrat");
-        secteurActiviteTab = new Tab("Secteur activite");
+        secteurActiviteTab = new Tab(securityService.getAuthenticatedUser().getEvenement().getLabelSecteurActivite());
         comportementTab = new Tab("Comportement Evenement");
-        lienEntrepriseSecteurTab = new Tab("Lien entreprise / " + securityService.getAuthenticatedUser().getEvenement().getLabelSecteurActivité());
+        lienEntrepriseSecteurTab = new Tab("Lien entreprise / " + securityService.getAuthenticatedUser().getEvenement().getLabelSecteurActivite());
         Tabs tabs = new Tabs(familleMetierTab, niveauTab, typeContratTab, secteurActiviteTab,
                 comportementTab, lienEntrepriseSecteurTab);
         tabs.addSelectedChangeListener(

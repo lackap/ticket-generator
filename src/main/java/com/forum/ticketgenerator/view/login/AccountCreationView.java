@@ -2,7 +2,6 @@ package com.forum.ticketgenerator.view.login;
 
 import com.forum.ticketgenerator.constants.Roles;
 import com.forum.ticketgenerator.exception.UserCreationException;
-import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.service.model.database.UserCreationService;
 import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.Text;
@@ -49,8 +48,6 @@ public class AccountCreationView extends VerticalLayout {
 
     private TextField displayedName;
 
-    private Button validationButton;
-
     private Text validationMessage;
 
     private Upload uploadLogo;
@@ -67,9 +64,9 @@ public class AccountCreationView extends VerticalLayout {
         selectRole = new ComboBox<>();
         selectRole.setLabel("Role");
         selectRole.setItems(
-                Arrays.stream(Roles.values()).map(role -> role.name()).collect(Collectors.toList()));
+                Arrays.stream(Roles.values()).map(Enum::name).collect(Collectors.toList()));
         selectRole.addValueChangeListener( event -> {
-            if (selectRole.getValue() == Roles.ENTREPRISE.name() || selectRole.getValue() == Roles.FORMATION.name()) {
+            if (selectRole.getValue().equals(Roles.ENTREPRISE.name()) || selectRole.getValue().equals(Roles.FORMATION.name())) {
                 displayedName.setVisible(true);
                 uploadLogo.setVisible(true);
             } else {
@@ -103,7 +100,7 @@ public class AccountCreationView extends VerticalLayout {
 
 
         validationMessage = new Text("");
-        validationButton = new Button("Créer le compte");
+        Button validationButton = new Button("Créer le compte");
         validationButton.addClickListener(buttonClickEvent -> {
             try {
                 userCreationService.createUser(name.getValue(), password.getValue(), selectRole.getValue(), displayedName.getValue(), logo);

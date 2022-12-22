@@ -5,7 +5,7 @@ import com.vaadin.flow.component.ComponentEvent;
 
 public class ParametrageTabEvent extends ComponentEvent<Component> {
 
-    private Component component;
+    private final Component component;
 
     public ParametrageTabEvent (Component source, boolean fromClient, Component component) {
         super(source, fromClient);

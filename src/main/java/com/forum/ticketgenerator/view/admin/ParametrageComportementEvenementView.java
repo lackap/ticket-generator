@@ -48,8 +48,6 @@ public class ParametrageComportementEvenementView extends VerticalLayout impleme
     protected Checkbox displayTypeContrat;
     protected Checkbox displayNiveau;
 
-    private Upload uploadAffiche;
-
     private byte[] affiche;
 
 
@@ -67,7 +65,7 @@ public class ParametrageComportementEvenementView extends VerticalLayout impleme
         displayTypeContrat = new Checkbox();
         displayTypeContrat.setLabel("Afficher les types de contrat");
         FileBuffer memoryBufferLogo = new FileBuffer();
-        uploadAffiche = new Upload(memoryBufferLogo);
+        Upload uploadAffiche = new Upload(memoryBufferLogo);
         uploadAffiche.setUploadButton(new Button("Charger l'affiche : "));
         uploadAffiche.setDropLabel(new Label("Déposer le fichier ici"));
         uploadAffiche.addSucceededListener(event -> {
@@ -83,9 +81,8 @@ public class ParametrageComportementEvenementView extends VerticalLayout impleme
 
         Button ajoutButton = new Button("Enregistrer");
         ajoutButton.addClickListener(event -> {
-            Evenement item = null;
             try {
-                item = save(applicationUser.getEvenement());
+                Evenement item = save(applicationUser.getEvenement());
                 applicationUser.setEvenement(item);
                 resultatInsertion.setText("Les paramètres ont été modifiés");
             } catch (ModelCreationException e) {
@@ -110,7 +107,7 @@ public class ParametrageComportementEvenementView extends VerticalLayout impleme
     @Override
     public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
         ApplicationUser applicationUser = securityService.getAuthenticatedUser();
-        labelSecteurActivite.setValue(applicationUser.getEvenement().getLabelSecteurActivité());
+        labelSecteurActivite.setValue(applicationUser.getEvenement().getLabelSecteurActivite());
         if (applicationUser.getEvenement().getDisplaySecteur() != null) {
             displaySecteurActivite.setValue(applicationUser.getEvenement().getDisplaySecteur());
         }

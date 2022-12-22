@@ -10,8 +10,6 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +18,6 @@ import java.io.IOException;
 @Component
 @UIScope
 public class SearchByEntrepriseView extends ASearchByLayout implements BeforeEnterObserver {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchByEntrepriseView.class);
 
     private final static String SEARCH_LABEL = "Recherche par entreprise";
 
@@ -53,12 +50,10 @@ public class SearchByEntrepriseView extends ASearchByLayout implements BeforeEnt
         buttonSearchEntreprise = new Button();
         buttonSearchEntreprise.setText("Chercher par entreprise");
         buttonSearchEntreprise.setEnabled(false);
-        buttonSearchEntreprise.addClickListener(event -> {
-            fireEvent(new SearchEvent(buttonSearchEntreprise, false,
-                    modelServiceFactory.getEntrepriseService().searchFromEntrepriseNameAndEvenement(selectEntreprise.getValue().getNom(),
-                            getEvenement()),
-                    SEARCH_LABEL + " " + selectEntreprise.getValue().getNom()));
-        });
+        buttonSearchEntreprise.addClickListener(event -> fireEvent(new SearchEvent(buttonSearchEntreprise, false,
+                modelServiceFactory.getEntrepriseService().searchFromEntrepriseNameAndEvenement(selectEntreprise.getValue().getNom(),
+                        getEvenement()),
+                SEARCH_LABEL + " " + selectEntreprise.getValue().getNom())));
         add(buttonSearchEntreprise);
     }
 

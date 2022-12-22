@@ -4,7 +4,6 @@ import com.forum.ticketgenerator.model.Model;
 import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.SecteurActivite;
-import com.forum.ticketgenerator.pdf.bean.PdfLegendBean;
 import com.forum.ticketgenerator.repository.SecteurActiviteRepository;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
@@ -16,7 +15,6 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.border.Border;
 import com.itextpdf.layout.border.GrooveBorder;
-import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.UnitValue;
@@ -27,8 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +35,7 @@ import java.util.stream.Collectors;
 public class PdfGenerationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PdfGenerationService.class);
 
-    private List<PdfLegendBean> pdfLegendBeans;
-
-    private Border DEFAULT_BORDER = new GrooveBorder(1.0f);
+    private final Border DEFAULT_BORDER = new GrooveBorder(1.0f);
 
     @Autowired
     private SecteurActiviteRepository secteurActiviteRepository;
@@ -63,8 +57,7 @@ public class PdfGenerationService {
 
     private Document createDocument(PdfWriter pdfWriter) {
         PdfDocument pdfDocument = new PdfDocument(pdfWriter);
-        Document document = new Document(pdfDocument, PageSize.A4.rotate());
-        return document;
+        return new Document(pdfDocument, PageSize.A4.rotate());
     }
 
     private void buildDocumentHeader(Document document, Evenement evenement) {
@@ -74,15 +67,15 @@ public class PdfGenerationService {
             pdfPTable.setWidth(UnitValue.createPercentValue(100));
             pdfPTable.setFixedLayout();
             addLegendToHeader(pdfPTable, evenement);
-            addImageToHeader(pdfPTable, "META-INF/resources/img/metropole.png", cellSize);
+            addImageToHeader(pdfPTable, cellSize);
             document.add(pdfPTable);
         } catch (Exception e ) {
             LOGGER.error("File not found : META-INF/resources/img/clee_45.png");
         }
     }
 
-    private void addImageToHeader(Table table, String imageName, float cellSize) throws IOException {
-        Image image = new Image(ImageDataFactory.create(loadImage(imageName), null, false));
+    private void addImageToHeader(Table table, float cellSize) throws IOException {
+        Image image = new Image(ImageDataFactory.create(loadImage(), null, false));
         float scaler = 0.85f - ((image.getImageWidth() - cellSize) / image.getImageWidth());
         image.scale(scaler, scaler);
         image.setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -106,18 +99,6 @@ public class PdfGenerationService {
             entry.getValue().forEach(poste -> addRow(table, poste));
         }
         document.add(table);
-    }
-
-    private void openDocument(String name) throws IOException {
-        File file = new File(name);
-        if (file.exists()) {
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().open(file);
-            } else {
-                ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "explorer " + file.getAbsolutePath());
-                processBuilder.start();
-            }
-        }
     }
 
     private void addRow(Table table, PosteMatching posteMatching) {
@@ -182,10 +163,10 @@ public class PdfGenerationService {
         table.addHeaderCell(commentCell);
     }
 
-    private java.awt.Image loadImage(String imageFilename) {
+    private java.awt.Image loadImage() {
         java.awt.Image img = null;
         try {
-            img = ImageIO.read(getClass().getClassLoader().getResource((imageFilename)));
+            img = ImageIO.read(getClass().getClassLoader().getResource(("META-INF/resources/img/metropole.png")));
         } catch (IOException ex) {
             LOGGER.error("Error while loading image ", ex);
         }
@@ -197,7 +178,7 @@ public class PdfGenerationService {
         table.setWidthPercent(100);
         table.setBorder(DEFAULT_BORDER);
         Cell headerCell = new Cell(1, 8);
-        String secteurName = evenement.getLabelSecteurActivité() != null ? evenement.getLabelSecteurActivité() : "secteurs d'activité";
+        String secteurName = evenement.getLabelSecteurActivite() != null ? evenement.getLabelSecteurActivite() : "secteurs d'activité";
         Paragraph legend = new Paragraph(new Text("Légende " + secteurName));
         legend.setHorizontalAlignment(HorizontalAlignment.CENTER);
         legend.setBold();

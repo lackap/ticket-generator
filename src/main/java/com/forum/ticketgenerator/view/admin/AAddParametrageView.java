@@ -12,8 +12,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.shared.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,9 +52,7 @@ public abstract class AAddParametrageView<V>  extends HorizontalLayout {
 
     private Component[] getComponentsToDisplay() {
         ajoutButton = new Button("Ajouter");
-        ajoutButton.addClickListener(event -> {
-            executeButtonAction();
-        });
+        ajoutButton.addClickListener(event -> executeButtonAction());
         List<Component> fields = new ArrayList<>();
         fields.add(valueToAdd);
         fields.addAll(getCustomComponents());

@@ -1,6 +1,5 @@
 package com.forum.ticketgenerator.model;
 
-import javax.persistence.Entity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

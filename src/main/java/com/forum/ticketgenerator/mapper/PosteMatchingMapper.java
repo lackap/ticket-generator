@@ -1,10 +1,9 @@
 package com.forum.ticketgenerator.mapper;
 
+import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.model.database.Entreprise;
 import com.forum.ticketgenerator.model.database.Poste;
-import com.forum.ticketgenerator.model.PosteMatching;
 import com.forum.ticketgenerator.model.database.SecteurActivite;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.util.Optional;
 

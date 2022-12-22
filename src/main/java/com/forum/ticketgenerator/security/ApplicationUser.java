@@ -24,12 +24,7 @@ public class ApplicationUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities () {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-        GrantedAuthority grantedAuthority = new GrantedAuthority() {
-            @Override
-            public String getAuthority () {
-                return ticketUser.getRole();
-            }
-        };
+        GrantedAuthority grantedAuthority = () -> ticketUser.getRole();
         grantedAuthorityList.add(grantedAuthority);
         return grantedAuthorityList;
     }

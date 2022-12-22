@@ -2,18 +2,14 @@ package com.forum.ticketgenerator.view.formation;
 
 import com.forum.ticketgenerator.event.ReloadEvent;
 import com.forum.ticketgenerator.model.database.Diplome;
-import com.forum.ticketgenerator.model.database.Evenement;
-import com.forum.ticketgenerator.model.database.Formation;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.forum.ticketgenerator.view.ParametersView;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +49,9 @@ public class FormationView extends ParametersView {
                 posteCreationResult.setText(event.getErrorMessage());
             }
         });
-
+        posteCreationResult = new Text("");
         configureGrid();
-        add(new H2("Ajouter un diplome"), addDiplomeView, grid);
+        add(new H2("Ajouter un diplome"), posteCreationResult, addDiplomeView, grid);
     }
 
     private void configureGrid() {

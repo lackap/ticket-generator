@@ -21,17 +21,15 @@ public class ParametersView  extends VerticalLayout implements BeforeEnterObserv
 
     @Override
     public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
-        ApplicationUser userDetails = (ApplicationUser) securityService.getAuthenticatedUser();
-        String user = "user";
-        Image logo = null;
+        ApplicationUser userDetails = securityService.getAuthenticatedUser();
+        Image logo;
         if (userDetails != null && userDetails.getTicketUser() != null) {
-            user = userDetails.getTicketUser().getDisplayName();
             logo = generateImage(userDetails.getTicketUser().getLogo());
             if (logo != null) {
                 logo.setWidth("75px");
                 logo.setHeight("75px");
             }
-            headerView.customizeHeader(logo, getTitlePrefix() + user);
+            headerView.customizeHeader(logo, getTitlePrefix() + userDetails.getTicketUser().getDisplayName());
         }
     }
 

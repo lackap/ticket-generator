@@ -3,7 +3,6 @@ package com.forum.ticketgenerator.model.database;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @Entity

@@ -17,9 +17,7 @@ public class EntrepriseDTOMapper {
             Optional<SecteurActivite> secteur = entreprise.getSecteursActivite().stream()
                     .filter(secteurActivite -> secteurActivite.getEvenement().equals(evenement))
                     .findFirst();
-            if (secteur.isPresent()) {
-                entrepriseDTO.setSecteurActivite(secteur.get());
-            }
+            secteur.ifPresent(entrepriseDTO::setSecteurActivite);
         }
         return entrepriseDTO;
     }

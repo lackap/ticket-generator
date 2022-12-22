@@ -48,8 +48,6 @@ public class ParametrageEvenementView extends VerticalLayout {
 
     protected TextField labelSecteurActivite;
 
-    private Upload uploadAffiche;
-
     private byte[] affiche;
 
     private Grid<Evenement> grid;
@@ -63,7 +61,7 @@ public class ParametrageEvenementView extends VerticalLayout {
         labelSecteurActivite = new TextField();
         labelSecteurActivite.setLabel("Label a utiliser pour les secteurs d'activité : ");
         FileBuffer memoryBufferLogo = new FileBuffer();
-        uploadAffiche = new Upload(memoryBufferLogo);
+        Upload uploadAffiche = new Upload(memoryBufferLogo);
         uploadAffiche.setUploadButton(new Button("Charger l'affiche : "));
         uploadAffiche.setDropLabel(new Label("Déposer le fichier ici"));
         uploadAffiche.addSucceededListener(event -> {
@@ -80,9 +78,8 @@ public class ParametrageEvenementView extends VerticalLayout {
         grid.setItems(getItems());
         Button ajoutButton = new Button("Ajouter");
         ajoutButton.addClickListener(event -> {
-            Evenement item = null;
             try {
-                item = save();
+                Evenement item = save();
                 grid.setItems(getItems());
                 grid.getDataProvider().refreshAll();
                 ApplicationUser applicationUser = securityService.getAuthenticatedUser();

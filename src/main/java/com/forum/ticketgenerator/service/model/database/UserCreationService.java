@@ -8,7 +8,6 @@ import com.forum.ticketgenerator.model.database.TicketUser;
 import com.forum.ticketgenerator.repository.EntrepriseRepository;
 import com.forum.ticketgenerator.repository.FormationRepository;
 import com.forum.ticketgenerator.repository.TicketUserRepository;
-import com.forum.ticketgenerator.view.formation.FormationView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
