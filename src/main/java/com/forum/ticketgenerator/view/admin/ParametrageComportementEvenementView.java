@@ -90,6 +90,7 @@ public class ParametrageComportementEvenementView extends VerticalLayout impleme
             }
         });
         resultatInsertion = new Text("");
+        updateDisplay();
         add(new H3("Paramétrage evenement"), resultatInsertion, labelSecteurActivite, displaySecteurActivite, displayNiveau, displayTypeContrat, uploadAffiche, ajoutButton);
     }
 
@@ -106,6 +107,10 @@ public class ParametrageComportementEvenementView extends VerticalLayout impleme
 
     @Override
     public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+        updateDisplay();
+    }
+
+    private void updateDisplay() {
         ApplicationUser applicationUser = securityService.getAuthenticatedUser();
         labelSecteurActivite.setValue(applicationUser.getEvenement().getLabelSecteurActivite());
         if (applicationUser.getEvenement().getDisplaySecteur() != null) {
@@ -117,5 +122,6 @@ public class ParametrageComportementEvenementView extends VerticalLayout impleme
         if (applicationUser.getEvenement().getDisplayTypeContrat() != null) {
             displayTypeContrat.setValue(applicationUser.getEvenement().getDisplayTypeContrat());
         }
+
     }
 }

@@ -2,6 +2,8 @@ package com.forum.ticketgenerator.view.login;
 
 import com.forum.ticketgenerator.constants.Roles;
 import com.forum.ticketgenerator.exception.UserCreationException;
+import com.forum.ticketgenerator.security.ApplicationUser;
+import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.service.model.database.UserCreationService;
 import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.Text;
@@ -27,7 +29,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Route("createAccount")
@@ -57,14 +61,16 @@ public class AccountCreationView extends VerticalLayout {
     @Autowired
     private UserCreationService userCreationService;
 
+    @Autowired
+    private SecurityService securityService;
+
     @PostConstruct
     public void init() {
         add(headerView);
         setAlignItems(Alignment.CENTER);
         selectRole = new ComboBox<>();
         selectRole.setLabel("Role");
-        selectRole.setItems(
-                Arrays.stream(Roles.values()).map(Enum::name).collect(Collectors.toList()));
+        selectRole.setItems(getRoles());
         selectRole.addValueChangeListener( event -> {
             if (selectRole.getValue().equals(Roles.ENTREPRISE.name()) || selectRole.getValue().equals(Roles.FORMATION.name())) {
                 displayedName.setVisible(true);
@@ -112,5 +118,17 @@ public class AccountCreationView extends VerticalLayout {
         });
         add(new H1("Création de compte"), validationMessage, selectRole, name, password, displayedName, uploadLogo, validationButton);
 
+    }
+
+    private List<String> getRoles() {
+        ApplicationUser applicationUser = securityService.getAuthenticatedUser();
+        if (applicationUser != null) {
+            if (applicationUser.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Roles.ADMIN.name()))) {
+                return Arrays.stream(Roles.values()).map(Enum::name).collect(Collectors.toList());
+            }
+        }
+        List<String> roles = new ArrayList<>();
+        roles.add(Roles.USER.name());
+        return roles;
     }
 }

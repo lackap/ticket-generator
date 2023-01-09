@@ -23,7 +23,7 @@ import java.io.IOException;
 
 @Component
 @UIScope
-public class AjoutEntrepriseSecteurView extends VerticalLayout implements BeforeEnterObserver {
+public class AjoutEntrepriseSecteurView extends VerticalLayout {
 
     @Autowired
     private ModelServiceFactory modelServiceFactory;
@@ -52,11 +52,11 @@ public class AjoutEntrepriseSecteurView extends VerticalLayout implements Before
             modelServiceFactory.getEntrepriseService().ajouterSecteurActivite(entreprise.getValue().getNom(), secteurActivite.getValue());
             fireEvent(new ReloadEvent(addButton, null,false));
         });
+        update();
         add(entreprise, secteurActivite, addButton);
     }
 
-    @Override
-    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
+    public void update() {
         ApplicationUser applicationUser = securityService.getAuthenticatedUser();
         entreprise.setItems(modelServiceFactory.getEntrepriseService().searchAllEntreprise(applicationUser.getEvenement()));
         secteurActivite.setItems(modelServiceFactory.getSecteurService().searchParEvenement(applicationUser.getEvenement()));

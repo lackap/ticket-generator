@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -119,7 +116,20 @@ public class EntrepriseModelService implements IEntrepriseModelService {
         if (entreprise.getSecteursActivite() == null) {
             entreprise.setSecteursActivite(new HashSet<>());
         }
+        List<SecteurActivite> secteurExisting = entreprise.getSecteursActivite().stream().filter(secteur -> secteur.getEvenement().getId() == secteurActivite.getId()).collect(Collectors.toList());
+        if (secteurExisting != null) {
+            for (SecteurActivite secteurActiviteToRemove : secteurExisting) {
+                entreprise.getSecteursActivite().remove(secteurActiviteToRemove);
+            }
+        }
         entreprise.getSecteursActivite().add(secteurActivite);
         entrepriseRepository.save(entreprise);
+    }
+
+    @Override
+    @Transactional
+    public void supprimerEntreprise (String entrepriseName) {
+        Entreprise entreprise = entrepriseRepository.findByNom(entrepriseName);
+        entrepriseRepository.delete(entreprise);
     }
 }

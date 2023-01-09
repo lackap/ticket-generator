@@ -4,6 +4,7 @@ import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.TicketUser;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class ApplicationUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities () {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-        GrantedAuthority grantedAuthority = () -> ticketUser.getRole();
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(ticketUser.getRole());
         grantedAuthorityList.add(grantedAuthority);
         return grantedAuthorityList;
     }

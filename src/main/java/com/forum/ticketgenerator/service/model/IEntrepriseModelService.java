@@ -23,4 +23,6 @@ public interface IEntrepriseModelService {
     void supprimerPoste(String entrepriseName, Evenement evenement, PosteMatching posteMatching);
 
     void ajouterSecteurActivite(String entrepriseName, SecteurActivite secteurActivite);
+
+    void supprimerEntreprise(String entrepriseName);
 }

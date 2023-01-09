@@ -60,6 +60,12 @@ public class FormationModelService implements IFormationModelService {
 
     @Override
     @Transactional
+    public void supprimerFormation (Formation formation) {
+        formationRepository.delete(formation);
+    }
+
+    @Override
+    @Transactional
     public List<Diplome> getAllDiplomes () throws IOException {
         Iterable<Formation> formations = formationRepository.findAll();
         List<Diplome> diplomesLabels = new ArrayList<>();
@@ -89,5 +95,14 @@ public class FormationModelService implements IFormationModelService {
         sortedList.add(formation);
         sortedList.addAll(centreFormationLabels.stream().distinct().collect(Collectors.toList()));
         return sortedList;
+    }
+
+    @Override
+    @Transactional
+    public List<Formation> getCentresFormation () {
+        Iterable<Formation> formations = formationRepository.findAll();
+        List<Formation> centreFormationLabels = new ArrayList<>();
+        formations.forEach(centreFormationLabels::add);
+        return centreFormationLabels;
     }
 }

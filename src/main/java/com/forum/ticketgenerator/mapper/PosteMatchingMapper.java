@@ -23,9 +23,15 @@ public class PosteMatchingMapper {
                 posteMatching.setSecteurActiviteColor(secteurActivite.get().getCouleur());
             }
         }
-        posteMatching.setNiveau(poste.getNiveau().getIntitule());
-        posteMatching.setTypeContrat(poste.getTypeContrat().getIntitule());
-        posteMatching.setFamilleMetier(poste.getFamilleMetier().getIntitule());
+        if (poste.getNiveau() != null) {
+            posteMatching.setNiveau(poste.getNiveau().getIntitule());
+        }
+        if (poste.getTypeContrat() != null) {
+            posteMatching.setTypeContrat(poste.getTypeContrat().getIntitule());
+        }
+        if (poste.getFamilleMetier() != null) {
+            posteMatching.setFamilleMetier(poste.getFamilleMetier().getIntitule());
+        }
         return posteMatching;
     }
 }

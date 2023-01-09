@@ -8,6 +8,7 @@ import com.forum.ticketgenerator.model.database.TicketUser;
 import com.forum.ticketgenerator.repository.EntrepriseRepository;
 import com.forum.ticketgenerator.repository.FormationRepository;
 import com.forum.ticketgenerator.repository.TicketUserRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,9 @@ public class UserCreationService {
         ticketUser.setPassword(passwordEncoder.encode(password));
         ticketUser.setRole(role);
         ticketUser.setLogo(logo);
+        if (StringUtils.isEmpty(displayedName)) {
+            displayedName = name;
+        }
         ticketUser.setDisplayName(displayedName);
         ticketUserRepository.save(ticketUser);
 
@@ -57,6 +61,9 @@ public class UserCreationService {
         }
         if (Roles.FORMATION.name().equals(role)) {
             Formation formation = new Formation();
+            if (StringUtils.isEmpty(displayedName)) {
+                displayedName = name;
+            }
             formation.setNomCentre(displayedName);
             formationRepository.save(formation);
         }

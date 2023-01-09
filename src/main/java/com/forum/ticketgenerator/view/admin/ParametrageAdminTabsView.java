@@ -1,6 +1,7 @@
 package com.forum.ticketgenerator.view.admin;
 
 import com.forum.ticketgenerator.model.database.Evenement;
+import com.forum.ticketgenerator.model.database.Formation;
 import com.forum.ticketgenerator.security.SecurityService;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -35,6 +36,12 @@ public class ParametrageAdminTabsView extends VerticalLayout {
     private ParametrageLienEntrepriseSecteurView parametrageLienEntrepriseSecteur;
 
     @Autowired
+    private EntrepriseManagementView entrepriseManagementView;
+
+    @Autowired
+    private FormationManagementView formationManagementView;
+
+    @Autowired
     private SecurityService securityService;
 
     private VerticalLayout content;
@@ -44,6 +51,8 @@ public class ParametrageAdminTabsView extends VerticalLayout {
     private Tab secteurActiviteTab;
     private Tab comportementTab;
     private Tab lienEntrepriseSecteurTab;
+    private Tab entrepriseManagementTab;
+    private Tab formationManagementTab;
 
     @PostConstruct
     public void init() throws IOException {
@@ -53,8 +62,10 @@ public class ParametrageAdminTabsView extends VerticalLayout {
         secteurActiviteTab = new Tab(securityService.getAuthenticatedUser().getEvenement().getLabelSecteurActivite());
         comportementTab = new Tab("Comportement Evenement");
         lienEntrepriseSecteurTab = new Tab("Lien entreprise / " + securityService.getAuthenticatedUser().getEvenement().getLabelSecteurActivite());
+        entrepriseManagementTab = new Tab("Gestion des entreprises");
+        formationManagementTab = new Tab("Gestion des formations");
         Tabs tabs = new Tabs(familleMetierTab, niveauTab, typeContratTab, secteurActiviteTab,
-                comportementTab, lienEntrepriseSecteurTab);
+                comportementTab, lienEntrepriseSecteurTab, entrepriseManagementTab, formationManagementTab);
         tabs.addSelectedChangeListener(
                 event -> setContent(event.getSelectedTab()));
         content = new VerticalLayout();
@@ -90,6 +101,10 @@ public class ParametrageAdminTabsView extends VerticalLayout {
         } else if (tab.equals(lienEntrepriseSecteurTab))  {
             parametrageLienEntrepriseSecteur.update();
             content.add(parametrageLienEntrepriseSecteur);
+        } else if (tab.equals(entrepriseManagementTab))  {
+            content.add(entrepriseManagementView);
+        } else if (tab.equals(formationManagementTab))  {
+            content.add(formationManagementView);
         }
     }
 }

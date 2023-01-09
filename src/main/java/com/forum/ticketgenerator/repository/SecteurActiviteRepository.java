@@ -14,4 +14,6 @@ public interface SecteurActiviteRepository extends CrudRepository<SecteurActivit
     List<SecteurActivite> findByEvenement(Evenement evenement);
 
     SecteurActivite findByEvenementAndIntitule(Evenement evenement, String intitule);
+
+    SecteurActivite findByEvenementAndCouleur(Evenement evenement, String couleur);
 }

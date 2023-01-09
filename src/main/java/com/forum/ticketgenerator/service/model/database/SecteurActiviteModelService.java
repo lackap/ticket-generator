@@ -52,6 +52,12 @@ public class SecteurActiviteModelService implements IParametrageService<SecteurA
         if (secteurExisting != null) {
             throw new ModelCreationException(evenement.getLabelSecteurActivite() + " " + secteurValue + " déjà existant pour l'évènement " + evenement.getIntitule());
         }
+
+         secteurExisting = secteurActiviteRepository.findByEvenementAndCouleur(evenement, couleur.name());
+        if (secteurExisting != null) {
+            throw new ModelCreationException(evenement.getLabelSecteurActivite() + " avec la couleur " + couleur.name() + " déjà existant pour l'évènement " + evenement.getIntitule());
+        }
+
         SecteurActivite secteur = new SecteurActivite();
         secteur.setIntitule(secteurValue);
         secteur.setCouleur(couleur.name());

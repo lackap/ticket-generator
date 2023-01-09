@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @Component
 @UIScope
-public class ParametrageLienEntrepriseSecteurView extends VerticalLayout implements BeforeEnterObserver {
+public class ParametrageLienEntrepriseSecteurView extends VerticalLayout {
 
     @Autowired
     protected ModelServiceFactory modelServiceFactory;
@@ -47,6 +47,7 @@ public class ParametrageLienEntrepriseSecteurView extends VerticalLayout impleme
         ApplicationUser applicationUser = securityService.getAuthenticatedUser();
         grid.setItems(modelServiceFactory.getEntrepriseService().searchAllEntreprise(applicationUser.getEvenement()));
         grid.getDataProvider().refreshAll();
+        ajoutEntrepriseSecteur.update();
     }
 
     protected void configureGrid(Evenement evenement) {
@@ -55,11 +56,5 @@ public class ParametrageLienEntrepriseSecteurView extends VerticalLayout impleme
         grid.addColumn("secteurActivite.intitule").setHeader(evenement.getLabelSecteurActivite());
         grid.setNestedNullBehavior(Grid.NestedNullBehavior.ALLOW_NULLS);
 
-    }
-
-    @Override
-    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
-        ApplicationUser applicationUser = securityService.getAuthenticatedUser();
-        grid.setItems(modelServiceFactory.getEntrepriseService().searchAllEntreprise(applicationUser.getEvenement()));
     }
 }

@@ -20,4 +20,8 @@ public interface IFormationModelService {
 
     List<Diplome> searchFromFormationNameAndEvenement (String formationName, Evenement evenement);
 
+    void supprimerFormation(Formation formation);
+
+    public List<Formation> getCentresFormation ();
+
 }

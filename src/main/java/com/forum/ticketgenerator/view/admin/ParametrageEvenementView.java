@@ -97,8 +97,8 @@ public class ParametrageEvenementView extends VerticalLayout {
         grid = new Grid<>(Evenement.class, false);
         grid.addColumn("intitule");
         grid.getColumnByKey("intitule").setHeader("Intitulé");
-        grid.addColumn("labelSecteurActivité");
-        grid.getColumnByKey("labelSecteurActivité").setHeader("Label secteur activité");
+        grid.addColumn("labelSecteurActivite");
+        grid.getColumnByKey("labelSecteurActivite").setHeader("Label secteur activité");
         Grid.Column<Evenement> deleteColumn = this.grid.addComponentColumn(item -> {
             DeleteButtonComponent deleteButtonComponent = new DeleteButtonComponent();
             deleteButtonComponent.addClickListener(event -> {
