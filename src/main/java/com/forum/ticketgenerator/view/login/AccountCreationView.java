@@ -1,6 +1,6 @@
 package com.forum.ticketgenerator.view.login;
 
-import com.forum.ticketgenerator.constants.Roles;
+import com.forum.ticketgenerator.constants.Role;
 import com.forum.ticketgenerator.exception.UserCreationException;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
@@ -17,8 +17,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.FileBuffer;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Route("createAccount")
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @PermitAll
 @AnonymousAllowed
 @UIScope
-public class AccountCreationView extends VerticalLayout {
+public class AccountCreationView extends VerticalLayout implements HasUrlParameter<String> {
 
     @Autowired
     private HeaderView headerView;
@@ -56,7 +56,11 @@ public class AccountCreationView extends VerticalLayout {
 
     private Upload uploadLogo;
 
+    private H1 pageTitle;
+
     private byte[] logo;
+
+    private Role roleToCreate;
 
     @Autowired
     private UserCreationService userCreationService;
@@ -70,9 +74,9 @@ public class AccountCreationView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         selectRole = new ComboBox<>();
         selectRole.setLabel("Role");
-        selectRole.setItems(getRoles());
+
         selectRole.addValueChangeListener( event -> {
-            if (selectRole.getValue().equals(Roles.ENTREPRISE.name()) || selectRole.getValue().equals(Roles.FORMATION.name())) {
+            if (selectRole.getValue().equals(Role.ENTREPRISE.name()) || selectRole.getValue().equals(Role.FORMATION.name())) {
                 displayedName.setVisible(true);
                 uploadLogo.setVisible(true);
             } else {
@@ -116,19 +120,45 @@ public class AccountCreationView extends VerticalLayout {
                 this.validationMessage.setText(e.getErrorMessage());
             }
         });
-        add(new H1("Création de compte"), validationMessage, selectRole, name, password, displayedName, uploadLogo, validationButton);
+        pageTitle = new H1();
+        add(pageTitle, validationMessage, selectRole, name, password, displayedName, uploadLogo, validationButton);
 
     }
 
     private List<String> getRoles() {
-        ApplicationUser applicationUser = securityService.getAuthenticatedUser();
-        if (applicationUser != null) {
-            if (applicationUser.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Roles.ADMIN.name()))) {
-                return Arrays.stream(Roles.values()).map(Enum::name).collect(Collectors.toList());
-            }
-        }
         List<String> roles = new ArrayList<>();
-        roles.add(Roles.USER.name());
+        if (roleToCreate == null) {
+            ApplicationUser applicationUser = securityService.getAuthenticatedUser();
+            if (applicationUser != null) {
+                if (applicationUser.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Role.ADMIN.name()))) {
+                    return Arrays.stream(Role.values()).map(Enum::name).collect(Collectors.toList());
+                }
+            }
+            roles.add(Role.USER.name());
+        } else {
+            roles.add(roleToCreate.name());
+        }
         return roles;
+    }
+
+    private String getViewTitle () {
+        String title = "Création de compte ";
+        if (roleToCreate != null) {
+            title += roleToCreate.getValue();
+        }
+        return title;
+
+    }
+
+    @Override
+    public void setParameter (BeforeEvent beforeEvent, @OptionalParameter String s) {
+        if (s != null) {
+            roleToCreate = Role.valueOf(s);
+        }
+        selectRole.setItems(getRoles());
+        if (roleToCreate != null) {
+            selectRole.setValue(roleToCreate.name());
+        }
+        pageTitle.setText(getViewTitle());
     }
 }

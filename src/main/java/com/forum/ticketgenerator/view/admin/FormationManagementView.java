@@ -1,5 +1,6 @@
 package com.forum.ticketgenerator.view.admin;
 
+import com.forum.ticketgenerator.constants.Role;
 import com.forum.ticketgenerator.model.database.Formation;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.forum.ticketgenerator.view.login.AccountCreationView;
@@ -32,7 +33,7 @@ public class FormationManagementView extends VerticalLayout implements BeforeEnt
         setAlignItems(Alignment.CENTER);
         addAccountButton = new Button("Ajouter une formation");
         addAccountButton.addClickListener(event -> {
-            UI.getCurrent().navigate(AccountCreationView.class);
+            UI.getCurrent().navigate(AccountCreationView.class, Role.FORMATION.name());
         });
         configureGrid();
         grid.setItems(modelServiceFactory.getFormationService().getCentresFormation());

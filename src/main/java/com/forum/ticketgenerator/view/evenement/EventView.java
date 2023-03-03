@@ -1,6 +1,6 @@
 package com.forum.ticketgenerator.view.evenement;
 
-import com.forum.ticketgenerator.constants.Roles;
+import com.forum.ticketgenerator.constants.Role;
 import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
@@ -37,8 +37,7 @@ public class EventView extends VerticalLayout {
         if (evenement.getAffiche() != null) {
             StreamResource resource = new StreamResource("myimage.jpg", () -> new ByteArrayInputStream(evenement.getAffiche()));
             Image affiche = new Image(resource, "Logo");
-            affiche.setHeight("100%");
-            affiche.setWidth("100%");
+            affiche.setHeight("300px");
             affiche.getStyle().set("cursor", "pointer");
             affiche.addClickListener(event -> goToEvent());
             add(affiche);
@@ -53,16 +52,16 @@ public class EventView extends VerticalLayout {
         ApplicationUser applicationUser = securityService.getAuthenticatedUser();
         applicationUser.setEvenement(evenement);
         for (GrantedAuthority grantedAuthority : securityService.getAuthenticatedUser().getAuthorities()) {
-            if (Roles.USER.name().equals(grantedAuthority.getAuthority())) {
+            if (Role.USER.name().equals(grantedAuthority.getAuthority())) {
                 UI.getCurrent().navigate(TicketView.class);
             }
-            if (Roles.ADMIN.name().equals(grantedAuthority.getAuthority())) {
+            if (Role.ADMIN.name().equals(grantedAuthority.getAuthority())) {
                 UI.getCurrent().navigate(ParametrageAdminView.class);
             }
-            if (Roles.ENTREPRISE.name().equals(grantedAuthority.getAuthority())) {
+            if (Role.ENTREPRISE.name().equals(grantedAuthority.getAuthority())) {
                 UI.getCurrent().navigate(EntrepriseView.class);
             }
-            if (Roles.FORMATION.name().equals(grantedAuthority.getAuthority())) {
+            if (Role.FORMATION.name().equals(grantedAuthority.getAuthority())) {
                 UI.getCurrent().navigate(FormationView.class);
             }
         }

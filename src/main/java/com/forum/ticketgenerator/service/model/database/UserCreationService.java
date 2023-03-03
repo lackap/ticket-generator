@@ -1,6 +1,6 @@
 package com.forum.ticketgenerator.service.model.database;
 
-import com.forum.ticketgenerator.constants.Roles;
+import com.forum.ticketgenerator.constants.Role;
 import com.forum.ticketgenerator.exception.UserCreationException;
 import com.forum.ticketgenerator.model.database.Entreprise;
 import com.forum.ticketgenerator.model.database.Formation;
@@ -54,12 +54,12 @@ public class UserCreationService {
         ticketUser.setDisplayName(displayedName);
         ticketUserRepository.save(ticketUser);
 
-        if (Roles.ENTREPRISE.name().equals(role)) {
+        if (Role.ENTREPRISE.name().equals(role)) {
             Entreprise entreprise = new Entreprise();
             entreprise.setNom(displayedName);
             entrepriseRepository.save(entreprise);
         }
-        if (Roles.FORMATION.name().equals(role)) {
+        if (Role.FORMATION.name().equals(role)) {
             Formation formation = new Formation();
             if (StringUtils.isEmpty(displayedName)) {
                 displayedName = name;

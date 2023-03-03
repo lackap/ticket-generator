@@ -1,6 +1,6 @@
 package com.forum.ticketgenerator.view;
 
-import com.forum.ticketgenerator.constants.Roles;
+import com.forum.ticketgenerator.constants.Role;
 import com.forum.ticketgenerator.security.ApplicationUser;
 import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.view.admin.ParametrageAdminView;
@@ -36,16 +36,16 @@ public class EntryView extends Div implements BeforeEnterObserver {
             if (userDetails.getEvenement() == null) {
                 event.rerouteTo(SelectEventView.class);
             } else {
-                if (Roles.ENTREPRISE.name().equals(grantedAuthority.getAuthority())) {
+                if (Role.ENTREPRISE.name().equals(grantedAuthority.getAuthority())) {
                     event.rerouteTo(EntrepriseView.class);
                 }
-                if (Roles.USER.name().equals(grantedAuthority.getAuthority())) {
+                if (Role.USER.name().equals(grantedAuthority.getAuthority())) {
                     event.rerouteTo(TicketView.class);
                 }
-                if (Roles.FORMATION.name().equals(grantedAuthority.getAuthority())) {
+                if (Role.FORMATION.name().equals(grantedAuthority.getAuthority())) {
                     event.rerouteTo(FormationView.class);
                 }
-                if (Roles.ADMIN.name().equals(grantedAuthority.getAuthority())) {
+                if (Role.ADMIN.name().equals(grantedAuthority.getAuthority())) {
                     event.rerouteTo(ParametrageAdminView.class);
                 }
             }

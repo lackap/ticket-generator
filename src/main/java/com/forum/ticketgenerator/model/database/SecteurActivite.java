@@ -15,4 +15,5 @@ public class SecteurActivite {
     @ManyToOne
     private Evenement evenement;
     private String couleur;
+    private String couleurLabel;
 }

@@ -40,6 +40,9 @@ public class PdfGenerationService {
     @Autowired
     private SecteurActiviteRepository secteurActiviteRepository;
 
+    @Autowired
+    private ColorService colorService;
+
     public byte[] genererPdf(Evenement evenement) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -102,7 +105,7 @@ public class PdfGenerationService {
     }
 
     private void addRow(Table table, PosteMatching posteMatching) {
-        Color cellColor = getCouleur(posteMatching.getSecteurActiviteColor());
+        Color cellColor = colorService.getCouleur(posteMatching.getSecteurActiviteColor());
         Cell colorCell = new Cell();
         Paragraph paragraph = new Paragraph();
         paragraph.setBackgroundColor(cellColor);
@@ -198,7 +201,7 @@ public class PdfGenerationService {
     public void addLegendCell(Table table, String couleur, String label) {
         Cell colorCell = new Cell();
         Paragraph paragraph = new Paragraph();
-        paragraph.setBackgroundColor(getCouleur(couleur));
+        paragraph.setBackgroundColor(colorService.getCouleur(couleur));
         paragraph.setPadding(2);
         paragraph.setWidth(8);
         paragraph.setHeight(8);
@@ -217,32 +220,6 @@ public class PdfGenerationService {
         labelCell.setVerticalAlignment(VerticalAlignment.MIDDLE);
         labelCell.setHorizontalAlignment(HorizontalAlignment.CENTER);
         table.addCell(labelCell);
-    }
-
-    private Color getCouleur(String couleur) {
-        if (couleur == null) {
-            return Color.WHITE;
-        }
-        switch (couleur) {
-            case "GREEN" :
-                return Color.GREEN;
-            case "ORANGE":
-                return Color.ORANGE;
-            case "YELLOW":
-                return Color.YELLOW;
-            case "RED":
-                return Color.RED;
-            case "LIGHT_GRAY":
-                return Color.LIGHT_GRAY;
-            case "PINK":
-                return Color.PINK;
-            case "BLUE":
-                return Color.BLUE;
-            case "SABLE":
-                return new DeviceRgb(194, 178, 128);
-            default:
-                return Color.WHITE;
-        }
     }
 
 }

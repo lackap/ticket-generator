@@ -104,9 +104,12 @@ public class EntrepriseModelService implements IEntrepriseModelService {
     @Transactional
     public void supprimerPoste(String entrepriseName, Evenement evenement, PosteMatching posteMatching) {
         Entreprise entreprise = entrepriseRepository.findByNomAndPostesEvenement(entrepriseName, evenement);
-        entreprise.setPostes(entreprise.getPostes().stream().filter(poste -> !(poste.getEvenement().getId() == evenement.getId())
-                || !(poste.getIntitule().equals(posteMatching.getIntitule()))).collect(Collectors.toList()));
-        entrepriseRepository.save(entreprise);
+        Optional<Poste> poste = entreprise.getPostes().stream().filter(p -> p.getEvenement().getId() == evenement.getId()
+                        && p.getIntitule().equals(posteMatching.getIntitule())).findFirst();
+        if (poste.isPresent()) {
+            entreprise.getPostes().remove(poste.get());
+            entrepriseRepository.save(entreprise);
+        }
     }
 
     @Override

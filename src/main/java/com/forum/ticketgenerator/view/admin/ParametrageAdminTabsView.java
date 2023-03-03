@@ -30,7 +30,7 @@ public class ParametrageAdminTabsView extends VerticalLayout {
     private ParametrageSecteurActiviteView parametrageSecteurActivite;
 
     @Autowired
-    private ParametrageComportementEvenementView parametrageComportementEvenement;
+    private ParametrageEvenementMainView parametrageComportementEvenement;
 
     @Autowired
     private ParametrageLienEntrepriseSecteurView parametrageLienEntrepriseSecteur;
@@ -57,7 +57,7 @@ public class ParametrageAdminTabsView extends VerticalLayout {
     @PostConstruct
     public void init() throws IOException {
         familleMetierTab = new Tab("Famille métier");
-        niveauTab = new Tab("Niveau");
+        niveauTab = new Tab("Niveaux");
         typeContratTab = new Tab("Type contrat");
         secteurActiviteTab = new Tab(securityService.getAuthenticatedUser().getEvenement().getLabelSecteurActivite());
         comportementTab = new Tab("Comportement Evenement");

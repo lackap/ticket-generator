@@ -54,12 +54,13 @@ public class ParametrageEvenementView extends VerticalLayout {
 
     @PostConstruct
     public void init() throws IOException {
+        headerView.customizeHeader("");
         add(headerView);
         setAlignItems(FlexComponent.Alignment.CENTER);
         intituleEvenement = new TextField();
         intituleEvenement.setLabel("Nom évènement : ");
         labelSecteurActivite = new TextField();
-        labelSecteurActivite.setLabel("Label a utiliser pour les secteurs d'activité : ");
+        labelSecteurActivite.setLabel("Intitulé des couleurs : ");
         FileBuffer memoryBufferLogo = new FileBuffer();
         Upload uploadAffiche = new Upload(memoryBufferLogo);
         uploadAffiche.setUploadButton(new Button("Charger l'affiche : "));
@@ -90,7 +91,7 @@ public class ParametrageEvenementView extends VerticalLayout {
             }
         });
         resultatInsertion = new Text("");
-        add(new H3("Paramétrage evenement"), resultatInsertion, intituleEvenement, labelSecteurActivite, uploadAffiche, ajoutButton, grid);
+        add(new H3("Paramétrage Evènement"), resultatInsertion, intituleEvenement, labelSecteurActivite, uploadAffiche, ajoutButton, grid);
     }
 
     protected void configureGrid() {

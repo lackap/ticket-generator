@@ -37,9 +37,11 @@ public class SearchView extends HorizontalLayout {
         searchIntitulePosteView.addListener(SearchEvent.class, this::fireEvent);
         searchView.addListener(SearchEvent.class, this::fireEvent);
 
-        add(formationView);
-        add(searchIntitulePosteView);
         add(searchView);
+        add(searchIntitulePosteView);
+        if (formationView.hasFormations()) {
+            add(formationView);
+        }
     }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,

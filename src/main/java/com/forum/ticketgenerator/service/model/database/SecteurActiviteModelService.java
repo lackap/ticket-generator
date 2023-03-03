@@ -5,6 +5,7 @@ import com.forum.ticketgenerator.model.ColorAvailable;
 import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.model.database.SecteurActivite;
 import com.forum.ticketgenerator.repository.SecteurActiviteRepository;
+import com.forum.ticketgenerator.service.ColorService;
 import com.forum.ticketgenerator.service.model.IParametrageService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import java.util.List;
 
 @Service
 public class SecteurActiviteModelService implements IParametrageService<SecteurActivite> {
+
+    @Autowired
+    private ColorService colorService;
 
     @Autowired
     private SecteurActiviteRepository secteurActiviteRepository;
@@ -62,6 +66,7 @@ public class SecteurActiviteModelService implements IParametrageService<SecteurA
         secteur.setIntitule(secteurValue);
         secteur.setCouleur(couleur.name());
         secteur.setEvenement(evenement);
+        secteur.setCouleurLabel(colorService.getCouleurLabel(couleur.name()));
         return secteurActiviteRepository.save(secteur);
     }
 

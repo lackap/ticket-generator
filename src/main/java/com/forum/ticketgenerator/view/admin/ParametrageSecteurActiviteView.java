@@ -39,7 +39,7 @@ public class ParametrageSecteurActiviteView extends AParametrageView<SecteurActi
 
     @Override
     protected void addCustomColumns() {
-        grid.addColumn("couleur").setWidth("15%").setHeader("Couleur associée").setFlexGrow(0);
+        grid.addColumn("couleurLabel").setWidth("15%").setHeader("Couleur associée").setFlexGrow(0);
     }
 
 }

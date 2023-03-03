@@ -1,18 +1,15 @@
 package com.forum.ticketgenerator.view.admin;
 
-import com.forum.ticketgenerator.event.ReloadEvent;
+import com.forum.ticketgenerator.constants.Role;
 import com.forum.ticketgenerator.model.EntrepriseDTO;
-import com.forum.ticketgenerator.model.database.Evenement;
 import com.forum.ticketgenerator.service.model.ModelServiceFactory;
 import com.forum.ticketgenerator.view.login.AccountCreationView;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +33,7 @@ public class EntrepriseManagementView extends VerticalLayout implements BeforeEn
         setAlignItems(FlexComponent.Alignment.CENTER);
         addAccountButton = new Button("Ajouter une entreprise");
         addAccountButton.addClickListener(event -> {
-            UI.getCurrent().navigate(AccountCreationView.class);
+            UI.getCurrent().navigate(AccountCreationView.class, Role.ENTREPRISE.name());
         });
         configureGrid();
         grid.setItems(modelServiceFactory.getEntrepriseService().searchAllEntreprise(null));

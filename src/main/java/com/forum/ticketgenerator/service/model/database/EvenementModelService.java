@@ -43,12 +43,16 @@ public class EvenementModelService implements IEvenementModelService {
         evenement.setIntitule(evenementValue);
         evenement.setLabelSecteurActivite(labelSecteurActivite);
         evenement.setAffiche(affiche);
+        evenement.setDisplayTypeContrat(true);
+        evenement.setDisplaySecteur(true);
+        evenement.setDisplayNiveau(true);
         return evenementRepository.save(evenement);
     }
 
     @Override
-    public Evenement mettreAJourParametres (Evenement evenement, String labelSecteurActivite, boolean displaySecteur,
+    public Evenement mettreAJourParametres (Evenement evenement, String labelTitreEvenement, String labelSecteurActivite, boolean displaySecteur,
                                                   boolean displayNiveau, boolean displayContrat, byte[] affiche) throws ModelCreationException {
+        evenement.setIntitule(labelTitreEvenement);
         evenement.setLabelSecteurActivite(labelSecteurActivite);
         evenement.setDisplaySecteur(displaySecteur);
         evenement.setDisplayNiveau(displayNiveau);

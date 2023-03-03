@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FamilleMetierModelService implements IParametrageService<FamilleMetier> {
@@ -25,7 +27,7 @@ public class FamilleMetierModelService implements IParametrageService<FamilleMet
         Iterable<FamilleMetier> famillesMetier = familleMetierRepository.findByEvenement(evenement);
         List<FamilleMetier> famillesMetierList = new ArrayList<>();
         famillesMetier.forEach(famillesMetierList::add);
-        return famillesMetierList;
+        return famillesMetierList.stream().sorted(Comparator.comparing(FamilleMetier::getIntitule)).collect(Collectors.toList());
     }
 
     @Override

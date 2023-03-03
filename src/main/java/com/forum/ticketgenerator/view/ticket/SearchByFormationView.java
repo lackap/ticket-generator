@@ -18,10 +18,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @UIScope
-public class SearchByFormationView extends ASearchByLayout implements BeforeEnterObserver {
+public class SearchByFormationView extends ASearchByLayout {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchByFormationView.class);
 
     private final static String SEARCH_LABEL = "Recherche par formation";
@@ -31,6 +32,8 @@ public class SearchByFormationView extends ASearchByLayout implements BeforeEnte
     private ComboBox<Diplome> selectDiplome;
 
     private Button buttonSearchFormation;
+
+    private Boolean hasFormations;
 
     @PostConstruct
     public void init() throws IOException {
@@ -47,6 +50,9 @@ public class SearchByFormationView extends ASearchByLayout implements BeforeEnte
         selectCentre = new ComboBox<>();
         selectCentre.setLabel("Centre de formation");
         selectCentre.setItemLabelGenerator(Formation::getNomCentre);
+        List<Formation> formations = modelServiceFactory.getFormationService().getCentresFormation(getEvenement());
+        selectCentre.setItems(formations);
+        hasFormations = formations.size() > 0;
         selectCentre.addValueChangeListener(event -> {
             if (selectCentre.getValue() == null) {
                 selectDiplome.setEnabled(false);
@@ -90,12 +96,7 @@ public class SearchByFormationView extends ASearchByLayout implements BeforeEnte
         add(buttonSearchFormation);
     }
 
-    @Override
-    public void beforeEnter (BeforeEnterEvent beforeEnterEvent) {
-        try {
-            selectCentre.setItems(modelServiceFactory.getFormationService().getCentresFormation(getEvenement()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public boolean hasFormations() {
+        return hasFormations;
     }
 }

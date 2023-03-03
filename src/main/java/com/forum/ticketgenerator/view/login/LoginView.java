@@ -1,14 +1,12 @@
 package com.forum.ticketgenerator.view.login;
 
+import com.forum.ticketgenerator.constants.Role;
 import com.forum.ticketgenerator.view.HeaderView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -45,7 +43,9 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
                 createAccount = new Button();
                 createAccount.setText("Créer compte");
-                createAccount.addClickListener(buttonClickEvent -> createAccount.getUI().ifPresent(ui -> ui.navigate(AccountCreationView.class)));
+                createAccount.addClickListener(buttonClickEvent -> {
+                        createAccount.getUI().ifPresent(ui -> ui.navigate(AccountCreationView.class, Role.USER.name()));
+                });
                 add(new H1(""), login, createAccount);
         }
 

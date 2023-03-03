@@ -1,6 +1,6 @@
 package com.forum.ticketgenerator.view.evenement;
 
-import com.forum.ticketgenerator.constants.Roles;
+import com.forum.ticketgenerator.constants.Role;
 import com.forum.ticketgenerator.security.SecurityService;
 import com.forum.ticketgenerator.view.HeaderView;
 import com.forum.ticketgenerator.view.admin.ParametrageEvenementView;
@@ -37,7 +37,7 @@ public class SelectEventView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         add(eventListView);
         for (GrantedAuthority grantedAuthority : securityService.getAuthenticatedUser().getAuthorities()) {
-            if (Roles.ADMIN.name().equals(grantedAuthority.getAuthority())) {
+            if (Role.ADMIN.name().equals(grantedAuthority.getAuthority())) {
                 Button creerEvenement = new Button("Créer évènement");
                 creerEvenement.addClickListener(event -> UI.getCurrent().navigate(ParametrageEvenementView.class));
                 add(creerEvenement);
